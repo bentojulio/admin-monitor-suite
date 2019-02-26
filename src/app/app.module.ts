@@ -78,6 +78,7 @@ import { DomainStatisticsComponent } from './pages/domain/domain-statistics/doma
 import { WebsiteStatisticsComponent } from './pages/website/website-statistics/website-statistics.component';
 import { ScoreDistributionDialogComponent } from './dialogs/score-distribution-dialog/score-distribution-dialog.component';
 import { ErrorDistributionDialogComponent } from './dialogs/error-distribution-dialog/error-distribution-dialog.component';
+import { CrawlerDialogComponent } from './dialogs/crawler-dialog/crawler-dialog.component';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent, canActivate: [NoAuthGuard] },
@@ -167,7 +168,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DomainStatisticsComponent,
     WebsiteStatisticsComponent,
     ScoreDistributionDialogComponent,
-    ErrorDistributionDialogComponent
+    ErrorDistributionDialogComponent,
+    CrawlerDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -213,7 +215,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ChooseObservatoryPagesDialogComponent,
     AddPagesErrorsDialogComponent,
     ScoreDistributionDialogComponent,
-    ErrorDistributionDialogComponent
+    ErrorDistributionDialogComponent,
+    CrawlerDialogComponent
   ],
   providers: [
     AdminAuthGuard,
