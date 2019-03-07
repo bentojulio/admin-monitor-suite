@@ -3,6 +3,17 @@
     "name": "Admin console",
     "logout": "Logout"
   },
+  "CRAWLER": {
+    "PARAMETERS": {
+      "depth": "Maximum depth",
+      "pages": "Maximum number of pages",
+      "max_depth_checkbox": "Depth equal to two (2)"
+    },
+    "PLACEHOLDER": {
+      "depth": "Equal or bigger than one (1)",
+      "pages": "Equal or bigger than one (1)"
+    }
+  },
   "LOGIN": {
     "title": "Login",
     "username_label": "Username",

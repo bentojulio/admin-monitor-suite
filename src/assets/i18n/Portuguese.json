@@ -3,6 +3,17 @@
     "name": "Consola de administração",
     "logout": "Sair"
   },
+  "CRAWLER": {
+    "PARAMETERS": {
+      "depth": "Profundidade máxima",
+      "pages": "Número máximo de páginas",
+      "max_depth_checkbox": "Profundidade igual a dois (2)"
+    },
+    "PLACEHOLDER": {
+      "depth": "Maior ou igual a um (1)",
+      "pages": "Maior ou igual a um (1)"
+    }
+  },
   "LOGIN": {
     "title": "Iniciar sessão",
     "username_label": "Utilizador",
