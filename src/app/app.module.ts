@@ -80,7 +80,7 @@ import { ScoreDistributionDialogComponent } from './dialogs/score-distribution-d
 import { ErrorDistributionDialogComponent } from './dialogs/error-distribution-dialog/error-distribution-dialog.component';
 import { CrawlerDialogComponent } from './dialogs/crawler-dialog/crawler-dialog.component';
 import { AddCrawlerPagesDialogComponent } from './dialogs/add-crawler-pages-dialog/add-crawler-pages-dialog.component';
-import { DeleteWebsitePagesDialogComponent } from './dialogs/delete-website-pages-dialog/delete-website-pages-dialog.component';
+import { ListOfPagesUserComponent } from './pages/pages/list-of-pages-user/list-of-pages-user.component';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent, canActivate: [NoAuthGuard] },
@@ -173,7 +173,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ErrorDistributionDialogComponent,
     CrawlerDialogComponent,
     AddCrawlerPagesDialogComponent,
-    DeleteWebsitePagesDialogComponent
+    ListOfPagesUserComponent
   ],
   imports: [
     BrowserModule,
