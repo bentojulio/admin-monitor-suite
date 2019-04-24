@@ -74,6 +74,7 @@ export class EvaluationResultsComponent implements OnInit, OnDestroy {
             this.error = true;
           } else {
             this.eval = data;
+            this.eval.metadata.url = decodeURIComponent(this.eval.metadata.url);
           }
 
           this.loading = false;
