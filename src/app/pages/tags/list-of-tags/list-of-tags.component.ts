@@ -39,7 +39,7 @@ export class ListOfTagsComponent implements OnInit {
     //'TagId',
     'Name',
     'Show_in_Observatorio',
-    'User',
+    //'User',
     'Creation_Date',
     'Websites',
     'edit',
