@@ -187,7 +187,7 @@ export class UpdateService {
           throw new AdminError(response.success, response.message);
         }
 
-        return <boolean> response.result;
+        return <boolean> (response.result > 0);
       }),
       catchError(err => {
         this.message.show('PAGES_PAGE.UPDATE.messages.error');

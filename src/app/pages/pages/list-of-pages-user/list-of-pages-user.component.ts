@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, Output, ViewChild, ElementRef, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, Output, ViewChild, ElementRef, EventEmitter, ChangeDetectorRef} from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { MatDialog } from '@angular/material';
 import * as _ from 'lodash';
@@ -44,6 +44,7 @@ export class ListOfPagesUserComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private update: UpdateService,
     private formBuilder: FormBuilder,
+    private cd: ChangeDetectorRef
   ) {
     this.pagesForm = this.formBuilder.group({
       file: new FormControl()});
@@ -77,9 +78,16 @@ export class ListOfPagesUserComponent implements OnInit, AfterViewInit {
   }
 
   setPageinAMS(pageId: string): void {
-    this.update.importPage({ pageId: pageId, user: this.user}).subscribe();
+    this.update.importPage({ pageId: pageId, user: this.user, tag: this.tag, website: this.website})
+      .subscribe(result => {
+        if (result) {
+          const page = _.filter(this.pages, ['PageId', pageId]);
+          page[0].Show_In = '1' + page[0].Show_In[1] + page[0].Show_In[2];
+          this.cd.detectChanges();
+        }
+      });
     //TODO deixar isto assim?
-    window.location.reload();
+    //window.location.reload();
   }
 
   isAdminPage(flags: string): boolean {

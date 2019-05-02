@@ -21,6 +21,8 @@ export class PageComponent implements OnInit, OnDestroy {
 
   sub: Subscription;
 
+  tag: string;
+  website: string;
   page: string;
 
   evaluations: Array<any>;
@@ -39,6 +41,8 @@ export class PageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.activatedRoute.params.subscribe(params => {
+      this.tag = params.tag;
+      this.website = params.website;
       this.page = params.page;
       this.getListOfPageEvaluations();
     });
@@ -49,7 +53,7 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   private getListOfPageEvaluations(): void {
-    this.get.listOfPageEvaluations(encodeURIComponent(this.page))
+    this.get.listOfPageEvaluations(encodeURIComponent(this.page), this.tag ? 'studies': this.website ? 'monitor' : 'admin')
       .subscribe(evaluations => {
         if (evaluations !== null) {
           this.evaluations = evaluations;

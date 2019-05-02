@@ -1,7 +1,22 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {ActivatedRoute} from '@angular/router';
-import {GetService} from '../../../services/get.service';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
+import {
+  MatDialog,
+  MatPaginator,
+  MatSort,
+  MatTableDataSource
+} from '@angular/material';
+import {
+  ActivatedRoute
+} from '@angular/router';
+import {
+  GetService
+} from '../../../services/get.service';
 
 import * as _ from 'lodash';
 import {AddCrawlerPagesDialogComponent} from '../../../dialogs/add-crawler-pages-dialog/add-crawler-pages-dialog.component';
@@ -21,7 +36,8 @@ export class ListOfWebsitesUserComponent implements OnInit {
     'Import',
   ];
 
-  // data source of domains
+  // data source of websites
+  websites: Array<any>;
   dataSource: any;
   selection: any;
 
@@ -38,10 +54,9 @@ export class ListOfWebsitesUserComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private get: GetService,
-    private update: UpdateService,
     private dialog: MatDialog,
-  ) {
-  }
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -73,7 +88,8 @@ export class ListOfWebsitesUserComponent implements OnInit {
     this.get.listOfStudiesTagWebsites(this.user, this.tag)
       .subscribe(websites => {
         if (websites !== null) {
-          this.dataSource = new MatTableDataSource(websites);
+          this.websites = websites;
+          this.dataSource = new MatTableDataSource(this.websites);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         }
@@ -97,12 +113,11 @@ export class ListOfWebsitesUserComponent implements OnInit {
     console.log(data);
   }
 
-  openImportWebsiteDialog(website, websiteId, webName, url: string, hasDomain: boolean): void {
-    console.log(url);
+  openImportWebsiteDialog(websiteName, websiteId, webName, url: string, hasDomain: boolean): void {
     const importWebsiteDialog = this.dialog.open(ImportWebsiteDialogComponent, {
       width: '40vw',
       data: {
-        website: website,
+        website: websiteName,
         websiteId: websiteId,
         hasDomain: hasDomain,
         webName: webName,
@@ -111,7 +126,10 @@ export class ListOfWebsitesUserComponent implements OnInit {
     });
     importWebsiteDialog.afterClosed().subscribe(result => {
       if (result) {
-        window.location.reload();
+        const website = _.filter(this.websites, ['WebsiteId', websiteId]);
+        website[0].imported = true;
+        this.cd.detectChanges();
+        //window.location.reload();
       }
     });
   }
