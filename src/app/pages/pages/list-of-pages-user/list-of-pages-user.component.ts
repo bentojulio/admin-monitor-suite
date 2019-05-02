@@ -1,12 +1,9 @@
-import { Component, OnInit, AfterViewInit, Input, Output, ViewChild, ElementRef, EventEmitter, ChangeDetectorRef} from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import {Component, OnInit, AfterViewInit, Input, Output, ViewChild, ElementRef, EventEmitter, ChangeDetectorRef} from '@angular/core';
+import {MatTableDataSource, MatPaginator, MatSort, MatTable} from '@angular/material';
 import { MatDialog } from '@angular/material';
 import * as _ from 'lodash';
 
-import { DeletePageDialogComponent } from '../../../dialogs/delete-page-dialog/delete-page-dialog.component';
-
 import { UpdateService } from '../../../services/update.service';
-import {OpenDataService} from '../../../services/open-data.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 
@@ -37,6 +34,7 @@ export class ListOfPagesUserComponent implements OnInit, AfterViewInit {
 
   @ViewChild('input') input: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTable) mattable: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -77,17 +75,8 @@ export class ListOfPagesUserComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  setPageinAMS(pageId: string): void {
-    this.update.importPage({ pageId: pageId, user: this.user, tag: this.tag, website: this.website})
-      .subscribe(result => {
-        if (result) {
-          const page = _.filter(this.pages, ['PageId', pageId]);
-          page[0].Show_In = '1' + page[0].Show_In[1] + page[0].Show_In[2];
-          this.cd.detectChanges();
-        }
-      });
-    //TODO deixar isto assim?
-    //window.location.reload();
+  setPageinAMS(pageId: string, showin: string): void {
+    this.update.importPage({ pageId: pageId, user: this.user, tag: this.tag, website: this.website}).subscribe();
   }
 
   isAdminPage(flags: string): boolean {
