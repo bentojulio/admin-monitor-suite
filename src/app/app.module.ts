@@ -84,6 +84,7 @@ import { ListOfTagsUserComponent } from './pages/tags/list-of-tags-user/list-of-
 import { ListOfWebsitesUserComponent } from './pages/websites/list-of-websites-user/list-of-websites-user.component';
 import { ImportWebsiteDialogComponent } from './dialogs/import-website-dialog/import-website-dialog.component';
 import { ImportTagDialogComponent } from './dialogs/import-tag-dialog/import-tag-dialog.component';
+import { EditDomainDialogComponent } from './dialogs/edit-domain-dialog/edit-domain-dialog.component';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent, canActivate: [NoAuthGuard] },
@@ -189,7 +190,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ListOfTagsUserComponent,
     ListOfWebsitesUserComponent,
     ImportWebsiteDialogComponent,
-    ImportTagDialogComponent
+    ImportTagDialogComponent,
+    EditDomainDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -239,7 +241,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     CrawlerDialogComponent,
     AddCrawlerPagesDialogComponent,
     ImportTagDialogComponent,
-    ImportWebsiteDialogComponent
+    ImportWebsiteDialogComponent,
+    EditDomainDialogComponent
   ],
   providers: [
     AdminAuthGuard,

@@ -274,8 +274,9 @@ export class AddPageDialogComponent implements OnInit {
     // divide the url in the result array
     reader.onload = () => {
       const urlFile = reader.result.toString();
-      const lines = urlFile.split('\n');
-      for (let i = 1; i < lines.length - 1; i++) {
+      const lines = _.without(_.map(urlFile.split('\n'), l => _.trim(l)), '');
+
+      /*for (let i = 1; i < lines.length - 1; i++) {
         result.push(lines[i]);
       }
     };
@@ -309,6 +310,7 @@ export class AddPageDialogComponent implements OnInit {
         url = _.replace(url, 'https://', '');
         url = _.replace(url, 'www.', '');
         if (!_.startsWith(url, domain)) {
+          console.log(url);
           this.fileErrorMessage = 'invalidDomain';
           return;
         } else {
