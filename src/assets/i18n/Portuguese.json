@@ -755,7 +755,8 @@
     "RESULT_LIST": {
       "uri_label": "Páginas",
       "cancel": "Cancelar",
-      "submit": "Adicionar"
+      "submit": "Adicionar",
+      "submitting": "A adicionar..."
     },
     "reset": "Limpar",
     "submit": "Procurar",
@@ -781,6 +782,9 @@
     },
     "DELETE": {
       "error": "Não foi possível apagar o resultado da pesquisa!"
+    },
+    "ADD": {
+      "title": "Escolha as páginas a adicionar"
     }
   },
   "IMPORT": {
