@@ -16,4 +16,8 @@ export class ConfigService {
 
     return `${this.PROTOCOL}${host}:${this.PORT}${service}`;
   }
+
+  getWSServer(namespace: string): string {
+    return this.URI + namespace;
+  }
 }

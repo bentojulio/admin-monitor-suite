@@ -9,6 +9,8 @@ import {CrawlerDialogComponent} from '../../../dialogs/crawler-dialog/crawler-di
 import {ActivatedRoute} from '@angular/router';
 import {GetService} from '../../../services/get.service';
 
+import { ReEvaluateWebsitePagesProgressDialogComponent } from '../../../dialogs/re-evaluate-website-pages-progress-dialog/re-evaluate-website-pages-progress-dialog.component';
+
 @Component({
   selector: 'app-list-of-domains',
   templateUrl: './list-of-domains.component.html',
@@ -28,6 +30,7 @@ export class ListOfDomainsComponent implements OnInit {
     'End_Date',
     //'delete',
     //'see',
+    're-evaluate',
     'Edit'
   ];
 
@@ -70,6 +73,14 @@ export class ListOfDomainsComponent implements OnInit {
     filterValue = _.trim(filterValue);
     filterValue = _.toLower(filterValue);
     this.dataSource.filter = filterValue;
+  }
+
+  reEvaluateWebsitePages(domainId: number): void {
+    this.dialog.open(ReEvaluateWebsitePagesProgressDialogComponent, {
+      width: '40vw',
+      disableClose: true,
+      data: domainId
+    });
   }
 
   openEditDomainDialog(domainId: number, url: string): void {
