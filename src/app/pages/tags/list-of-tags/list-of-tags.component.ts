@@ -43,7 +43,7 @@ export class ListOfTagsComponent implements OnInit {
     //'User',
     'Creation_Date',
     'Websites',
-    're-evaluate',
+    //'re-evaluate',
     'edit',
   ];
 
