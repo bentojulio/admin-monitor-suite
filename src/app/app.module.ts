@@ -86,6 +86,7 @@ import { ImportWebsiteDialogComponent } from './dialogs/import-website-dialog/im
 import { ImportTagDialogComponent } from './dialogs/import-tag-dialog/import-tag-dialog.component';
 import { ListOfCrawlsComponent } from './pages/list-of-crawls/list-of-crawls.component';
 import { CrawlerConfigDialogComponent } from './dialogs/crawler-config-dialog/crawler-config-dialog.component';
+import { ChoosePagesToReEvaluateDialogComponent } from './dialogs/choose-pages-to-re-evaluate-dialog/choose-pages-to-re-evaluate-dialog.component';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent, canActivate: [NoAuthGuard] },
@@ -194,7 +195,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImportWebsiteDialogComponent,
     ImportTagDialogComponent,
     ListOfCrawlsComponent,
-    CrawlerConfigDialogComponent
+    CrawlerConfigDialogComponent,
+    ChoosePagesToReEvaluateDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -245,7 +247,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     AddCrawlerPagesDialogComponent,
     ImportTagDialogComponent,
     ImportWebsiteDialogComponent,
-    CrawlerConfigDialogComponent
+    EditDomainDialogComponent,
+    AddPagesProgressDialogComponent,
+    AddPagesProgressCloseConfirmationDialogComponent,
+    ReEvaluateWebsitePagesProgressDialogComponent,
+    ReEvaluateTagWebsitesProgressDialogComponent,
+    ReEvaluateEntityWebsitesProgressDialogComponent,
+    CrawlerConfigDialogComponent,
+    ChoosePagesToReEvaluateDialogComponent
   ],
   providers: [
     AdminAuthGuard,

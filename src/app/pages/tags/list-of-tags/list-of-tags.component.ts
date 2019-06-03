@@ -24,8 +24,7 @@ import {
 import {
   EditTagDialogComponent
 } from '../../../dialogs/edit-tag-dialog/edit-tag-dialog.component';
-import { ReEvaluateTagWebsitesProgressDialogComponent } from '../../../dialogs/re-evaluate-tag-websites-progress-dialog/re-evaluate-tag-websites-progress-dialog.component';
-
+import { ChoosePagesToReEvaluateDialogComponent } from './../../../dialogs/choose-pages-to-re-evaluate-dialog/choose-pages-to-re-evaluate-dialog.component';
 
 @Component({
   selector: 'app-list-of-tags',
@@ -43,7 +42,7 @@ export class ListOfTagsComponent implements OnInit {
     //'User',
     'Creation_Date',
     'Websites',
-    //'re-evaluate',
+    're-evaluate',
     'edit',
   ];
 
@@ -89,10 +88,12 @@ export class ListOfTagsComponent implements OnInit {
   }
 
   reEvaluateTagWebsites(tagId: number): void {
-    this.dialog.open(ReEvaluateTagWebsitesProgressDialogComponent, {
+    this.dialog.open(ChoosePagesToReEvaluateDialogComponent, {
       width: '40vw',
-      disableClose: true,
-      data: tagId
+      data: {
+        info: tagId,
+        dialog: 'tag'
+      }
     });
   }
 

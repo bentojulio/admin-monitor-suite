@@ -9,7 +9,7 @@ import {CrawlerDialogComponent} from '../../../dialogs/crawler-dialog/crawler-di
 import {ActivatedRoute} from '@angular/router';
 import {GetService} from '../../../services/get.service';
 
-import { ReEvaluateWebsitePagesProgressDialogComponent } from '../../../dialogs/re-evaluate-website-pages-progress-dialog/re-evaluate-website-pages-progress-dialog.component';
+import { ChoosePagesToReEvaluateDialogComponent } from './../../../dialogs/choose-pages-to-re-evaluate-dialog/choose-pages-to-re-evaluate-dialog.component';
 
 @Component({
   selector: 'app-list-of-domains',
@@ -28,6 +28,10 @@ export class ListOfDomainsComponent implements OnInit {
     'Pages',
     'Start_Date',
     'End_Date',
+    //'delete',
+    //'see',
+    're-evaluate',
+    'Edit',
     'see'
   ];
 
@@ -56,10 +60,12 @@ export class ListOfDomainsComponent implements OnInit {
   }
 
   reEvaluateWebsitePages(domainId: number): void {
-    this.dialog.open(ReEvaluateWebsitePagesProgressDialogComponent, {
+    this.dialog.open(ChoosePagesToReEvaluateDialogComponent, {
       width: '40vw',
-      disableClose: true,
-      data: domainId
+      data: {
+        info: domainId,
+        dialog: 'website'
+      }
     });
   }
 
