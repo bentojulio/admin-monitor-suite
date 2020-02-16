@@ -105,7 +105,9 @@ export class AddPageDialogComponent implements OnInit {
   urisFromFileString: string;
   fileErrorMessage: string;
 
-  @ViewChild('tagInput') tagInput: ElementRef;
+  fileLoading: boolean;
+
+  @ViewChild('tagInput', { static: false }) tagInput: ElementRef;
 
   constructor(
     private get: GetService,
