@@ -3,13 +3,13 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { A11yModule } from '@angular/cdk/a11y';
+//import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ObserversModule } from '@angular/cdk/observers';
-import { NgxGaugeModule } from 'ngx-gauge';
-import { HighlightModule } from 'ngx-highlightjs';
+//import { NgxGaugeModule } from 'ngx-gauge';
 
 import { CookieService } from 'ngx-cookie-service';
 
@@ -203,7 +203,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NoopAnimationsModule,
     BrowserAnimationsModule,
     MaterialModule,
-    FlexLayoutModule,
+    //FlexLayoutModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -219,8 +219,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    NgxGaugeModule,
-    HighlightModule.forRoot()
+    //NgxGaugeModule
   ],
   entryComponents: [
     UserAuthErrorDialogComponent,
