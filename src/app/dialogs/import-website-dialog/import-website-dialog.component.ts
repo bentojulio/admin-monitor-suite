@@ -1,5 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { Observable } from 'rxjs';
+import * as _ from 'lodash';
+
 import {VerifyService} from '../../services/verify.service';
 import {UpdateService} from '../../services/update.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
