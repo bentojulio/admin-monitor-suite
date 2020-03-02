@@ -1,6 +1,6 @@
-import {Component, OnInit, OnDestroy, Input} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {combineLatest, Subscription} from 'rxjs';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
 import {GetService} from '../../services/get.service';
@@ -46,7 +46,9 @@ export class UserComponent implements OnInit, OnDestroy {
           } else {
             this.error = true;
           }
+
           this.loading = false;
+          this.cd.detectChanges();
         });
     });
   }
@@ -70,6 +72,7 @@ export class UserComponent implements OnInit, OnDestroy {
         }
 
         this.loading = false;
+        this.cd.detectChanges();
       });
   }
 

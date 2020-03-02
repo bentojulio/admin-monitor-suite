@@ -13,7 +13,7 @@
       <!--<mat-form-field appearance="outline" fxFlex>
         <label for="website_table_filter">
           {{ "MISC.filter" | translate }}
-        </mat-label>
+        </label>
         <input id="website_table_filter" matInput (keyup)="applyFilter($event.target.value)">
       </mat-form-field>-->
       <mat-form-field appearance="outline">
@@ -30,16 +30,16 @@
           {{ "WEBSITES_PAGE.LIST.table.name_label" | translate }}
         </mat-header-cell>
         <mat-cell *matCellDef="let element" fxFlex>
-          <a *ngIf="!element.User" [routerLink]="['/console', 'website', 'admin', element.Name]">
+          <a *ngIf="tag" [routerLink]="['/console', 'tag', 'website', tag, element.User, element.Name]">
             <strong>{{element.Name}}</strong>
           </a>
-          <a *ngIf="element.User" [routerLink]="['/console', 'website', element.User, element.Name]">
+          <a *ngIf="!tag" [routerLink]="['/console', 'website', element.User, element.Name]">
             <strong>{{element.Name}}</strong>
           </a>
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="Entity">
+      <!--<ng-container matColumnDef="Entity">
         <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="20">
           {{ "WEBSITES_PAGE.LIST.table.entity_label" | translate }}
         </mat-header-cell>
@@ -48,7 +48,7 @@
             <strong>{{element.Entity}}</strong>
           </a>
         </mat-cell>
-      </ng-container>
+      </ng-container>-->
 
       <ng-container matColumnDef="Creation_Date">
         <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10">
@@ -58,10 +58,10 @@
       </ng-container>
 
       <ng-container matColumnDef="Import">
-        <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [hidden]="type !== 'studies'" fxFlex="10">
           {{ "IMPORT.import" | translate }}
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" fxFlex="10">
+        <mat-cell *matCellDef="let element" fxFlex="10" [hidden]="type !== 'studies'">
           <button mat-raised-button color="primary"
                   (click)="openImportWebsiteDialog(element.Name, element.WebsiteId, element.webName, element.Url, element.hasDomain)"
                   [disabled]="element.imported">{{ "IMPORT.import" | translate }}</button>

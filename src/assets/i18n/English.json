@@ -158,6 +158,7 @@
       "emails_label": "Contact e-mails",
       "emails_error": "Email is <strong>invalid</strong>",
       "choose_app": "Application",
+      "transfer_label": "Transfer pages from observatory",
       "websites_label": "Choose websites",
       "reset": "Reset",
       "submit": "Create",
@@ -837,13 +838,14 @@
         "item2": "), as well as all its pages.",
         "item3": "If you pretend to import this domain to another existent website, you need to create that domain in that desired website first.",
         "item4": "This operation will import the domain (",
-        "item5": ") link to this website to the website ",
+        "item5": ") from this website to the website ",
         "item6": ", as well as all its pages.",
         "item7": "This action cannot be undone!"
       },
       "warning": {
         "item1": "Already exists a website with this name!",
-        "item2": "Please insert a new name for the future imported website:"
+        "item2": "Please insert a new name for the future imported website:",
+        "item3": "New name"
       }
     },
     "TAG": {
@@ -855,8 +857,14 @@
       },
       "warning": {
         "item1": "Already exists a tag with this name!",
-        "item2": "Please insert a new name for the future imported tag:"
+        "item2": "Please insert a new name for the future imported tag:",
+        "item3": "New name"
       }
+    },
+    "errors": {
+      "page": "Error importing page",
+      "website": "Error importing website",
+      "tag": "Error importing tag"
     }
   },
   "FOOTER": {

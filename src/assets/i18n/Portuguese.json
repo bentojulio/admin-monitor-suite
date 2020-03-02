@@ -158,6 +158,7 @@
       "emails_label": "E-mails de contacto",
       "emails_error": "Email é <strong>inválido</strong>",
       "choose_app": "Aplicação a que se destina",
+      "transfer_label": "Transferir páginas do observatório",
       "websites_label": "Associar Websites",
       "reset": "Limpar",
       "submit": "Criar",
@@ -841,7 +842,8 @@
       },
       "warning": {
         "item1": "Já existe um website com este nome!",
-        "item2": "Por favor, insira um novo nome para o website a importar:"
+        "item2": "Por favor, insira um novo nome para o website a importar:",
+        "item3": "Novo nome"
       }
     },
     "TAG": {

@@ -17,9 +17,15 @@ import {
 } from '../../../services/get.service';
 
 import * as _ from 'lodash';
-import {AddCrawlerPagesDialogComponent} from '../../../dialogs/add-crawler-pages-dialog/add-crawler-pages-dialog.component';
-import {ImportWebsiteDialogComponent} from '../../../dialogs/import-website-dialog/import-website-dialog.component';
-import {UpdateService} from '../../../services/update.service';
+import {
+  AddCrawlerPagesDialogComponent
+} from '../../../dialogs/add-crawler-pages-dialog/add-crawler-pages-dialog.component';
+import {
+  ImportWebsiteDialogComponent
+} from '../../../dialogs/import-website-dialog/import-website-dialog.component';
+import {
+  UpdateService
+} from '../../../services/update.service';
 
 @Component({
   selector: 'app-list-of-websites-user',
@@ -29,7 +35,7 @@ import {UpdateService} from '../../../services/update.service';
 export class ListOfWebsitesUserComponent implements OnInit {
   displayedColumns = [
     'Name',
-    'Entity',
+    //'Entity',
     'Creation_Date',
     'Import',
   ];
@@ -42,6 +48,7 @@ export class ListOfWebsitesUserComponent implements OnInit {
   loading: boolean;
 
   user: string;
+  type: string;
   tag: string;
   userType: string;
 
@@ -64,16 +71,16 @@ export class ListOfWebsitesUserComponent implements OnInit {
       this.get.userType(this.user)
         .subscribe(type => {
           if (type !== null) {
+            this.type = type;
             if (type === 'studies' || type === 'nimda') {
               this.getListOfStudiesWebsites();
             } else {
               this.getListOfWebsites();
             }
-          this.loading = false;
-        }});
+            this.loading = false;
+          }
+        });
     });
-
-
   }
 
   applyFilter(filterValue: string): void {
@@ -128,4 +135,3 @@ export class ListOfWebsitesUserComponent implements OnInit {
     });
   }
 }
-

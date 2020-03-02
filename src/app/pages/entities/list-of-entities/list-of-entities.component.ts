@@ -41,7 +41,7 @@ export class ListOfEntitiesComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private get: GetService,
-    private message: MessageService
+    private cd: ChangeDetectorRef
   ) {
     this.loading = true;
     this.error = false;
@@ -63,6 +63,7 @@ export class ListOfEntitiesComponent implements OnInit {
         }
 
         this.loading = false;
+        this.cd.detectChanges();
       });
   }
 

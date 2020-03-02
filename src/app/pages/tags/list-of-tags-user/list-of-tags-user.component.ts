@@ -26,7 +26,7 @@ export class ListOfTagsUserComponent implements OnInit {
 
   displayedColumns = [
     'Name',
-    'Show_in_Observatorio',
+    //'Show_in_Observatorio',
     'Creation_Date',
     'Websites',
     'Import'

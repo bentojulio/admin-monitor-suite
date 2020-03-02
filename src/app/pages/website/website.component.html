@@ -18,7 +18,7 @@
 <app-list-of-pages-user *ngIf="!loading && !error && user !== 'admin'" [pages]="pages"></app-list-of-pages-user>
 <app-loading *ngIf="loading"></app-loading>
 
-<div *ngIf="errorNoActiveDomains"fxLayout="column" fxLayoutAlign="center center">
+<div *ngIf="errorNoActiveDomains" fxLayout="column" fxLayoutAlign="center center">
   <!-- TODO message a dizer que os dominios existentes nao estao ativos-->
   <span>{{ "MISC.unexpected_error" | translate }}</span>
 </div>

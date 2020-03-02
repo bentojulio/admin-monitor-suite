@@ -6,7 +6,6 @@ import * as _ from 'lodash';
 
 import {VerifyService} from '../../services/verify.service';
 import {UpdateService} from '../../services/update.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-import-website-dialog',
@@ -37,8 +36,8 @@ export class ImportWebsiteDialogComponent implements OnInit {
     this.webName = this.data.webName;
     this.domain = this.data.url;
     this.pageForm = this.formBuilder.group({
-      newWebsiteName: new FormControl('', [
-        Validators.required])
+      newWebsiteName: new FormControl('',
+      [Validators.required], this.nameValidator.bind(this))
     });
   }
 
@@ -50,10 +49,20 @@ export class ImportWebsiteDialogComponent implements OnInit {
   }
 
   importWebsite(): void {
-    if (this.websiteNameExists) {
+    if (!this.hasDomain) {
       this.update.importWebsite({websiteId: this.websiteId, websiteName: this.pageForm.value.newWebsiteName}).subscribe();
     } else {
       this.update.importWebsite({websiteId: this.websiteId, websiteName: this.website}).subscribe();
+    }
+  }
+
+  nameValidator(control: AbstractControl): Observable<any> {
+    const name = _.trim(control.value);
+
+    if (name !== '') {
+      return this.verify.websiteNameExists(name);
+    } else {
+      return null;
     }
   }
 }

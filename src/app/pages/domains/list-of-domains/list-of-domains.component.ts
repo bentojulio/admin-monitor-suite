@@ -46,7 +46,24 @@ export class ListOfDomainsComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private dialog: MatDialog) {
+  constructor(
+    private dialog: MatDialog,
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.activatedRoute.params.subscribe(params => {
+      this.user = _.trim(params.user);
+
+      if (this.user !== '') {
+        this.displayedColumns = [
+          'Url',
+          'Active',
+          'Pages',
+          'Start_Date',
+          'End_Date',
+          'delete'
+        ];
+      }
+    });
   }
 
   ngOnInit(): void {

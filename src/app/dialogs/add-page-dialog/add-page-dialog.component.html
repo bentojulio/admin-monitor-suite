@@ -51,7 +51,7 @@
         </label>
         <br>
         <input type="file" id="file" formControlName="files" accept="text/xml, text/plain"
-               (change)="handleFileInput($event.target.files)" (focus)="updateUrisFromFile()">
+               (change)="handleFileInput($event.target.files)" > <!--(change)="handleFileInput($event.target.files)" (focus)="updateUrisFromFile()"-->
         <button type="button" *ngIf="pageForm.value.files" matSuffix mat-icon-button aria-label="Clear" (click)="resetFile()">
           <mat-icon aria-hidden="false">clear</mat-icon>
         </button>
@@ -76,7 +76,7 @@
       {{ "PAGES_PAGE.ADD.reset" | translate }}
     </button>
     <button mat-raised-button color="primary" type="submit" [disabled]="pageForm.controls.domain.invalid ||
-    pageForm.hasError('requiredAtLeastOne') || pageForm.controls.uris.hasError('invalidUri') || fileErrorMessage != ''"
+    pageForm.hasError('requiredAtLeastOne') || pageForm.controls.uris.hasError('invalidUri') || fileErrorMessage != '' || fileLoading"
             *ngIf="!loadingCreate">
       {{ "PAGES_PAGE.ADD.submit" | translate }}
     </button>

@@ -444,6 +444,29 @@ export class GetService {
     );
   }
 
+  listOfUserWebsitePages(tag: string, user: string, website: string): Observable<Array<Page>> {
+    return ajax.post(this.config.getServer('/admin/pages/website'), {tag, user, website, cookie: this.user.getUserData()}).pipe(
+      retry(3),
+      map(res => {
+        const response = <Response> res.response;
+
+        if (!res.response || res.status === 404) {
+          throw new AdminError(404, 'Service not found', 'SERIOUS');
+        }
+
+        if (response.success !== 1) {
+          throw new AdminError(response.success, response.message);
+        }
+
+        return <Array<Page>> response.result;
+      }),
+      catchError(err => {
+        console.log(err);
+        return of(null);
+      })
+    );
+  }
+
   listOfWebsitePages(websiteId: number): Observable<Array<Page>> {
     return ajax.post(this.config.getServer('/admin/website/allPages'), {websiteId, cookie: this.user.getUserData()}).pipe(
       retry(3),
@@ -559,8 +582,8 @@ export class GetService {
     );
   }
 
-  listOfDomainPages(domain: string): Observable<Array<Page>> {
-    return ajax.post(this.config.getServer('/admin/pages/domain'), {domain, cookie: this.user.getUserData()}).pipe(
+  listOfDomainPages(user: string, domain: string): Observable<Array<Page>> {
+    return ajax.post(this.config.getServer('/admin/pages/domain'), {user, domain, cookie: this.user.getUserData()}).pipe(
       retry(3),
       map(res => {
         const response = <Response> res.response;

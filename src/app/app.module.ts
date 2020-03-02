@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -80,11 +80,22 @@ import { ScoreDistributionDialogComponent } from './dialogs/score-distribution-d
 import { ErrorDistributionDialogComponent } from './dialogs/error-distribution-dialog/error-distribution-dialog.component';
 import { CrawlerDialogComponent } from './dialogs/crawler-dialog/crawler-dialog.component';
 import { AddCrawlerPagesDialogComponent } from './dialogs/add-crawler-pages-dialog/add-crawler-pages-dialog.component';
+import { DeleteWebsitePagesDialogComponent } from './dialogs/delete-website-pages-dialog/delete-website-pages-dialog.component';
 import { ListOfPagesUserComponent } from './pages/pages/list-of-pages-user/list-of-pages-user.component';
+import { DeleteWebsiteConfirmationDialogComponent } from './dialogs/delete-website-confirmation-dialog/delete-website-confirmation-dialog.component';
+import { DeleteTagConfirmationDialogComponent } from './dialogs/delete-tag-confirmation-dialog/delete-tag-confirmation-dialog.component';
 import { ListOfTagsUserComponent } from './pages/tags/list-of-tags-user/list-of-tags-user.component';
 import { ListOfWebsitesUserComponent } from './pages/websites/list-of-websites-user/list-of-websites-user.component';
 import { ImportWebsiteDialogComponent } from './dialogs/import-website-dialog/import-website-dialog.component';
 import { ImportTagDialogComponent } from './dialogs/import-tag-dialog/import-tag-dialog.component';
+
+import { EditDomainDialogComponent } from './dialogs/edit-domain-dialog/edit-domain-dialog.component';
+import { AddPagesProgressDialogComponent } from './dialogs/add-pages-progress-dialog/add-pages-progress-dialog.component';
+import { AddPagesProgressCloseConfirmationDialogComponent } from './dialogs/add-pages-progress-close-confirmation-dialog/add-pages-progress-close-confirmation-dialog.component';
+import { ReEvaluateWebsitePagesProgressDialogComponent } from './dialogs/re-evaluate-website-pages-progress-dialog/re-evaluate-website-pages-progress-dialog.component';
+import { ReEvaluateTagWebsitesProgressDialogComponent } from './dialogs/re-evaluate-tag-websites-progress-dialog/re-evaluate-tag-websites-progress-dialog.component';
+import { ReEvaluateEntityWebsitesProgressDialogComponent } from './dialogs/re-evaluate-entity-websites-progress-dialog/re-evaluate-entity-websites-progress-dialog.component';
+
 import { ListOfCrawlsComponent } from './pages/list-of-crawls/list-of-crawls.component';
 import { CrawlerConfigDialogComponent } from './dialogs/crawler-config-dialog/crawler-config-dialog.component';
 import { ChoosePagesToReEvaluateDialogComponent } from './dialogs/choose-pages-to-re-evaluate-dialog/choose-pages-to-re-evaluate-dialog.component';
@@ -97,6 +108,7 @@ const appRoutes: Routes = [
     { path: 'user/:user', component: UserComponent, canActivate: [AdminAuthGuard] },
     { path: 'tags', component: TagsComponent, canActivate: [AdminAuthGuard] },
     { path: 'tag/:tag', component: TagComponent, canActivate: [AdminAuthGuard] },
+    { path: 'tag/:user/:tag', component: TagComponent, canActivate: [AdminAuthGuard] },
     { path: 'entities', component: EntitiesComponent, canActivate: [AdminAuthGuard] },
     { path: 'entity/:entity', component: EntityComponent, canActivate: [AdminAuthGuard] },
     { path: 'websites', component: WebsitesComponent, canActivate: [AdminAuthGuard] },
@@ -192,11 +204,21 @@ export function HttpLoaderFactory(http: HttpClient) {
     ErrorDistributionDialogComponent,
     CrawlerDialogComponent,
     AddCrawlerPagesDialogComponent,
+    DeleteWebsitePagesDialogComponent,
+    ListOfPagesUserComponent,
+    DeleteWebsiteConfirmationDialogComponent,
+    DeleteTagConfirmationDialogComponent,
     ListOfPagesUserComponent,
     ListOfTagsUserComponent,
     ListOfWebsitesUserComponent,
     ImportWebsiteDialogComponent,
     ImportTagDialogComponent,
+    EditDomainDialogComponent,
+    AddPagesProgressDialogComponent,
+    AddPagesProgressCloseConfirmationDialogComponent,
+    ReEvaluateWebsitePagesProgressDialogComponent,
+    ReEvaluateTagWebsitesProgressDialogComponent,
+    ReEvaluateEntityWebsitesProgressDialogComponent,
     ListOfCrawlsComponent,
     CrawlerConfigDialogComponent,
     ChoosePagesToReEvaluateDialogComponent
@@ -204,10 +226,10 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     BrowserModule,
     NoopAnimationsModule,
-    BrowserAnimationsModule,
     MaterialModule,
     FlexLayoutModule,
     HttpClientModule,
+    A11yModule,
     FormsModule,
     ReactiveFormsModule,
     ObserversModule,
@@ -248,6 +270,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ErrorDistributionDialogComponent,
     CrawlerDialogComponent,
     AddCrawlerPagesDialogComponent,
+    DeleteWebsitePagesDialogComponent,
+    DeleteWebsiteConfirmationDialogComponent,
+    DeleteTagConfirmationDialogComponent,
     ImportTagDialogComponent,
     ImportWebsiteDialogComponent,
     EditDomainDialogComponent,

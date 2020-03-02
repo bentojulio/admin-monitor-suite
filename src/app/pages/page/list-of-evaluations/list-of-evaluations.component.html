@@ -10,9 +10,9 @@
   <mat-card-content>
     <div class="table-filter">
       <mat-form-field appearance="outline">
-        <mat-label>
+        <label>
           {{ "MISC.filter" | translate }}
-        </mat-label>
+        </label>
         <input id="evaluation_table_filter" matInput (keyup)="applyFilter($event.target.value)">
       </mat-form-field>
     </div>

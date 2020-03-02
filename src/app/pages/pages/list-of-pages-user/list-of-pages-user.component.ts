@@ -30,6 +30,8 @@ export class ListOfPagesUserComponent implements OnInit, AfterViewInit {
   selection: any;
 
   user: string;
+  tag: string;
+  website: string;
 
   error: boolean;
   pagesForm: FormGroup;
@@ -55,6 +57,8 @@ export class ListOfPagesUserComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.activatedRoute.params.subscribe(params => {
       this.user = _.trim(params.user);
+      this.tag = params.tag;
+      this.website = params.website;
     });
   }
 
@@ -76,8 +80,15 @@ export class ListOfPagesUserComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  setPageinAMS(pageId: string, showin: string): void {
-    this.update.importPage({ pageId: pageId, user: this.user, tag: this.tag, website: this.website}).subscribe();
+  setPageinAMS(pageId: string): void {
+    this.update.importPage({ pageId: pageId, user: this.user, tag: this.tag, website: this.website})
+      .subscribe(result => {
+        if (result) {
+          const page = _.filter(this.pages, ['PageId', pageId]);
+          page[0].Show_In = '1' + page[0].Show_In[1] + page[0].Show_In[2];
+          this.cd.detectChanges();
+        }
+      });
   }
 
   isAdminPage(flags: string): boolean {

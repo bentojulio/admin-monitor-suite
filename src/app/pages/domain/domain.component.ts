@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
 import { GetService } from '../../services/get.service';
 import { DeleteService } from '../../services/delete.service';
-import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-domain',
@@ -27,7 +26,7 @@ export class DomainComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private get: GetService,
     private deleteService: DeleteService,
-    private message: MessageService
+    private cd: ChangeDetectorRef
   ) {
     this.loading = true;
     this.error = false;
@@ -35,6 +34,7 @@ export class DomainComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.activatedRoute.params.subscribe(params => {
+      this.user = params.user || 'admin';
       this.domain = params.domain;
 
       this.getListOfDomainPages();
@@ -46,7 +46,7 @@ export class DomainComponent implements OnInit, OnDestroy {
   }
 
   private getListOfDomainPages(): void {
-    this.get.listOfDomainPages(encodeURIComponent(this.domain))
+    this.get.listOfDomainPages(this.user, encodeURIComponent(this.domain))
       .subscribe(pages => {
         if (pages !== null) {
           this.pages = pages;
@@ -55,6 +55,7 @@ export class DomainComponent implements OnInit, OnDestroy {
         }
 
         this.loading = false;
+        this.cd.detectChanges();
       });
   }
 

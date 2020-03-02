@@ -197,7 +197,7 @@ export class UpdateService {
     );
   }
 
-  importPage(data: any): Observable<boolean> {
+importPage(data: any): Observable<boolean> {
     data.cookie = this.userService.getUserData();
     return ajax.post(this.config.getServer('/admin/pages/updateAdminPage'), data).pipe(
       retry(3),
@@ -215,7 +215,7 @@ export class UpdateService {
         return <boolean> (response.result > 0);
       }),
       catchError(err => {
-        this.message.show('PAGES_PAGE.UPDATE.messages.error');
+        this.message.show('IMPORT.errors.page');
         console.log(err);
         return of(null);
       })
@@ -240,7 +240,7 @@ export class UpdateService {
         return <boolean> response.result;
       }),
       catchError(err => {
-        this.message.show('PAGES_PAGE.UPDATE.messages.error');
+        this.message.show('IMPORT.errors.website');
         console.log(err);
         return of(null);
       })
@@ -265,14 +265,14 @@ export class UpdateService {
         return <boolean> response.result;
       }),
       catchError(err => {
-        this.message.show('PAGES_PAGE.UPDATE.messages.error');
+        this.message.show('IMPORT.errors.tag');
         console.log(err);
         return of(null);
       })
     );
   }
 
-  observatorioPages(pages: Array<any>, pagesId: Array<number>): Observable<boolean> {
+  observatoryPages(pages: Array<any>, pagesId: Array<number>): Observable<boolean> {
     const data = {
       pages: JSON.stringify(pages),
       pagesId: JSON.stringify(pagesId),

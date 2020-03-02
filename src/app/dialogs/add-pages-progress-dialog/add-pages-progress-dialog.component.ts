@@ -98,6 +98,11 @@ export class AddPagesProgressDialogComponent implements OnInit, OnDestroy {
 
   closeDialog(): void {
     if (this.finished) {
+      if (this.location.path() !== '/console/pages') {
+        this.router.navigateByUrl('/console/pages');
+      } else {
+        window.location.reload();
+      }
       this.dialogRef.close();
     } else {
       const dialog = this.dialog.open(AddPagesProgressCloseConfirmationDialogComponent);

@@ -107,8 +107,8 @@ export class AddUserDialogComponent implements OnInit {
       app: new FormControl('', [
         Validators.required
       ]),
-      websites: new FormControl({value: '', disabled: true}),
-      transfer: new FormControl()
+      transfer: new FormControl({value: '', disabled: true}),
+      websites: new FormControl({value: '', disabled: true})
     },
     {
       validator: PasswordValidation.MatchPassword
@@ -142,6 +142,9 @@ export class AddUserDialogComponent implements OnInit {
     } else {
       this.userForm.controls.websites.reset();
       this.userForm.controls.websites.disable();
+      this.userForm.controls.transfer.disable();
+      this.selectedWebsites = [];
+      this.userForm.controls.transfer.setValue(false);
     }
   }
 
@@ -162,7 +165,7 @@ export class AddUserDialogComponent implements OnInit {
     const emails = _.join(this.emails, ';');
     const type = this.userForm.value.app;
     const websites = _.map(this.selectedWebsites, 'WebsiteId');
-    const transfer: boolean = this.userForm.value.transfer;
+    const transfer = this.userForm.value.transfer;
     const formData = {
       username,
       password,
@@ -249,10 +252,20 @@ export class AddUserDialogComponent implements OnInit {
     if (index >= 0) {
       this.selectedWebsites.splice(index, 1);
     }
+    if (this.selectedWebsites.length === 0) {
+      this.userForm.controls.transfer.disable();
+      this.userForm.controls.transfer.setValue(false);
+    }
+  }
+
+  removeWebsites(): void {
+    this.selectedWebsites = [];
+    this.userForm.controls.transfer.disable();
+    this.userForm.controls.transfer.setValue(false);
   }
 
   removeTransferList(website: any): void {
-      this.siteTransferList = null;
+    this.siteTransferList = null;
   }
 
   filterWebsite(name: string) {
@@ -261,11 +274,14 @@ export class AddUserDialogComponent implements OnInit {
   }
 
   selectedWebsite(event: MatAutocompleteSelectedEvent): void {
-    const index = _.findIndex(this.websites, w => w.Name === event.option.viewValue);
+    const index = _.findIndex(this.websites, w => w['Name'] === event.option.viewValue);
     if (!_.includes(this.selectedWebsites, this.websites[index])) {
       this.selectedWebsites.push(this.websites[index]);
       this.websiteInput.nativeElement.value = '';
       this.userForm.controls.websites.setValue(null);
+    }
+    if (this.selectedWebsites.length > 0) {
+      this.userForm.controls.transfer.enable();
     }
   }
 

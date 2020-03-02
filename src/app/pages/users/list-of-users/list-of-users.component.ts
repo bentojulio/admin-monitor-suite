@@ -41,7 +41,8 @@ export class ListOfUsersComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private get: GetService
+    private get: GetService,
+    private cd: ChangeDetectorRef
   ) {
     this.loading = true;
     this.error = false;
@@ -63,6 +64,7 @@ export class ListOfUsersComponent implements OnInit {
         }
 
         this.loading = false;
+        this.cd.detectChanges();
       });
   }
 

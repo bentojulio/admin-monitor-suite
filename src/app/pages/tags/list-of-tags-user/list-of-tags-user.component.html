@@ -12,7 +12,7 @@
       <!--<mat-form-field appearance="outline" fxFlex>
         <label for="tag_table_filter">
           {{ "MISC.filter" | translate }}
-        </mat-label>
+        </label>
         <input id="tag_table_filter" matInput (keyup)="applyFilter($event.target.value)">
       </mat-form-field>-->
       <mat-form-field appearance="outline">
@@ -38,16 +38,13 @@
           {{ "TAGS_PAGE.LIST.table.name_label" | translate }}
         </mat-header-cell>
         <mat-cell *matCellDef="let element" fxFlex>
-          <a *ngIf="!element.User" [routerLink]="['/console', 'tag', 'admin', element.Name]">
-            <strong>{{element.Name}}</strong>
-          </a>
-          <a *ngIf="element.User" [routerLink]="['/console', 'tag', element.User, element.Name]">
+          <a [routerLink]="['/console', 'tag', element.User, element.Name]">
             <strong>{{element.Name}}</strong>
           </a>
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="Show_in_Observatorio">
+      <!--<ng-container matColumnDef="Show_in_Observatorio">
         <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10">
           {{ "TAGS_PAGE.LIST.table.observatorio_label" | translate }}
         </mat-header-cell>
@@ -55,7 +52,7 @@
           <mat-icon *ngIf="element.Show_in_Observatorio" class="md-24" aria-label="">check</mat-icon>
           <mat-icon *ngIf="!element.Show_in_Observatorio" class="md-24" aria-label="">clear</mat-icon>
         </mat-cell>
-      </ng-container>
+      </ng-container>-->
 
       <ng-container matColumnDef="Creation_Date">
         <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="10">

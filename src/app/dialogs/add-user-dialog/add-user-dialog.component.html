@@ -107,14 +107,13 @@
     </div>
     <div class="add-type-block">
       <mat-radio-group formControlName="app" fxLayout="row" (change)="changeApp()" required>
-        <mat-radio-button value="studies">Study Monitor</mat-radio-button>
+        <mat-radio-button color="primary" value="studies">Study Monitor</mat-radio-button>
         <span fxFlex="5"></span>
-        <mat-radio-button value="monitor">My Monitor</mat-radio-button>
+        <mat-radio-button color="primary" value="monitor">My Monitor</mat-radio-button>
       </mat-radio-group>
     </div>
     <div class="add-websites-block" *ngIf="!loadingWebsites && userForm.value.app && userForm.value.app === 'monitor'"
       fxLayout="column" fxLayoutAlign="start stretch">
-      <mat-checkbox formControlName="transfer">Transfer Pages</mat-checkbox>
       <mat-form-field>
         <label for="user_websites_input">
           {{ "USERS_PAGE.ADD.websites_label" | translate }}
@@ -139,6 +138,9 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+      <mat-checkbox color="primary" formControlName="transfer">
+        {{ "USERS_PAGE.ADD.transfer_label" | translate }}
+      </mat-checkbox>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions fxLayout="row">

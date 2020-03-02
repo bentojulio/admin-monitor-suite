@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { GetService } from '../../services/get.service';
 
@@ -19,7 +19,10 @@ export class HomeComponent implements OnInit {
   observatorio_tags: number;
   observatorio_websites: number;
 
-  constructor(private get: GetService) {
+  constructor(
+    private get: GetService,
+    private cd: ChangeDetectorRef
+  ) {
     this.access_studies_users = 0;
     this.my_monitor_users = 0;
     this.access_studies_tags = 0;
@@ -33,36 +36,43 @@ export class HomeComponent implements OnInit {
     this.get.numberOfStudyMonitorUsers()
       .subscribe(total => {
         this.access_studies_users = total;
+        this.cd.detectChanges();
       });
 
     this.get.numberOfStudyMonitorTags()
       .subscribe(total => {
         this.access_studies_tags = total;
+        this.cd.detectChanges();
       });
 
     this.get.numberOfStudyMonitorWebsites()
       .subscribe(total => {
         this.access_studies_websites = total;
+        this.cd.detectChanges();
       });
 
     this.get.numberOfMyMonitorUsers()
       .subscribe(total => {
         this.my_monitor_users = total;
+        this.cd.detectChanges();
       });
 
     this.get.numberOfMyMonitorWebsites()
       .subscribe(total => {
         this.my_monitor_websites = total;
+        this.cd.detectChanges();
       });
 
     this.get.numberOfObservatoryTags()
       .subscribe(total => {
         this.observatorio_tags = total;
+        this.cd.detectChanges();
       });
 
     this.get.numberOfObservatoryWebsites()
       .subscribe(total => {
         this.observatorio_websites = total;
+        this.cd.detectChanges();
       });
   }
 }

@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Location } from '@angular/common';
 import * as _ from 'lodash';
 
 import { EvaluationService } from '../../services/evaluation.service';
@@ -29,11 +28,11 @@ export class PageComponent implements OnInit, OnDestroy {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private location: Location,
     private evaluation: EvaluationService,
     private get: GetService,
     private deleteService: DeleteService,
-    private message: MessageService
+    private message: MessageService,
+    private cd: ChangeDetectorRef
   ) {
     this.loading = true;
     this.error = false;
@@ -62,6 +61,7 @@ export class PageComponent implements OnInit, OnDestroy {
         }
 
         this.loading = false;
+        this.cd.detectChanges();
       });
   }
 
@@ -73,6 +73,7 @@ export class PageComponent implements OnInit, OnDestroy {
         if (data === null) {
           this.error = true;
           this.loading = false;
+          this.cd.detectChanges();
         } else {
           this.getListOfPageEvaluations();
         }

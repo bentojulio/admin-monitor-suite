@@ -136,6 +136,8 @@ export class AddPageDialogComponent implements OnInit {
       });
     this.loadingDomains = true;
     this.loadingCreate = false;
+    this.fileLoading = false;
+    this.urisFromFile = [];
   }
 
   ngOnInit(): void {
@@ -174,10 +176,11 @@ export class AddPageDialogComponent implements OnInit {
     const domainId = _.find(this.domains, ['Url', this.pageForm.value.domain]).DomainId;
 
     this.pageForm.value.uris = this.pageForm.value.uris === null ? '' : this.pageForm.value.uris;
-    const urisWithFileUris = this.urisFromFile !== undefined ?
-      this.urisFromFile.join('\n') + '\n' + this.pageForm.value.uris : this.pageForm.value.uris;
+    const urisWithFileUris = [...this.urisFromFile, ..._.split(this.pageForm.value.uris, '\n')];
+    // this.urisFromFile.join('\n') + this.pageForm.value.uris;
 
-    const uris = JSON.stringify(_.without(_.uniq(_.map(_.split(urisWithFileUris, '\n'), p => {
+    const uris = JSON.stringify(_.without(_.uniq(_.map(urisWithFileUris, p => {
+      p = _.trim(p);
       p = _.replace(p, 'http://', '');
       p = _.replace(p, 'https://', '');
       p = _.replace(p, 'www.', '');
@@ -188,6 +191,7 @@ export class AddPageDialogComponent implements OnInit {
 
       return _.trim(p);
     })), ''));
+
     if (this.pageForm.value.observatorio) {
       const chooseDialog = this.dialog.open(ChooseObservatoryPagesDialogComponent, {
         width: '40vw',
@@ -269,8 +273,9 @@ export class AddPageDialogComponent implements OnInit {
   }
 
   handleFileInput(files: FileList) {
+    this.fileLoading = true;
     const fileToRead = files.item(0);
-
+    this.urisFromFile = [];
     if (fileToRead === null) {
       this.fileErrorMessage = '';
       this.urisFromFile = [];
@@ -280,10 +285,12 @@ export class AddPageDialogComponent implements OnInit {
 
     switch (fileToRead.type) {
       case ('text/plain'):
-        this.urisFromFile = this.parseTXT(fileToRead);
+        //this.urisFromFile = this.parseTXT(fileToRead);
+        this.parseTXT(fileToRead);
         break;
       case ('text/xml'):
-        this.urisFromFile = this.parseXML(fileToRead);
+        //this.urisFromFile = this.parseXML(fileToRead);
+        this.parseXML(fileToRead);
         break;
       default:
         this.urisFromFile = [];
@@ -304,7 +311,11 @@ export class AddPageDialogComponent implements OnInit {
 
       /*for (let i = 1; i < lines.length - 1; i++) {
         result.push(lines[i]);
-      }
+        this.urisFromFile.push(lines[i]);
+      }*/
+      this.urisFromFile = _.clone(lines);
+      this.validateFileUris(this.pageForm.value.domain, this.urisFromFile);
+      this.fileLoading = false;
     };
     return result;
   }
@@ -318,9 +329,16 @@ export class AddPageDialogComponent implements OnInit {
       const xml = parser.parseFromString(reader.result.toString(), 'text/xml');
       const json = {}; // this.xml2Json.xmlToJson(xml);
       const urlJson = json['urlset']['url'];
+
+      this.urisFromFile = _.clone(_.map(urlJson, u => u.loc));
+      /*console.log(this.urisFromFile);
+      this.urisFromFile = [];
       for (let i = 1; i < urlJson.length; i++) {
         result.push(urlJson[i]['loc']);
-      }
+        this.urisFromFile.push(urlJson[i]['loc']);
+      }*/
+      this.validateFileUris(this.pageForm.value.domain, this.urisFromFile);
+      this.fileLoading = false;
     };
     return result;
   }
@@ -351,5 +369,4 @@ export class AddPageDialogComponent implements OnInit {
       this.validateFileUris(this.pageForm.value.domain, this.urisFromFile);
     }
   }
-
 }

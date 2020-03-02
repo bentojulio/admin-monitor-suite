@@ -9,6 +9,10 @@ import {MessageService} from '../../services/message.service';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 
+import {
+  AddPagesProgressDialogComponent
+} from '../add-pages-progress-dialog/add-pages-progress-dialog.component';
+
 @Component({
   selector: 'app-add-crawler-pages-dialog',
   templateUrl: './add-crawler-pages-dialog.component.html',
@@ -72,7 +76,7 @@ export class AddCrawlerPagesDialogComponent implements OnInit {
 
             return _.trim(uriToClean);
           }));
-          this.dataSource = new MatTableDataSource(_.map(JSON.parse(cleanUris), u => ({Uri: u})));
+          this.dataSource = new MatTableDataSource(_.map(JSON.parse(cleanUris), u => ({Uri: decodeURIComponent(u)})));
         } else {
           this.error = true;
         }
@@ -122,12 +126,25 @@ export class AddCrawlerPagesDialogComponent implements OnInit {
 
   private addPages(uris: any, observatorio: any): void {
     const domainId = this.domainId;
-    const formData = {
+    /*const formData = {
       domainId,
       uris,
       observatorio
-    };
-    this.loading = true;
+    };*/
+
+    this.dialog.open(AddPagesProgressDialogComponent, {
+      width: '40vw',
+      disableClose: true,
+      data: {
+        domainId: domainId,
+        uris: JSON.parse(uris),
+        observatory_uris: observatorio
+      }
+    });
+
+    this.dialogRef.close();
+
+    /*this.loading = true;
     this.create.newPages(formData)
       .subscribe(success => {
         if (success !== null) {
@@ -142,6 +159,6 @@ export class AddCrawlerPagesDialogComponent implements OnInit {
             }
           }
         }
-      });
+      });*/
   }
 }

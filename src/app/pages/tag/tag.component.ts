@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
@@ -25,7 +25,7 @@ export class TagComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private get: GetService,
-    private message: MessageService
+    private cd: ChangeDetectorRef
   ) {
     this.loading = true;
     this.error = false;
@@ -33,6 +33,7 @@ export class TagComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.activatedRoute.params.subscribe(params => {
+      this.user = params.user || 'admin';
       this.tag = params.tag;
 
       this.getListOfTagWebsites();
@@ -49,7 +50,7 @@ export class TagComponent implements OnInit, OnDestroy {
   }
 
   private getListOfTagWebsites(): void {
-    this.get.listOfTagWebsites(this.tag)
+    this.get.listOfTagWebsites(this.user, this.tag)
       .subscribe(websites => {
         if (websites !== null) {
           this.websites = websites;
@@ -58,6 +59,7 @@ export class TagComponent implements OnInit, OnDestroy {
         }
 
         this.loading = false;
+        this.cd.detectChanges();
       });
   }
 }

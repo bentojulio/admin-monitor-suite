@@ -101,7 +101,8 @@ export class EditUserDialogComponent implements OnInit {
       names: new FormControl(),
       emails: new FormControl(),
       app: new FormControl({value: '', disabled: true}),
-      websites: new FormControl()
+      websites: new FormControl(),
+      transfer: new FormControl({value: '', disabled: true})
     },
     {
       validator: PasswordValidation.MatchPassword
@@ -159,6 +160,8 @@ export class EditUserDialogComponent implements OnInit {
     this.names = _.without(_.split(this.defaultUser.Names, ';'), '');
     this.emails = _.without(_.split(this.defaultUser.Emails, ';'), '');
     this.selectedWebsites = _.clone(this.defaultUser.websites);
+    this.userForm.controls.transfer.disable();
+    this.userForm.controls.transfer.setValue(false);
   }
 
   deleteUser(): void {
@@ -182,6 +185,7 @@ export class EditUserDialogComponent implements OnInit {
 
     const defaultWebsites = JSON.stringify(_.map(this.defaultUser.websites, 'WebsiteId'));
     const websites = JSON.stringify(_.map(this.selectedWebsites, 'WebsiteId'));
+    const transfer = this.userForm.value.transfer;
 
     const formData = {
       userId: this.data.id,
@@ -191,7 +195,8 @@ export class EditUserDialogComponent implements OnInit {
       emails,
       app: this.defaultUser.Type,
       defaultWebsites,
-      websites
+      websites,
+      transfer
     };
 
     this.update.user(formData)
@@ -260,6 +265,22 @@ export class EditUserDialogComponent implements OnInit {
     if (index >= 0) {
       this.selectedWebsites.splice(index, 1);
     }
+    if (this.selectedWebsites.length === 0) {
+      this.userForm.controls.transfer.disable();
+      this.userForm.controls.transfer.setValue(false);
+    } else {
+      const differ = _.difference(_.map(this.selectedWebsites, 'Name'), _.map(this.defaultUser.websites, 'Name'));
+      if (_.size(differ) === 0) {
+        this.userForm.controls.transfer.disable();
+        this.userForm.controls.transfer.setValue(false);
+      }
+    }
+  }
+
+  removeWebsites(): void {
+    this.selectedWebsites = [];
+    this.userForm.controls.transfer.disable();
+    this.userForm.controls.transfer.setValue(false);
   }
 
   filterWebsite(name: string) {
@@ -268,11 +289,17 @@ export class EditUserDialogComponent implements OnInit {
   }
 
   selectedWebsite(event: MatAutocompleteSelectedEvent): void {
-    const index = _.findIndex(this.websites, w => w.Name === event.option.viewValue);
+    const index = _.findIndex(this.websites, w => w['Name'] === event.option.viewValue);
     if (!_.includes(this.selectedWebsites, this.websites[index])) {
       this.selectedWebsites.push(this.websites[index]);
       this.websiteInput.nativeElement.value = '';
       this.userForm.controls.websites.setValue(null);
+    }
+    if (this.selectedWebsites.length > 0) {
+      const differ = _.difference(_.map(this.selectedWebsites, 'Name'), _.map(this.defaultUser.websites, 'Name'));
+      if (_.size(differ) > 0) {
+        this.userForm.controls.transfer.enable();
+      }
     }
   }
 

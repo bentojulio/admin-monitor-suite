@@ -3,22 +3,17 @@ import { Observable, of } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { map, retry, catchError } from 'rxjs/operators';
 import * as _ from 'lodash';
-import {User} from '../models/user';
-import {Response} from '../models/response';
-import {AdminError} from '../models/error';
-import {ConfigService} from './config.service';
-import {Domain} from '../models/domain';
-import {UserService} from './user.service';
+
+import { Response } from '../models/response';
+import { AdminError } from '../models/error';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CrawlerService {
 
-  constructor(
-    private user: UserService,
-    private config: ConfigService
-  ) { }
+  constructor(private config: ConfigService) { }
 
   callCrawler(domain: string, domainId: number, subDomain: string, max_depth: number, max_pages: number): Observable<any> {
     return ajax.post(this.config.getServer('/admin/crawler/crawl'), {domain, domainId, subDomain, max_depth, max_pages}).pipe(

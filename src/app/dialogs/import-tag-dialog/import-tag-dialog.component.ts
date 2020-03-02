@@ -4,8 +4,7 @@ import { Observable, of } from 'rxjs';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {VerifyService} from '../../services/verify.service';
 import {UpdateService} from '../../services/update.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {VerifyService} from '../../services/verify.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-import-tag-dialog',
@@ -31,7 +30,7 @@ export class ImportTagDialogComponent implements OnInit {
     this.tagId = this.data.tagId;
     this.pageForm = this.formBuilder.group({
       newTagName: new FormControl('', [
-        Validators.required])
+        Validators.required], this.nameValidator.bind(this))
     });
   }
 
@@ -50,4 +49,13 @@ export class ImportTagDialogComponent implements OnInit {
     }
   }
 
+  nameValidator(control: AbstractControl): Observable<any> {
+    const name = _.trim(control.value);
+
+    if (name !== '') {
+      return this.verify.tagNameExists(name);
+    } else {
+      return of(null);
+    }
+  }
 }
