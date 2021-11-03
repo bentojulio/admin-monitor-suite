@@ -1119,13 +1119,13 @@ export class GetService {
       );
   }
 
-  listOfWebsiteDomains(
+  listOfWebsitePagesByName(
     user: string,
     website: string
-  ): Observable<Array<Domain>> {
+  ): Observable<Array<any>> {
     return this.http
       .get<any>(
-        this.config.getServer(`/website/${website}/user/${user}/domains`),
+        this.config.getServer(`/website/${website}/user/${user}/pages`),
         { observe: "response" }
       )
       .pipe(
@@ -1141,7 +1141,7 @@ export class GetService {
             throw new AdminError(response.success, response.message);
           }
 
-          return <Array<Domain>>response.result;
+          return <Array<any>>response.result;
         }),
         catchError((err) => {
           console.log(err);
