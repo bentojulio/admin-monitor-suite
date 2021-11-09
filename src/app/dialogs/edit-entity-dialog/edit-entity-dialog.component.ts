@@ -193,24 +193,16 @@ export class EditEntityDialogComponent implements OnInit {
     }
   }
 
-  filterWebsite(val: string) {
-    return this.websites.filter((website) => {
-      let valid = true;
-      const names = val.trim().toLowerCase().split(' ');
-
-      for (const n of names ?? [val]) {
-        if (!(website.Name + ' ' + website.Url).toLowerCase().includes(n)) {
-          valid = false;
-        }
-      }
-      return valid;
-    });
+  filterWebsite(url: string) {
+    return this.websites.filter((website) =>
+      _.includes(website.StartingUrl.toLowerCase(), url.toLowerCase())
+    );
   }
 
   selectedWebsite(event: MatAutocompleteSelectedEvent): void {
     const index = _.findIndex(
       this.websites,
-      (w) => w["Url"].trim() === event.option.viewValue.trim()
+      (w) => w["StartingUrl"] === event.option.viewValue
     );
     if (!_.includes(this.selectedWebsites, this.websites[index])) {
       this.selectedWebsites.push(this.websites[index]);

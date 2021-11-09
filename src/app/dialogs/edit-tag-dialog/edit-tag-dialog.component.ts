@@ -257,28 +257,20 @@ export class EditTagDialogComponent implements OnInit {
     }
   }
 
-  filterWebsite(val: string) {
-    return this.websites.filter((website) => {
-      let valid = true;
-      const names = val.trim().toLowerCase().split(' ');
-
-      for (const n of names ?? [val]) {
-        if (!(website.Name + ' ' + website.Url).toLowerCase().includes(n)) {
-          valid = false;
-        }
-      }
-      return valid;
-    });
+  filterWebsite(url: string) {
+    return this.websites.filter((website) =>
+      _.includes(website.StartingUrl.toLowerCase(), url.toLowerCase())
+    );
   }
 
   selectedWebsite(event: MatAutocompleteSelectedEvent): void {
     const index = _.findIndex(
       this.websites,
-      (w) => w["Url"] === event.option.viewValue
+      (w) => w["StartingUrl"] === event.option.viewValue
     );
     const index2 = _.findIndex(
       this.selectedWebsites,
-      (w) => w["Url"] === event.option.viewValue
+      (w) => w["StartingUrl"] === event.option.viewValue
     );
     if (index2 < 0) {
       this.selectedWebsites.push(this.websites[index]);
