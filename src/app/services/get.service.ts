@@ -16,6 +16,7 @@ import { Entity } from "../models/entity";
 import { Website } from "../models/website";
 import { Domain } from "../models/domain";
 import { Page } from "../models/page";
+import { GovUser } from "../models/govUser";
 
 @Injectable({
   providedIn: "root",
@@ -28,9 +29,36 @@ export class GetService {
     private config: ConfigService
   ) {}
 
-  observatoryData(): Observable<any> {//{CreatedAt,ID}
+
+  govUser(userId: number): Observable<GovUser> {
     return this.http
-      .get<any>(this.config.getServer("/observatory/all"), {
+      .get<any>(this.config.getServer("/govUser/" + userId), {
+        observe: "response",
+      })
+      .pipe(
+        retry(3),
+        map((res) => {
+          if (!res.body || res.status === 404) {
+            throw new AdminError(404, "Service not found", "SERIOUS");
+          }
+
+          const response = <Response>res.body;
+
+          if (response.success !== 1) {
+            throw new AdminError(response.success, response.message);
+          }
+
+          return <any>response.result;
+        }),
+        catchError((err) => {
+          console.log(err);
+          return of(null);
+        })
+      );
+  }
+  govUsers(): Observable<GovUser[]> {
+    return this.http
+      .get<any>(this.config.getServer("/govUser/all"), {
         observe: "response",
       })
       .pipe(
@@ -46,7 +74,7 @@ export class GetService {
             throw new AdminError(response.success, response.message);
           }
 
-          return <any>response.result;
+          return <GovUser[]>response.result;
         }),
         catchError((err) => {
           console.log(err);
@@ -54,332 +82,6 @@ export class GetService {
         })
       );
   }
-
-  collectionDate(): Observable<any> {//{CreatedAt,ID}
-    return this.http
-      .get<any>(this.config.getServer("/collection-date"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  numberOfEvaluationByType(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/evaluations"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  numberfA11yStatementsOPAWDirectory(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/directory/OPAW"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  numberfA11yStatementsByConformanceDirectory(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/directory/conformance"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  numberfA11yStatementsBySealDirectory(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/directory/seal"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-  
-  numberfA11yStatementsByStateDirectory(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/directory/state"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  numberfA11yStatementsByState(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/state"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  numberfA11yStatementsBySeal(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/seal"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  numberfA11yStatementsByConformance(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/conformance"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  numberfA11yStatementsByYear(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/year"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-          console.log(res);
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-  
-  getA11yStatementById(id:number): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/id/"+id), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
-  listOfA11yStatements(): Observable<any> {
-    return this.http
-      .get<any>(this.config.getServer("/accessibility-statement/"), {
-        observe: "response",
-      })
-      .pipe(
-        retry(3),
-        map((res) => {
-          const response = <Response>res.body;
-
-          if (!res.body || res.status === 404) {
-            throw new AdminError(404, "Service not found", "SERIOUS");
-          }
-
-          if (response.success !== 1) {
-            throw new AdminError(response.success, response.message);
-          }
-
-          return <any>response.result;
-        }),
-        catchError((err) => {
-          console.log(err);
-          return of(null);
-        })
-      );
-  }
-
   numberOfStudyMonitorUsers(): Observable<number> {
     return this.http
       .get<any>(this.config.getServer("/user/studyMonitor/total"), {
