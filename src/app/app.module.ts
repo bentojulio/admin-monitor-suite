@@ -262,16 +262,6 @@ const appRoutes: Routes = [
         component: A11yStatementsComponent,
         canActivate: [AdminAuthGuard],
       },
-      {
-        path: "a11yStatements/:id",
-        component: A11yStatementComponent,
-        canActivate: [AdminAuthGuard],
-      },
-      {
-        path: "devTools",
-        component: DevToolsComponent,
-        canActivate: [AdminAuthGuard],
-      }
     ],
   },
   { path: "**", component: NotFound404Component },
