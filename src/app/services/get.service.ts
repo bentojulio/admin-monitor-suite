@@ -30,7 +30,7 @@ export class GetService {
   
   getA11yStatementById(id:number): Observable<any> {
     return this.http
-      .get<any>(this.config.getServer("accessibility-statement/"+id), {
+      .get<any>(this.config.getServer("/accessibility-statement/"+id), {
         observe: "response",
       })
       .pipe(
@@ -57,7 +57,7 @@ export class GetService {
 
   listOfA11yStatements(): Observable<any> {
     return this.http
-      .get<any>(this.config.getServer("accessibility-statement"), {
+      .get<any>(this.config.getServer("/accessibility-statement/"), {
         observe: "response",
       })
       .pipe(
