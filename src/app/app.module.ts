@@ -131,6 +131,10 @@ import { ContactTableComponent } from './pages/a11y-statement/contact-table/cont
 import { AutomaticEvaluationTableComponent } from './pages/a11y-statement/automatic-evaluation-table/automatic-evaluation-table.component';
 import { ManualEvaluationTableComponent } from './pages/a11y-statement/manual-evaluation-table/manual-evaluation-table.component';
 import { UserEvaluationTableComponent } from './pages/a11y-statement/user-evaluation-table/user-evaluation-table.component';
+import { DevToolsComponent } from './pages/dev-tools/dev-tools.component';
+import { ErrorLogListComponent } from './pages/dev-tools/error-log-list/error-log-list.component';
+import { ActionLogListComponent } from './pages/dev-tools/action-log-list/action-log-list.component';
+import { DeleteUserDialogComponent } from './dialogs/delete-user-dialog/delete-user-dialog.component';
 
 registerLocaleData(localeEn, "en");
 registerLocaleData(localePt, "pt", localePtExtra);
@@ -397,6 +401,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     AutomaticEvaluationTableComponent,
     ManualEvaluationTableComponent,
     UserEvaluationTableComponent,
+    DevToolsComponent,
+    ErrorLogListComponent,
+    ActionLogListComponent,
+    DeleteUserDialogComponent,
   ],
   imports: [
     BrowserModule,
