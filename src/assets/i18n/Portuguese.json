@@ -1162,6 +1162,7 @@
     }
   },
   "A11_STATEMENTS_PAGE": {
+    "export":"Exportar",
     "CONFORMANCE_DIRECTORY_TABLE": {
       "caption":"Conformidade declarada por Diretório (%)",
       "name_label": "Nome",
