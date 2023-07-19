@@ -387,8 +387,8 @@ export class UpdateService {
     pagesId: Array<number>
   ): Observable<boolean> {
     const data = {
-      pages: JSON.stringify(pages),
-      pagesId: JSON.stringify(pagesId),
+      pages,
+      pagesId,
     };
 
     return this.http

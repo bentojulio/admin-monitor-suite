@@ -243,7 +243,7 @@ export class ListOfWebsitesComponent implements OnInit, AfterViewInit {
     const websitesId = this.selection.selected.map((w) => w.WebsiteId);
     this.deleteService
       .websitesPages({
-        websitesId: JSON.stringify(websitesId),
+        websitesId: websitesId,
       })
       .subscribe((result) => {
         if (result) {
@@ -275,7 +275,7 @@ export class ListOfWebsitesComponent implements OnInit, AfterViewInit {
     const websitesId = this.selection.selected.map((w) => w.WebsiteId);
     this.deleteService
       .websites({
-        websitesId: JSON.stringify(websitesId),
+        websitesId: websitesId,
       })
       .subscribe((result) => {
         if (result) {
