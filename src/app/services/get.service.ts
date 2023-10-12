@@ -82,6 +82,59 @@ export class GetService {
         })
       );
   }
+  
+  observatoryData(): Observable<any> {//{CreatedAt,ID}
+    return this.http
+      .get<any>(this.config.getServer("/gov-user/" + userId), {
+        observe: "response",
+      })
+      .pipe(
+        retry(3),
+        map((res) => {
+          if (!res.body || res.status === 404) {
+            throw new AdminError(404, "Service not found", "SERIOUS");
+          }
+
+          const response = <Response>res.body;
+
+          if (response.success !== 1) {
+            throw new AdminError(response.success, response.message);
+          }
+
+          return <any>response.result;
+        }),
+        catchError((err) => {
+          console.log(err);
+          return of(null);
+        })
+      );
+  }
+  govUsers(): Observable<GovUser[]> {
+    return this.http
+      .get<any>(this.config.getServer("/gov-user/all"), {
+        observe: "response",
+      })
+      .pipe(
+        retry(3),
+        map((res) => {
+          const response = <Response>res.body;
+          console.log(res);
+          if (res.status === 404) {
+            throw new AdminError(404, "Service not found", "SERIOUS");
+          }
+
+          if (response.success !== 1) {
+            throw new AdminError(response.success, response.message);
+          }
+
+          return <GovUser[]>response.result;
+        }),
+        catchError((err) => {
+          console.log(err);
+          return of(null);
+        })
+      );
+  }
   numberOfStudyMonitorUsers(): Observable<number> {
     return this.http
       .get<any>(this.config.getServer("/user/studyMonitor/total"), {
