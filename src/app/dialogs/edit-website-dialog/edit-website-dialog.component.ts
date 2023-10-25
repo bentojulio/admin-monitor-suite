@@ -199,7 +199,7 @@ export class EditWebsiteDialogComponent implements OnInit {
 
   setDefault(): void {
     this.websiteForm.controls.name.setValue(this.defaultWebsite.Name);
-    this.websiteForm.controls.domain.setValue(this.defaultWebsite.Domain);
+    this.websiteForm.controls.startingUrl.setValue(this.defaultWebsite.StartingUrl);
     this.websiteForm.controls.declaration.setValue(
       this.defaultWebsite.Declaration
     );
