@@ -24,7 +24,7 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="main-content">
+    <div className="main-content-dashboard">
       <header>
       <img src={Logo} alt="Logo" className="login-logo" />
 
