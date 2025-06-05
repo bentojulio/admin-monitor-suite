@@ -118,6 +118,8 @@ import { GovUserComponent } from './pages/gov-user/gov-user.component';
 import { GovUsersComponent } from './pages/gov-users/gov-users.component';
 import { EditGovUserDialogComponent } from './dialogs/edit-gov-user-dialog/edit-gov-user-dialog.component';
 import { AddGovUserDialogComponent } from './dialogs/add-gov-user-dialog/add-gov-user-dialog.component';
+import { UploadEvaluationCSVComponent } from './dialogs/upload-evaluation-csv/upload-evaluation-csv.component';
+import { SuccessfulUploadEvaluationDialogComponent } from "./dialogs/successful-upload-evaluation-dialog/successful-upload-evaluation-dialog.component";
 
 registerLocaleData(localeEn, "en");
 registerLocaleData(localePt, "pt", localePtExtra);
@@ -376,6 +378,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     GovUsersComponent,
     EditGovUserDialogComponent,
     AddGovUserDialogComponent,
+    UploadEvaluationCSVComponent,
+    SuccessfulUploadEvaluationDialogComponent,
   ],
   imports: [
     MatTableExporterModule,
@@ -432,6 +436,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ChoosePagesToReEvaluateDialogComponent,
     BackgroundEvaluationsInformationDialogComponent,
     EvaluationErrorDialogComponent,
+    UploadEvaluationCSVComponent,
+    SuccessfulUploadEvaluationDialogComponent,
   ],
   providers: [
     AdminAuthGuard,

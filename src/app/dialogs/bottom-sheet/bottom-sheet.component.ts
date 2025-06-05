@@ -6,6 +6,7 @@ import { AddDirectoryDialogComponent } from "../add-directory-dialog/add-directo
 import { AddEntityDialogComponent } from "../add-entity-dialog/add-entity-dialog.component";
 import { AddPageDialogComponent } from "../add-page-dialog/add-page-dialog.component";
 import { AddGovUserDialogComponent } from "../add-gov-user-dialog/add-gov-user-dialog.component";
+import { UploadEvaluationCSVComponent } from "../upload-evaluation-csv/upload-evaluation-csv.component";
 
 @Component({
   selector: "app-bottom-sheet",
@@ -107,5 +108,16 @@ export class BottomSheetComponent implements OnInit {
     this.bottomSheetRef.dismiss();
     e.preventDefault();
 
+  }
+   
+  openUploadEvaluation(e): void {
+    this.bottomSheetRef.dismiss();
+    e.preventDefault();
+
+    this.dialog.open(UploadEvaluationCSVComponent, {
+      width: "60vw",
+      disableClose: false,
+      hasBackdrop: true,
+    });
   }
 }
