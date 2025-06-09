@@ -1,6 +1,17 @@
 import React from "react";
-import { Input, Button, Select, TextArea } from "ama-design-system";
+import {
+  Input,
+  Button,
+  Select,
+  TextArea,
+  Breadcrumb,
+  Tabs,
+} from "ama-design-system";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import InsertUrl from "./Tabs/insertUrl";
+import InsertSiteMap from "./Tabs/insertSiteMap";
+import InsertCrawling from "./Tabs/insertCrawling";
 
 const PageCreateForm = () => {
   const {
@@ -8,11 +19,39 @@ const PageCreateForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [breadcrumbs, setBreadcrumbs] = React.useState([
+    { children: <Link to="/">Home</Link> },
+    {
+      title: "Dashboard",
+    },
+  ]);
 
   const onSubmit = (data) => {
     console.log("User data:", data);
   };
 
+  const TabsWithComponenets = (
+    <Tabs
+      defaultActiveKey="tab1"
+      tabs={[
+        {
+          component: <InsertUrl register={register} errors={errors} />,
+          eventKey: "tab1",
+          title: "Inserir URLs",
+        },
+        {
+          component: <InsertSiteMap register={register} errors={errors} />,
+          eventKey: "tab2",
+          title: "Inserir Sitemap",
+        },
+        {
+          component: <InsertUrl register={register} errors={errors} />,
+          eventKey: "tab3",
+          title: "Crawling",
+        },
+      ]}
+    />
+  );
   return (
     <div>
       <h1>Criar Páginas Web</h1>
@@ -39,69 +78,13 @@ const PageCreateForm = () => {
           />
         </div>
 
-        <div className="bg-white p-4">
+        <div className="bg-white p-4 mt-5">
           <h2 className="mb-4">
             2. De que forma deseja adicionar as novas páginas?
           </h2>
           <p>Selecione apenas um dos processos abaixo:</p>
-          <div className="d-flex flex-col gap-3">
-            <div className="w-50">
-              <h3>2a. Por submissão de lista de URLs</h3>
-              <p>
-                Compile uma lista de URLs do sítio web pretendido (1 URL por
-                linha) e cole essa lista no campo "Novos URLs" abaixo.
-              </p>
-              <TextArea
-                label="Novos URLs"
-                {...register("urls", { required: "Campo obrigatório" })}
-                error={errors.urls?.message}
-                rows={10}
-              />
-              <Button
-                type="submit"
-                text="Adicionar Páginas"
-                className="mt-3"
-                variant="primary"
-                onClick={() => console.log("Páginas adicionadas")}
-              />
-            </div>
-
-            <div className="w-50">
-              {" "}
-              <h3>2b. Por submissão de um siteMap</h3>
-              <p>
-                Compile uma lista de URLs do sítio web pretendido (1 URL por
-                linha) e cole essa lista no campo "Novos URLs" abaixo.
-              </p>
-              <Input
-                label="Ficheiro"
-                type="file"
-                {...register("sitemap", { required: "Campo obrigatório" })}
-                error={errors.sitemap?.message}
-              />
-            </div>
-
-            <div className="w-50">
-              {" "}
-              <h3>2c. Solicitar um crawling ao sítio web</h3>
-              <p>
-                Se pretende que o robô do AdminMonitorSuite produza uma amostra
-                automaticamente pressione no botão abaixo. O robô irá gerar uma
-                amostra segundo o método H+Depois basta ir à página "Crawler" e
-                importar a amostra de páginas recolhidas pelo robô.
-              </p>
-              <Button
-                type="button"
-                text="Gerar Crawler"
-                className="mt-3"
-                variant="primary"
-                onClick={() => console.log("Crawling solicitado")}
-              />
-            </div>
-          </div>
+          <div className="mt-5">{TabsWithComponenets}</div>
         </div>
-
-        {/* Seção 2: Declaração e Selo */}
       </form>
     </div>
   );

@@ -3,7 +3,7 @@ import {
   Button,
   InputSearch,
   SortingTable,
-  Breadcrumb,
+  Breadcrumb
 } from "ama-design-system";
 import "./style.users.css";
 import {
@@ -11,21 +11,17 @@ import {
   dataRows,
   columnsOptions,
   nameOfIcons,
-  paginationButtonsTexts,
-} from "./table.config";
+  paginationButtonsTexts
+} from "./table.config.jsx";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-const UserList = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+const UsersGovList = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const breadcrumbs = [
     { children: <Link to="/">Home</Link> },
-    { title: "Dashboard" },
+    { title: "Dashboard" }
   ];
 
   const [data, setData] = useState(dataRows);
@@ -38,10 +34,10 @@ const UserList = () => {
 
   return (
     <div>
-      <h2>Utilizadores</h2>
+      <Breadcrumb items={breadcrumbs} />
+      <h2>Utilizadores Gov</h2>
       <p>
-        Abaixo encontra a listagem de todos os utilizadores registados no
-        AdminMonitorSuite, num total de 38 diretórios.
+        Abaixo encontra a listagem de todos os utilizadores registados no AdminMonitorSuite, num total de 38 diretórios.
       </p>
 
       <div className="content">
@@ -68,12 +64,7 @@ const UserList = () => {
               text="Apagar Utilizadores"
               icon="AMA-Apagar-Line"
               variant="danger"
-              onClick={() =>
-                console.log(
-                  "Apagar Utilizadores selecionados:",
-                  checkboxesSelected
-                )
-              }
+              onClick={() => console.log("Apagar Utilizadores selecionados:", checkboxesSelected)}
               disabled={checkboxesSelected.length === 0}
             />
           </div>
@@ -97,4 +88,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default UsersGovList;
