@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "ama-design-system": "file:./ama-design-system-1.1.88.tgz",
+    "ama-design-system": "file:./ama-design-system-1.1.88 1.tgz",
+    "bootstrap": "^5.3.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.57.0",
