@@ -35,7 +35,7 @@ const UsersGovList = () => {
   return (
     <div>
       <Breadcrumb items={breadcrumbs} />
-      <h2>Utilizadores Gov</h2>
+      <h1>Utilizadores Gov</h1>
       <p>
         Abaixo encontra a listagem de todos os utilizadores registados no AdminMonitorSuite, num total de 38 diretórios.
       </p>

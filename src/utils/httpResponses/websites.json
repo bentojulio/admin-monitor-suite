@@ -1,0 +1,21 @@
+{
+    "data": {
+        "success": 1,
+        "message": "NO_ERROR",
+        "errors": null,
+        "result": [
+            {
+                "WebsiteId": 3,
+                "UserId": 53,
+                "Name": "Portal da Justiça",
+                "StartingUrl": "https://justica.gov.pt",
+                "Declaration": "1",
+                "Declaration_Update_Date": null,
+                "Stamp": "1",
+                "Stamp_Update_Date": null,
+                "Creation_Date": "2020-11-24T22:00:46.000Z",
+                "Pages": "70"
+            }
+        ]
+    }
+}

@@ -34,7 +34,7 @@ const UserList = () => {
 
   return (
     <div>
-      <h2>Utilizadores</h2>
+      <h1>Utilizadores</h1>
       <p>
         Abaixo encontra a listagem de todos os utilizadores registados no AdminMonitorSuite, num total de 38 diretórios.
       </p>

@@ -17,6 +17,9 @@ import PageList from "./pages/Pages/";
 import PageCreateForm from "./pages/Pages/PageCreateForm";
 import UsersGovList from "./pages/UsersGov";
 import UsersGovCreateForm from "./pages/UsersGov/UsersGovCreateForm";
+import ViewDirectories from "./pages/Directories/ViewDirectories";
+import ViewWebSites from "./pages/Websites/ViewWebSite";
+import ViewPages from "./pages/Pages/ViewPages";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -27,6 +30,7 @@ const router = createBrowserRouter([
     element: React.createElement(DashboardLayout),
     children: [
       {path: "home", element: React.createElement(Home)},
+      {path: "global", element: React.createElement(ViewDirectories)},
       { path: "users",
         children: [
           { path: "", element: React.createElement(UsersList) },
@@ -49,6 +53,8 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: React.createElement(WebSiteList) },
           { path: "create", element: React.createElement(WebSiteCreateForm) },
+          { path:"view", element: React.createElement(ViewWebSites)}
+
        ],
       },
       { path: "categories",
@@ -61,6 +67,7 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: React.createElement(PageList) },
           { path: "create", element: React.createElement(PageCreateForm) },
+          { path:"view", element: React.createElement(ViewPages)}
        ],
       },
       { path: "usersgov",
