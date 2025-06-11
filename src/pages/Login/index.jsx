@@ -28,13 +28,13 @@ const Login = () => {
             />
           <Input
             name="username"
-            label="Utilizador"
+            label="Email"
             type="text"
             {...register("username", { required: true })}
             error={errors.username ? "Username is required" : undefined}
             />
           <Input
-            name="Senha"
+            name="Palavra-Passe"
             label="Password"
             type="password"
             {...register("password", { required: true })}

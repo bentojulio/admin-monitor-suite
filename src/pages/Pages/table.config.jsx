@@ -146,3 +146,115 @@ export const options = [
     tdClassName: "warning-cell",
   },
 ];
+
+
+export const directoriesHeadersPage = [
+  [
+    { type: "Checkbox", nRow: 2, name: "rank ", property: "title" },
+    { type: "SortingText", nRow: 2, name: "Data avaliação ", property: "date_avaliation" },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Pontuação",
+      property: "point",
+      justifyCenter: true,
+    },
+
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Elementos HTML",
+      property: "elementnumber",
+      justifyCenter: true,
+    },
+
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "A",
+      property: "a",
+      justifyCenter: true,
+    },
+
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "AA",
+      property: "aa",
+      justifyCenter: true,
+    },
+
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "AAA",
+      property: "aaa",
+      justifyCenter: true,
+    },
+
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Ver relatório",
+      property: "state",
+      justifyCenter: true,
+    },
+
+  ],
+];
+
+export const columnsOptionsPage = {
+  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
+  title: { type: "Text", center: false, bold: false, decimalPlace: false }, // Checkbox
+  date_avaliation: { type: "Text", center: false, bold: false, decimalPlace: false },
+  point: { type: "Text", center: true, bold: false, decimalPlace: true },
+
+  elementnumber: {
+    type: "Text",
+    center: true,
+    bold: false,
+    decimalPlace: false,
+  },
+  a: { type: "Text", center: true, bold: false, decimalPlace: false },
+  aa: { type: "Text", center: true, bold: false, decimalPlace: false },
+  aaa: { type: "Text", center: true, bold: false, decimalPlace: false },
+  state: { type: "Link", center: true, bold: false, decimalPlace: false },
+};
+
+
+
+
+export const dataRowsPage = [
+  {
+    title: "",
+    date_avaliation: "05/06/2025",
+    point: "8.5",
+    elementnumber: 134,
+    a: 10,
+    aa: 8,
+    aaa: 5,
+    state: "Relatório",
+  },
+];
+
+export const optionsPage = [
+  {
+    id: "1",
+    title:
+      "I found 1 image on the page without the alternative text equivalent.",
+    component: (
+      <div>
+        Check if the alternative text equivalent found in the images provides
+        equal information or function as the one performed by the image on the
+        page. H37: Using alt attributes on img elements This WCAG 2.1 technique
+        is related to: Success criteria 1.1.1 (Level A) Notions about the SC
+        1.1.1
+      </div>
+    ),
+    lvl: "AA",
+    iconName: "AMA-Middle-Line",
+    ele: "test",
+    tdClassName: "warning-cell",
+  },
+];
+

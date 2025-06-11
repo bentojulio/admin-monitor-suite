@@ -11,7 +11,7 @@ const WebSiteList = () => {
     return(
     
     <div>
-    <h2>Sítios web</h2>
+    <h1>Sítios web</h1>
     <p>Abaixo encontra a listagem de todos os sítios web registados no AdminMonitorSuite, num total de 38 diretórios.</p>
 
     <div className="content">

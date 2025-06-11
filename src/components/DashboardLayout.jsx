@@ -18,6 +18,7 @@ const DashboardLayout = () => {
         icon: "AMA-Visible-Line", 
         url: "/",
         submenu: [
+          { id: "global", label: "Global", icon: "AMA-MarcadorGrande-Line", url: "/dashboard/global" },
           { id: "categories", label: "Categorias", icon: "AMA-MarcadorGrande-Line", url: "/dashboard/categories" },
           { id: "directories", label: "Diretórios", icon: "AMA-Pasta-Line", url: "/dashboard/directories" },
           { id: "users", label: "Utilizadores", icon: "AMA-Pessoa-Line", url: "/dashboard/users" },
@@ -60,15 +61,7 @@ const DashboardLayout = () => {
       <header className="d-flex justify-content-between gap-5 align-items-center">
         <div className="d-flex align-items-center gap-3">
       <img src={Logo} alt="Logo" className="logo"/>
-      <div className="d-flex justify-content-center gap-3 align-items-center ms-4">
-        <label htmlFor="search-input" className="text-white">Pesquisar</label>
-      <InputSearch
-        id="search-input"
-        placeholder="Pesquisar..."
-        style={{ width: "450px" }}
-        className="search-input"
-        />
-        </div>
+  
         </div>
 
         <div className="d-flex gap-3 align-items-center">

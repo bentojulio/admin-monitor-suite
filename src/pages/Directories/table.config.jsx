@@ -2,20 +2,21 @@
 
 export const directoriesHeaders = [
   [
-    {type: "Checkbox", nRow: 2, name: "rank ", property: "title"},
-    {type: "SortingText", nRow: 2, name: "Email ", property: "email"},
-    {type: "SortingText", nRow: 2, name: "Nome do usuário", property: "username", justifyCenter: true},
-    {type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true},
+    { type: "Checkbox", nRow: 2, name: "rank ", property: "id" },
+    { type: "Link", nRow: 2, center: false, name: "Nome ", property: "name", justifyCenter: false },
+    { type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true },
   ]
 ]
 
 export const columnsOptions = {
   id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  email: { type: "Text", center: false, bold: false, decimalPlace: false },
-  username: { type: "Text", center: false, bold: false, decimalPlace: false },
+  name: {
+    type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => {
+      return "http://localhost:5173/dashboard/websites/view"
+    }
+  },
   type: { type: "Text", center: true, bold: false, decimalPlace: true },
- }
+}
 
 export const nameOfIcons = [
   "Selo Bronze",
@@ -33,7 +34,7 @@ export const paginationButtonsTexts = [
   "Última página"
 ]
 
-export const nItemsPerPageText=[
+export const nItemsPerPageText = [
   "Ver ",
   " itens por página"
 ]
@@ -47,27 +48,22 @@ export const itemsPaginationText = [
 export const dataRows = [
   {
     "id": 22,
-    "email": "Portal Mais Transparência <code>teste</code>",
-    "username": "Agência para a Modernização Administrativa",
+    "name": "Portal Mais Transparência <code>teste</code>",
     "type": "MyMonitor",
-
   },
   {
     "id": 23,
-    "email": "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
-    "username": "Instituto da Segurança Social, I.P.",
+    "name": "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
     "type": "MyMonitor",
   },
   {
     "id": 31,
-    "email": "Portal do SNS 24",
-    "username": "Serviços Partilhados do Ministério da Saúde, E.P.E.",
+    "name": "Portal do SNS 24",
     "type": "AcessMonitor",
   },
   {
     "id": 25,
-    "email": "Comissão Nacional de Eleições",
-    "username": "Comissão Nacional de Eleições",
+    "name": "Comissão Nacional de Eleições",
     "type": "AcessMonitor",
   }
 ]
@@ -92,3 +88,5 @@ export const options = [
     tdClassName: "warning-cell"
   },
 ];
+
+

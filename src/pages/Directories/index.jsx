@@ -20,7 +20,7 @@ const DirectoriesList = () => {
     <div>
                   <Breadcrumb data={breadcrumbs} />
 
-    <h2>Directórios</h2>
+    <h1>Directórios</h1>
     <p>Abaixo encontra a listagem de todos os Directórios registados no AdminMonitorSuite, num total de 38 diretórios.</p>
 
     <div className="content">
