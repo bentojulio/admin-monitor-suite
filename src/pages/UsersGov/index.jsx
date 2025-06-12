@@ -15,9 +15,11 @@ import {
 } from "./table.config.jsx";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useTheme } from '../../context/ThemeContext';
 
 const UsersGovList = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { theme } = useTheme();
 
   const breadcrumbs = [
     { children: <Link to="/">Home</Link> },
@@ -40,7 +42,7 @@ const UsersGovList = () => {
         Abaixo encontra a listagem de todos os utilizadores registados no AdminMonitorSuite, num total de 38 diretórios.
       </p>
 
-      <div className="content">
+      <div className="content bg-white">
         <h3>Lista de Utilizadores</h3>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,7 +73,7 @@ const UsersGovList = () => {
         </form>
 
         <SortingTable
-          darkTheme={false ? "dark" : "light"}
+          darkTheme={theme === 'dark'}
           headers={directoriesHeaders}
           setDataList={setData}
           dataList={data}

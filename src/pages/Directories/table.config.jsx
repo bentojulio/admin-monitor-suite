@@ -2,17 +2,17 @@
 
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "rank ", property: "id" },
-    { type: "Link", nRow: 2, center: false, name: "Nome ", property: "name", justifyCenter: false },
-    { type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true },
+    { type: "Checkbox", nRow: 2,center:true, name: "rank ", property: "id" },
+    { type: "SortingText", nRow: 2, center: true, name: "Nome ", property: "name", justifyCenter: false },
+    { type: "SortingText", nRow: 2,  center: true, name: "Tipo", property: "type", justifyCenter: true },
   ]
 ]
 
 export const columnsOptions = {
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
+  id: { type: "Checkbox", center: false, bold: false, decimalPlace: false },
   name: {
     type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => {
-      return "http://localhost:5173/dashboard/websites/view"
+      return `http://localhost:5173/dashboard/directories/view/${row.name}`
     }
   },
   type: { type: "Text", center: true, bold: false, decimalPlace: true },
@@ -48,7 +48,7 @@ export const itemsPaginationText = [
 export const dataRows = [
   {
     "id": 22,
-    "name": "Portal Mais Transparência <code>teste</code>",
+    "name": "Portal Mais Transparência",
     "type": "MyMonitor",
   },
   {

@@ -5,7 +5,7 @@ const theme = "light"
 export const directoriesHeaders = [
   [
     { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id" },
-    { type: "SortingText", nRow: 2, name: "Nome", property: "username" },
+    { type: "SortingText", nRow: 2, name: "Nome", property: "name" },
     { type: "SortingText", nRow: 2, name: "URL inicial", property: "url" },
     {
       type: "SortingText",
@@ -39,8 +39,10 @@ export const directoriesHeaders = [
 
 // opções de renderização de colunas
 export const columnsOptions = {
-  id: { type: "Text", center: true, bold: false, decimalPlace: false },
-  username: { type: "Text", center: false, bold: false, decimalPlace: false },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row)=>{
+    return `http://localhost:5173/dashboard/websites/view/${row.name}`
+  } },
   url: { type: "Text", center: false, bold: false, decimalPlace: false },
   pages: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
   createdAt: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
@@ -74,7 +76,7 @@ export const itemsPaginationText = [" de ", " itens"];
 export const dataRows = [
   {
     id: "", // utilizado pelo checkbox
-    username: "Agência para a Modernização",
+    name: "Agência para a Modernização",
     url: "https://exemplo.pt",
     pages: 18,
     createdAt: "05/06/2025",

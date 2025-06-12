@@ -1,10 +1,12 @@
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "rank ", property: "title" },
-    { type: "SortingText", nRow: 2, name: "URL ", property: "url" },
+    { type: "Checkbox", nRow: 2,center: true, name: "Selecionar ", property: "id" },
+    { type: "SortingText", nRow: 2, center: true, name: "URL ", property: "url" },
+    { type: "SortingText", nRow: 2, center: true, name: "Título", property: "title" },
     {
       type: "SortingText",
       nRow: 2,
+      center: true,
       name: "Pontuação",
       property: "point",
       justifyCenter: true,
@@ -12,6 +14,7 @@ export const directoriesHeaders = [
     {
       type: "SortingText",
       nRow: 2,
+      center: true,
       name: "Última avaliação",
       property: "lastavaliation",
       justifyCenter: true,
@@ -20,6 +23,7 @@ export const directoriesHeaders = [
     {
       type: "SortingText",
       nRow: 2,
+      center: true,
       name: "Nº elementos",
       property: "elementnumber",
       justifyCenter: true,
@@ -28,6 +32,7 @@ export const directoriesHeaders = [
     {
       type: "SortingText",
       nRow: 2,
+      center: true,
       name: "A",
       property: "a",
       justifyCenter: true,
@@ -36,6 +41,7 @@ export const directoriesHeaders = [
     {
       type: "SortingText",
       nRow: 2,
+      center: true,
       name: "AA",
       property: "aa",
       justifyCenter: true,
@@ -44,6 +50,7 @@ export const directoriesHeaders = [
     {
       type: "SortingText",
       nRow: 2,
+      center: true,
       name: "AAA",
       property: "aaa",
       justifyCenter: true,
@@ -52,14 +59,7 @@ export const directoriesHeaders = [
     {
       type: "SortingText",
       nRow: 2,
-      name: "Estado",
-      property: "state",
-      justifyCenter: true,
-    },
-
-    {
-      type: "SortingText",
-      nRow: 2,
+      center: true,
       name: "Observatório",
       property: "observatory",
       justifyCenter: true,
@@ -68,9 +68,9 @@ export const directoriesHeaders = [
 ];
 
 export const columnsOptions = {
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  title: { type: "Text", center: false, bold: false, decimalPlace: false }, // Checkbox
-  url: { type: "Text", center: false, bold: false, decimalPlace: false },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  title: { type: "Text", center: true, bold: false, decimalPlace: false }, // Checkbox
+  url: { type: "Link", center: true, bold: false, decimalPlace: false, href: (row) => "http://localhost:5173/dashboard/pages/view/" + row.title },
   point: { type: "Text", center: true, bold: false, decimalPlace: true },
   lastavaliation: {
     type: "Text",
@@ -87,8 +87,7 @@ export const columnsOptions = {
   a: { type: "Text", center: true, bold: false, decimalPlace: false },
   aa: { type: "Text", center: true, bold: false, decimalPlace: false },
   aaa: { type: "Text", center: true, bold: false, decimalPlace: false },
-  state: { type: "Text", center: true, bold: false, decimalPlace: false },
-  observatory: { type: "Text", center: true, bold: false, decimalPlace: false },
+  observatory: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
 };
 
 export const nameOfIcons = [
@@ -113,16 +112,28 @@ export const itemsPaginationText = [" de ", " itens"];
 
 export const dataRows = [
   {
-    title: "",
-    url: "https://exemplo.pt",
+    id: "1",
+    title: "Página 1",
+    url: "exemplo.pt",
     point: "82.5",
     lastavaliation: "05/06/2025",
     elementnumber: 134,
     a: 10,
     aa: 8,
     aaa: 5,
-    state: "Conforme",
-    observatory: <input type="checkbox" />,
+    observatory: "",
+  },
+  {
+    id: "2",
+    title: "Página 2",
+    url: "exemplo.pt",
+    point: "82.5",
+    lastavaliation: "05/06/2025",
+    elementnumber: 134,
+    a: 10,
+    aa: 8,
+    aaa: 5,
+    observatory: "",
   },
 ];
 

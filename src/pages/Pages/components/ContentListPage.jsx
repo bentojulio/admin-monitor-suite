@@ -7,9 +7,9 @@ import {
   nameOfIcons,
   paginationButtonsTexts,
 } from "../table.config";
-
+import { useTheme } from "../../../context/ThemeContext";
 export default function ContentListPages ({ checkboxesSelected, setCheckboxesSelected, data, setData}){
-
+  const { theme } = useTheme();
   return(
      <div>
 
@@ -29,7 +29,7 @@ export default function ContentListPages ({ checkboxesSelected, setCheckboxesSel
             />
         </div>
         <SortingTable
-          darkTheme={false ? "dark" : "light"}
+          darkTheme={theme}
           headers={directoriesHeaders}
           setDataList={setData}
           dataList={data}

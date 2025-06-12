@@ -47,7 +47,7 @@ export const itemsPaginationText = [
 export const dataRows = [
   {
     "id": 22,
-    "email": "Portal Mais Transparência <code>teste</code>",
+    "email": "Portal Mais Transparência",
     "username": "Agência para a Modernização Administrativa",
     "type": "MyMonitor",
 

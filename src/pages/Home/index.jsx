@@ -3,6 +3,7 @@ import { Card, Button, Breadcrumb } from "ama-design-system";
 import { Link } from "react-router-dom";
 import CardAvaliation from "../../components/CardAvaliation";
 import "./style.home.css";
+import { useTheme } from "../../context/ThemeContext";
 const Home = () => {
         const breadcrumbs = [
     { children: <Link to="/">Home</Link> },
@@ -11,6 +12,7 @@ const Home = () => {
       title: "Dashboard",
     }
   ];
+  const { theme } = useTheme();
     const [cards, setCards] = useState([
         {
             title: "Diretórios",
@@ -52,7 +54,7 @@ const Home = () => {
                 <p>Encontra nesta página a síntese dos registos efetuados, em tempo real, pelas diversas aplicações do Ecossistema AccessMonitor.</p>
             </div>
 
-            <div className="cards-dashboard">
+            <div className="cards-dashboard bg-white">
                 <h2 className="text-start">Observatório</h2>
                 <div className="d-flex gap-4 flex-grow-1 flex-wrap">
 
@@ -62,14 +64,14 @@ const Home = () => {
                     title={card.title}
                         subtitle={card.subtitle}
                         icon={card.icon}
-                        darkTheme={card.darkTheme}
+                        darkTheme={theme === 'dark'}
                         />
                     ))}
 
                     </div>
                     <h2 className="text-start">MyMonitor</h2>
 
-            <div className="d-flex gap-4 flex-grow-1 flex-wrap">
+            <div className="d-flex gap-4 flex-grow-1 flex-wrap  bg-white">
 
                 {cards.map((card, index) => (
                     <Card
@@ -77,25 +79,26 @@ const Home = () => {
                     title={card.title}
                     subtitle={card.subtitle}
                     icon={card.icon}
-                    darkTheme={card.darkTheme}
+                    darkTheme={theme === 'dark'}
+
                     />
                 ))}
                 </div>
             </div>
 
-            <div className="cards-dashboard mt-5">
+            <div className="cards-dashboard mt-5 bg-white">
                 <h2>Sincronização de dados estatísticos globais com o Observatório</h2>
                 <p>A informação processada no AMS (back office) é sincronizada com o Observatório público todos os dias à meia-noite. Este processo atualiza toda a informação pública registada no AMS com o Observatório. Por vezes é útil sincronizar a informação durante o dia. Para o efeito pressione o botão "sincronizar" que se encontra abaixo. A duração da sincronização depende do número de páginas, o que poderá levar vários minutos a concluir.</p>
                 <Button text={"Sincronizar dados com o observatório"} ></Button>
             </div>
 
-            <div className="cards-dashboard mt-5">
+            <div className="cards-dashboard mt-5 bg-white">
                 <h2>Carregamento de dados de forma massiva</h2>
                 <p>Carregamento de dados no AMS de forma massiva através do carregamento de um ficheiro .CSV. O ficheiro deverá ter as seguintes colunas: diretoria, categoria, nome do sítio, url da homepage do sítio web.</p>
                 <Button text={"Sincronizar dados com o observatório"} ></Button>
             </div>
 
-            <div className="d-flex gap-5 mt-5 justify-content-between">
+            <div className="d-flex gap-5 mt-5 justify-content-between bg-white">
                 <CardAvaliation
                     title="Avaliação de Diretórios"
                     description="Avaliações feitas pelo Access Monitor "
