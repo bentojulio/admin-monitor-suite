@@ -1,27 +1,38 @@
 import React, { useState, useEffect } from 'react'
 import { Tabs } from 'ama-design-system'
-import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
+import { 
+  dataHeadersBad, 
+  dataBad, 
+  columnsOptionsBad,
+  nameOfIcons, 
+  paginationButtonsTexts 
+} from "./table.config.jsx";
 import { SortingTable } from 'ama-design-system';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function GoodBadTab() {
-    const [data, setData] = useState([])
-    useEffect(()=>{
-        
+    const { theme } = useTheme();
+    const [dataGood, setDataGood] = useState([])
+    const [dataBad, setDataBad] = useState([])
+    const [checkboxesSelected, setCheckboxesSelected] = useState([])
+
+    useEffect(() => {
+        // Initialize data if needed
     }, [])
-    const [checkboxesSelected, setCheckboxesSelected] = useState()
+
     const tabs = [
         {
             eventKey: "tab1",
             title: "Boas Práticas",
             component:
                 <SortingTable
-                    darkTheme={false ? "dark" : "light"}
-                    headers={directoriesHeaders}
-                    setDataList={setData}
-                    dataList={data}
-                    columnsOptions={columnsOptions}
+                    darkTheme={theme === 'dark'}
+                    headers={dataHeadersBad}
+                    setDataList={setDataGood}
+                    dataList={dataGood}
+                    columnsOptions={columnsOptionsBad}
                     nextPage={() => null}
-                    caption={"Estatísticas do diretório" + " " + "Os 25 Portais + Procurados da AP"}
+                    caption="Boas Práticas"
                     iconsAltTexts={nameOfIcons}
                     paginationButtonsTexts={paginationButtonsTexts}
                     project={""}
@@ -33,13 +44,13 @@ export default function GoodBadTab() {
             title: "Más Práticas",
             component:
                 <SortingTable
-                    darkTheme={false ? "dark" : "light"}
-                    headers={directoriesHeaders}
-                    setDataList={setData}
-                    dataList={data}
-                    columnsOptions={columnsOptions}
+                    darkTheme={theme === 'dark'}
+                    headers={dataHeadersBad}
+                    setDataList={setDataBad}
+                    dataList={dataBad}
+                    columnsOptions={columnsOptionsBad}
                     nextPage={() => null}
-                    caption={"Estatísticas do diretório" + " " + "Os 25 Portais + Procurados da AP"}
+                    caption="Más Práticas"
                     iconsAltTexts={nameOfIcons}
                     paginationButtonsTexts={paginationButtonsTexts}
                     project={""}
@@ -49,9 +60,7 @@ export default function GoodBadTab() {
     ]
     return (
         <>
-            <Tabs tabs={tabs}
-
-            />
+            <Tabs tabs={tabs} />
         </>
     )
 }

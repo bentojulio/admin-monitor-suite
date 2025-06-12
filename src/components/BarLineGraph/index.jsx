@@ -1,10 +1,12 @@
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import { Tabs, SortingTable } from "ama-design-system";
 import { Bar } from "react-chartjs-2";
 
+import { useTheme } from '../../context/ThemeContext';
 
-export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barData, barOptions}) {
-    const memoBarData = useMemo(() => barData, [barData]);
+export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barData, barOptions }) {
+  const { theme } = useTheme();
+  const memoBarData = useMemo(() => barData, [barData]);
   const memoBarOptions = useMemo(() => barOptions, [barOptions]);
 
   const tabs = [
@@ -25,7 +27,7 @@ export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barDat
           hasSort={false}
           headers={dataHeaders}
           dataList={dataList}
-          darkTheme={false}
+          darkTheme={theme}
           pagination={false}
           links={false}
           caption="Table Caption"
@@ -35,11 +37,9 @@ export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barDat
     },
   ];
 
-  const [activeTab, setActiveTab] = React.useState(tabs[0].eventKey);
-
   return (
     <>
-      <Tabs tabs={tabs} defaultActiveKey={"tab1"}/>
+      <Tabs tabs={tabs} defaultActiveKey={"tab1"} darkTheme={theme} />
     </>
   );
 }

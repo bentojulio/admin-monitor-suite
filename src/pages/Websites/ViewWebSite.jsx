@@ -3,23 +3,33 @@ import { Button, StatisticsHeader, Breadcrumb, SortingTable } from "ama-design-s
 import "./style.users.css";
 import { RadarGraph } from "../../components/RadarGraph/index.jsx";
 import GoodBadTab from "../../components/GoodBadTab/GoodBadTab.jsx";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { BarLineGraphTabs } from "../../components/BarLineGraph/index.jsx";
 import ContentListPages from "../Pages/components/ContentListPage.jsx";
-import { 
-  dataRows as dataRowsBad,
-  columnsOptions as columnsOptionsBad,
+import {
   directoriesHeaders as dataHeadersBad,
+  columnsOptions as columnsOptionsBad,
+  dataRows as dataRowsBad,
   itemsPaginationText,
   nameOfIcons,
   nItemsPerPageText,
   paginationButtonsTexts,
- } from "../../components/GoodBadTab/table.config.jsx";
+} from "../../components/GoodBadTab/table.config.jsx";
 import { dataRows, horizontalData, optionsHorizontalBar } from "./table.config.jsx";
-import { barData, barOptions, dataHeaders } from "../../components/BarLineGraph/table.config.jsx";
-
+import {
+  barData,
+  barOptions,
+  dataHeaders as dataHeadersBar,
+  columnsOptions as columnsOptionsBar,
+  dataList as dataListBar
+} from "../../components/BarLineGraph/table.config.jsx";
+import { useTheme } from '../../context/ThemeContext';
+import {
+  dataRows as dataRowsBar
+} from "../Pages/table.config.jsx";
 const ViewWebSites = () => {
-
+  const { websiteName, directoryName } = useParams();
+  const { theme } = useTheme();
   const [statsTitle, setWebsiteStatsTitle] = useState([
 
     { subtitle: 'Sítios Web', subtitle2: "" },
@@ -40,44 +50,42 @@ const ViewWebSites = () => {
 
   ])
   const breadcrumbs = [
-    { children: <Link to="/">Home</Link> },
-
-    {
-      title: "Dashboard",
-    }
+    { children: <Link to="/">Global</Link> },
+    { children: <Link to="/directories">Diretórios</Link> },
+    { children: <Link to={`/directories/${directoryName}`}>Diretório</Link> },
+    { title: websiteName }
   ];
-  const [data, setData] = useState([])
-  const [dataBad, setDataBad] = useState([])
+  const [data, setData] = useState(dataRowsBar)
+  const [dataBad, setDataBad] = useState(dataRowsBad);
   const [checkboxesSelected, setCheckboxesSelected] = useState([])
-  const columnsOptionsCopy = JSON.parse(JSON.stringify(columnsOptionsBad));
   return (
 
     <div>
       <Breadcrumb data={breadcrumbs} />
 
-      <h1>Lista de páginas do sítio Web</h1>
+      <h1>Lista de páginas do sítio Web - {websiteName}</h1>
       <p>Abaixo encontra a listagem de todos os Directórios registados no AdminMonitorSuite, num total de 38 diretórios.</p>
 
-      <div className="content">
+      <div className="content bg-white">
         <ContentListPages
           checkboxesSelected={checkboxesSelected}
           setCheckboxesSelected={setCheckboxesSelected}
           data={data}
           setData={setData}
         />
-       
+
       </div>
       <div className="mt-5 bg-white p-4 d-flex flex-column gap-3">
-          <h2>Exportação de dados</h2>
-          <p>Para exportar todos os dados do Observatório à data de hoje, pressione o botão "Exportar CSV" abaixo.</p>
-          <div className="d-flex justify-content-end align-items-end">
-        <Button
+        <h2>Exportação de dados</h2>
+        <p>Para exportar todos os dados do Observatório à data de hoje, pressione o botão "Exportar CSV" abaixo.</p>
+        <div className="d-flex justify-content-end align-items-end">
+          <Button
             text={"Exportar CSV"}
             className="btn-primary"
             onClick={() => console.log("Criar Utilizador")}
           />
         </div>
-        </div>
+      </div>
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Indicadores globais do sítio web</h2>
@@ -136,22 +144,22 @@ const ViewWebSites = () => {
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição das pontuações AccessMonitor no universo das 37 páginas analisadas no sítio web</h2>
-        <BarLineGraphTabs 
+        <BarLineGraphTabs
           barData={barData}
           barOptions={barOptions}
           columnsOptions={columnsOptionsBad}
-          dataHeaders={dataHeaders}
-          dataList={[]}
+          dataHeaders={dataHeadersBad}
+          dataList={dataBad}
         />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Más Práticas de acessibilidade encontradas no sítio web</h2>
-        <BarLineGraphTabs 
+        <BarLineGraphTabs
           barData={horizontalData}
           barOptions={optionsHorizontalBar}
           columnsOptions={columnsOptionsBad}
           dataHeaders={dataHeadersBad}
-          dataList={[]}
+          dataList={dataBad}
         />
       </div>
       <div className="mt-5 bg-white p-4">
@@ -161,7 +169,7 @@ const ViewWebSites = () => {
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição detalhada das melhores práticas</h2>
         <SortingTable
-          darkTheme={false ? "dark" : "light"}
+          darkTheme={theme === 'dark'}
           headers={dataHeadersBad}
           setDataList={setDataBad}
           dataList={dataBad}

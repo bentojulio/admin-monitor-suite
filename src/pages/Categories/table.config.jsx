@@ -2,19 +2,18 @@
 
 export const directoriesHeaders = [
   [
-    {type: "Checkbox", nRow: 2, name: "rank ", property: "title"},
-    {type: "SortingText", nRow: 2, name: "Email ", property: "email"},
-    {type: "SortingText", nRow: 2, name: "Nome do usuário", property: "username", justifyCenter: true},
-    {type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true},
+    {type: "SortingText", nRow: 2, name: "Nome", property: "Nome"},
+    {type: "SortingText", nRow: 2, name: "Nº sítios Web", property: "numberSites", justifyCenter: true},
+    {type: "Checkbox", nRow: 2, name: "Seleção ", property: "selection", justifyCenter: true},
   ]
 ]
 
 export const columnsOptions = {
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  email: { type: "Text", center: false, bold: false, decimalPlace: false },
-  username: { type: "Text", center: false, bold: false, decimalPlace: false },
-  type: { type: "Text", center: true, bold: false, decimalPlace: true },
+  name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => {
+    return `http://localhost:5173/dashboard/categories/view/${row.name}`
+  } },
+  numberSites: { type: "Text", center: false, bold: false, decimalPlace: false },
+  selection: { type: "Checkbox", center: true, bold: false, decimalPlace: true },
  }
 
 export const nameOfIcons = [
@@ -46,29 +45,25 @@ export const itemsPaginationText = [
 
 export const dataRows = [
   {
-    "id": 22,
-    "email": "Portal Mais Transparência <code>teste</code>",
-    "username": "Agência para a Modernização Administrativa",
-    "type": "MyMonitor",
+    "name": "Portal Mais Transparência",
+    "numberSites": "12",
+    "selection": "MyMonitor",
 
   },
   {
-    "id": 23,
-    "email": "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
-    "username": "Instituto da Segurança Social, I.P.",
-    "type": "MyMonitor",
+    "name": "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
+    "numberSites": "24",
+    "selection": "MyMonitor",
   },
   {
-    "id": 31,
-    "email": "Portal do SNS 24",
-    "username": "Serviços Partilhados do Ministério da Saúde, E.P.E.",
-    "type": "AcessMonitor",
+    "name": "Portal do SNS 24",
+    "numberSites": "23",
+    "selection": "AcessMonitor",
   },
   {
-    "id": 25,
-    "email": "Comissão Nacional de Eleições",
-    "username": "Comissão Nacional de Eleições",
-    "type": "AcessMonitor",
+    "name": "Comissão Nacional de Eleições",
+    "numberSites": "64",
+    "selection": "AcessMonitor",
   }
 ]
 

@@ -20,6 +20,8 @@ import UsersGovCreateForm from "./pages/UsersGov/UsersGovCreateForm";
 import ViewDirectories from "./pages/Directories/ViewDirectories";
 import ViewWebSites from "./pages/Websites/ViewWebSite";
 import ViewPages from "./pages/Pages/ViewPages";
+import ViewCategories from "./pages/Categories/ViewCategories";
+import GlobalDirectories from "./pages/Directories/GlobalDirectories";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -30,7 +32,7 @@ const router = createBrowserRouter([
     element: React.createElement(DashboardLayout),
     children: [
       {path: "home", element: React.createElement(Home)},
-      {path: "global", element: React.createElement(ViewDirectories)},
+      {path: "global", element: React.createElement(GlobalDirectories)},
       { path: "users",
         children: [
           { path: "", element: React.createElement(UsersList) },
@@ -47,13 +49,15 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: React.createElement(DirectoriesList) },
           { path: "create", element: React.createElement(DirectoriesCreateForm) },
+          { path: "view/:directoryName", element: React.createElement(ViewDirectories)},
        ],
       },
       { path: "websites",
         children: [
           { path: "", element: React.createElement(WebSiteList) },
           { path: "create", element: React.createElement(WebSiteCreateForm) },
-          { path:"view", element: React.createElement(ViewWebSites)}
+          { path:"view", element: React.createElement(ViewWebSites)},
+          { path:"view/:websiteName", element: React.createElement(ViewWebSites)}
 
        ],
       },
@@ -61,13 +65,15 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: React.createElement(CategoriesList) },
           { path: "create", element: React.createElement(CategoriesCreateForm) },
+          { path:"view/:categoryName", element: React.createElement(ViewCategories)}
        ],
       },
       { path: "pages",
         children: [
           { path: "", element: React.createElement(PageList) },
           { path: "create", element: React.createElement(PageCreateForm) },
-          { path:"view", element: React.createElement(ViewPages)}
+          { path:"view", element: React.createElement(ViewPages)},
+          { path:"view/:pageName", element: React.createElement(ViewPages)}
        ],
       },
       { path: "usersgov",

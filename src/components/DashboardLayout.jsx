@@ -3,11 +3,13 @@ import { Outlet } from "react-router-dom";
 import { DashboardMenu, Breadcrumb, InputSearch, Button, Icon } from "ama-design-system";
 import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo-header.svg"; 
+import { useTheme } from "../context/ThemeContext";
 
 const DashboardLayout = () => {
 
   const [activeItem, setActiveItem] = useState("home");
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const propsDashboardMenu = {
     menuItems: [
@@ -29,8 +31,7 @@ const DashboardLayout = () => {
         ],
         activeItem: "home",
       },
-         { 
-        id: "create", 
+      { 
         label: "Criar",
         icon: "AMA-Mais-Line",
         url: "/dashboard/users/create",
@@ -42,13 +43,11 @@ const DashboardLayout = () => {
           { id: "websites/create", label: "Sítios web", icon: "AMA-Globo-Line", url: "/dashboard/websites/create" },
           { id: "pages/create", label: "Páginas", icon: "AMA-Paginas-Line", url: "/dashboard/pages/create" },
           { id: "usersgov/create", label: "Utilizadores Gov", icon: "AMA-DuasPessoas-Line", url: "/dashboard/usersgov/create" },
-
         ],
         activeItem: "home",
       }
-  ]
-};
-
+    ]
+  };
 
   const handleMenuItemClick = (id) => {
     console.log(`Menu item clicked: ${id}`);
@@ -57,22 +56,18 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="main-content-dashboard">
+    <div className={`main-content-dashboard ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
       <header className="d-flex justify-content-between gap-5 align-items-center">
         <div className="d-flex align-items-center gap-3">
-      <img src={Logo} alt="Logo" className="logo"/>
-  
+          <img src={Logo} alt="Logo" className="logo"/>
         </div>
 
         <div className="d-flex gap-3 align-items-center">
           <Button
-            text="Dark mode"
-            onClick={() => {
-              console.log("Sair clicked");
-              // Implement logout logic here
-            }}
+            text={theme === 'dark' ? "Light mode" : "Dark mode"}
+            onClick={toggleTheme}
             iconRight={<Icon
-              name="AMA-EscuroClaro-Line"
+              name={theme === 'dark' ? "AMA-Claro-Line" : "AMA-Escuro-Line"}
               size={16}
               className="icon-right"
             />}
@@ -91,8 +86,6 @@ const DashboardLayout = () => {
             />}
           />
         </div>
-
-
       </header>
       <aside>
         <DashboardMenu

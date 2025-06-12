@@ -4,20 +4,50 @@ const theme = "light"
 
 export const directoriesHeaders = [
   [
-    {type: "Checkbox", nRow: 2, name: "rank ", property: "title"},
-    {type: "SortingText", nRow: 2, name: "Email ", property: "email"},
-    {type: "SortingText", nRow: 2, name: "Nome do usuário", property: "username", justifyCenter: true},
-    {type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true},
-  ]
-]
+    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id" },
+    { type: "SortingText", nRow: 2, name: "Nome", property: "name" },
+    { type: "SortingText", nRow: 2, name: "URL inicial", property: "url" },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Nº de páginas",
+      property: "pages",
+      justifyCenter: true,
+    },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Data de criação",
+      property: "createdAt",
+      justifyCenter: true,
+    },
+    {
+      type: "Action",
+      nRow: 2,
+      name: "Editar",
+      property: "edit",
+      justifyCenter: true,
+    },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Selos digitais",
+      property: "badges",
+    },
+  ],
+];
 
 export const columnsOptions = {
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  email: { type: "Text", center: false, bold: false, decimalPlace: false },
-  username: { type: "Text", center: false, bold: false, decimalPlace: false },
-  type: { type: "Text", center: true, bold: false, decimalPlace: true },
- }
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row)=>{
+    return `http://localhost:5173/dashboard/websites/view/${row.name}`
+  } },
+  url: { type: "Text", center: false, bold: false, decimalPlace: false },
+  pages: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
+  createdAt: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
+  edit: { type: "Action", center: true, bold: false, decimalPlace: false },
+  badges: { type: "Text", center: false, bold: false, decimalPlace: false },
+};
 
 export const nameOfIcons = [
   "Selo Bronze",
@@ -48,31 +78,15 @@ export const itemsPaginationText = [
 
 export const dataRows = [
   {
-    "id": 22,
-    "email": "Portal Mais Transparência <code>teste</code>",
-    "username": "Agência para a Modernização Administrativa",
-    "type": "MyMonitor",
-
+    id: "", // utilizado pelo checkbox
+    name: "Agência para a Modernização",
+    url: "https://exemplo.pt",
+    pages: 18,
+    createdAt: "05/06/2025",
+    edit: "Editar", // usado pelo botão de ação
+    badges: "Selo Ouro",
   },
-  {
-    "id": 23,
-    "email": "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
-    "username": "Instituto da Segurança Social, I.P.",
-    "type": "MyMonitor",
-  },
-  {
-    "id": 31,
-    "email": "Portal do SNS 24",
-    "username": "Serviços Partilhados do Ministério da Saúde, E.P.E.",
-    "type": "AcessMonitor",
-  },
-  {
-    "id": 25,
-    "email": "Comissão Nacional de Eleições",
-    "username": "Comissão Nacional de Eleições",
-    "type": "AcessMonitor",
-  }
-]
+];
 
 export const options = [
   {

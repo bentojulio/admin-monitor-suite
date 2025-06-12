@@ -2,28 +2,41 @@ const theme = "light"
 
 export const dataHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "rank ", property: "title" },
-    { type: "Link", nRow: 2, center: false, name: "Nome ", property: "name", justifyCenter: false },
+    { type: "Checkbox", nRow: 2, name: "Selecionar ", property: "id" },
+    { type: "SortingText", nRow: 2, name: "Nome ", property: "name", justifyCenter: false },
     { type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true },
   ],
 ];
 
 export const columnsOptions = {
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
+  id: { 
+    type: "Checkbox", 
+    center: true, 
+    bold: false, 
+    decimalPlace: false,
+    property: "id"
+  },
   name: {
     type: "Link",
-    center: false,
+    center: true,
     bold: false,
     decimalPlace: false,
-    href: (row) => "http://localhost:5173/dashboard/directories",
+    property: "name",
+    href: (row) => "http://localhost:5173/dashboard/pages/view",
   },
-  type: { type: "Text", center: true, bold: false, decimalPlace: true },
+  type: { 
+    type: "Text", 
+    center: true, 
+    bold: false, 
+    decimalPlace: false,
+    property: "type"
+  },
 };
 
 export const dataList = [
   {
     id: 22,
-    name: "Portal Mais Transparência <code>teste</code>",
+    name: "Portal Mais Transparência",
     type: "MyMonitor",
   },
   {
@@ -45,28 +58,25 @@ export const dataList = [
 
 export const headersBarLine = ['[1 - 2[', '[2 - 3[', '[3 - 4[', '[4 - 5[', '[5 - 6[', '[6 - 7[', '[7 - 8[', '[8 - 9[', '[9 - 10[']
 
-
-
 export const barData = {
   labels: headersBarLine,
   datasets: [
     {
       type: 'line',
       label: "Percentagem(nº de páginas)",
-      data: [1, 2, 3,0,0,0, 10],
+      data: [1, 2, 3, 0, 0, 0, 0, 0, 10],
       backgroundColor: 'rgba(51, 51, 153, 1)',
       borderColor: 'rgba(51, 51, 153, 1)',
       borderWidth: 2,
       fill: false,
       tension: 0,
-      pointBackgroundColor: 'red', // Set the color of the dots
+      pointBackgroundColor: 'red',
       pointBorderColor: 'red',
     },
     {
       type: 'bar',
-
       label: "Frequência (nº de páginas)",
-    data: [1, 2, 3, 1,0,0,0, 10],
+      data: [1, 2, 3, 1, 0, 0, 0, 0, 10],
       backgroundColor: [
         '#e90018',
         '#e90018',
@@ -82,7 +92,7 @@ export const barData = {
     },
   ],
 };
-// ... existing code ...
+
 export const optionsHorizontalBar = {
   indexAxis: 'y', // This makes the bar chart horizontal
   responsive: true,
@@ -176,5 +186,4 @@ export const barOptions = {
     }
   }
 };
-// ... existing code ...
 

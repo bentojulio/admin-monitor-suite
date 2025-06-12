@@ -19,7 +19,7 @@ const PageList = () => {
         AdminMonitorSuite, num total de 38 diretórios.
       </p>
 
-      <div className="content">
+      <div className="content bg-white">
         <h3>Lista de Páginas Web</h3>
         <ContentListPages 
         checkboxesSelected={checkboxesSelected}

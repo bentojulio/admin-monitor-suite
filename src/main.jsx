@@ -5,6 +5,7 @@ import "./index.css";
 import "ama-design-system/dist/index.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
+import { ThemeProvider } from "./context/ThemeContext";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -31,8 +32,11 @@ ChartJS.register(
   RadialLinearScale,
   ArcElement
 );
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
