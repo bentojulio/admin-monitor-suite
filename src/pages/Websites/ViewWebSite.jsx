@@ -7,7 +7,7 @@ import { Link, useParams } from "react-router-dom";
 import { BarLineGraphTabs } from "../../components/BarLineGraph/index.jsx";
 import ContentListPages from "../Pages/components/ContentListPage.jsx";
 import {
-  directoriesHeaders as dataHeadersBad,
+  dataHeaders as dataHeadersBad,
   columnsOptions as columnsOptionsBad,
   dataRows as dataRowsBad,
   itemsPaginationText,

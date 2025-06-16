@@ -156,3 +156,9 @@ main {
 .dark-theme p {
   color: white !important;
 }
+
+
+.last_column_no_gauge {
+  width: 67.3vw !important;
+}
+

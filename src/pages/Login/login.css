@@ -32,3 +32,8 @@
   height: 100vh;
   background-color: var(--ama-color-brand-primary);
 }
+
+
+.ama.field {
+  text-align: start !important;
+}

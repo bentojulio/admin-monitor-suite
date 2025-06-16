@@ -73,11 +73,14 @@ const DirectoriesCreateForm = () => {
                     error={errors.categories ? "Campo obrigatório" : undefined}
                 />
 
+                
+                <div className="px-4 d-flex justify-content-end">
                 <Button
                     type="submit"
                     text="Criar Diretório"
                     className="mt-3"
                 />
+                </div>
             </form>
         </div>
     );

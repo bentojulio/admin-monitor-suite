@@ -45,7 +45,7 @@ const PageCreateForm = () => {
           title: "Inserir Sitemap",
         },
         {
-          component: <InsertUrl register={register} errors={errors} />,
+          component: <InsertCrawling register={register} errors={errors} />,
           eventKey: "tab3",
           title: "Crawling",
         },

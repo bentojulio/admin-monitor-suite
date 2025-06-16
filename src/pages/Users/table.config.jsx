@@ -1,6 +1,6 @@
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id" },
+    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", label:"Selecionar"},
     { type: "SortingText", nRow: 2, name: "Nome", property: "name" },
     { type: "SortingText", nRow: 2, name: "Aplicação", property: "app" },
     {

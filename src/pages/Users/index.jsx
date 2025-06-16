@@ -15,6 +15,7 @@ import {
 } from "./table.config";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
 
 const UserList = () => {
   const {
@@ -22,7 +23,7 @@ const UserList = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const { theme } = useTheme();
   const breadcrumbs = [
     { children: <Link to="/">Home</Link> },
     { title: "Dashboard" },
@@ -80,7 +81,7 @@ const UserList = () => {
         </form>
 
         <SortingTable
-          darkTheme={false ? "dark" : "light"}
+          darkTheme={theme === 'dark'}
           headers={directoriesHeaders}
           setDataList={setData}
           dataList={data}

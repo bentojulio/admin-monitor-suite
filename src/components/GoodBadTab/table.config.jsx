@@ -1,4 +1,4 @@
-export const directoriesHeaders = [
+export const dataHeaders = [
   [
     { type: "SortingText", nRow: 2, name: "Práticas ", property: "name", justifyCenter: false },
     { type: "SortingText", nRow: 2, name: "Práticas por páginas", property: "praticesPerPage", justifyCenter: true },
@@ -106,59 +106,3 @@ export const dataRows = [
     "level": "AAAA"
   }
 ]
-
-export const dataHeadersBad = [
-  [
-    { type: "Checkbox", nRow: 2, name: "Selecionar ", property: "id" },
-    { type: "SortingText", nRow: 2, name: "Nome ", property: "name", justifyCenter: false },
-    { type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true },
-  ],
-];
-
-export const columnsOptionsBad = {
-  id: { 
-    type: "Checkbox", 
-    center: true, 
-    bold: false, 
-    decimalPlace: false,
-    property: "id"
-  },
-  name: {
-    type: "Link",
-    center: true,
-    bold: false,
-    decimalPlace: false,
-    property: "name",
-    href: (row) => "http://localhost:5173/dashboard/pages/view",
-  },
-  type: { 
-    type: "Text", 
-    center: true, 
-    bold: false, 
-    decimalPlace: false,
-    property: "type"
-  },
-};
-
-export const dataBad = [
-  {
-    id: 22,
-    name: "Portal Mais Transparência",
-    type: "MyMonitor",
-  },
-  {
-    id: 23,
-    name: "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
-    type: "MyMonitor",
-  },
-  {
-    id: 31,
-    name: "Portal do SNS 24",
-    type: "AcessMonitor",
-  },
-  {
-    id: 25,
-    name: "Comissão Nacional de Eleições",
-    type: "AcessMonitor",
-  },
-];

@@ -59,7 +59,7 @@ const DashboardLayout = () => {
     <div className={`main-content-dashboard ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
       <header className="d-flex justify-content-between gap-5 align-items-center">
         <div className="d-flex align-items-center gap-3">
-          <img src={Logo} alt="Logo" className="logo"/>
+          <img src={Logo} alt="AdminMonitorSuite Logo" className="logo"/>
         </div>
 
         <div className="d-flex gap-3 align-items-center">

@@ -39,11 +39,14 @@ const UsersGovCreateForm = () => {
                 />
 
                 
+              
+                <div className="px-4 d-flex justify-content-end">
                 <Button
                     type="submit"
                     text="Criar Utilizador"
                     className="mt-3"
                 />
+                </div>
             </form>
         </div>
     );

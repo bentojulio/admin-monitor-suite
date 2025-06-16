@@ -47,12 +47,12 @@ const CategoriesCreateForm = () => {
                 />
 
            
-
+        <div className="px-4 d-flex justify-content-end">
                 <Button
                     type="submit"
                     text="Criar Categoria"
-                    className="mt-3"
                 />
+            </div>
             </form>
         </div>
     );

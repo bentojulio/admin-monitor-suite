@@ -82,7 +82,7 @@ const WebSiteCreateForm = () => {
         <div className="bg-white d-flex align-items-end justify-content-between p-4 flex-column">
 
              {/* Botões */}
-        <div className="d-flex gap-3">
+        <div className="d-flex justify-content-end gap-3">
           <Button
             type="button"
             text="Guardar e Sair"

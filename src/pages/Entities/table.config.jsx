@@ -1,6 +1,6 @@
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id" },
+    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", label:"Selecionar"},
     {
       type: "SortingText",
       nRow: 2,
@@ -38,7 +38,7 @@ export const directoriesHeaders = [
 ];
 
 export const columnsOptions = {
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
   shortName: { type: "Text", center: false, bold: false, decimalPlace: false },
   fullName: { type: "Text", center: false, bold: false, decimalPlace: false },
   createdAt: { type: "Text", center: true, bold: false, decimalPlace: false },
