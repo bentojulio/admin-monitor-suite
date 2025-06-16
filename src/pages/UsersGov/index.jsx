@@ -3,27 +3,30 @@ import {
   Button,
   InputSearch,
   SortingTable,
-  Breadcrumb
+  Breadcrumb,
 } from "ama-design-system";
 import "./style.users.css";
 import {
-  directoriesHeaders,
+  dataHeaders,
   dataRows,
   columnsOptions,
   nameOfIcons,
-  paginationButtonsTexts
-} from "./table.config.jsx";
+  paginationButtonsTexts,
+} from "./table.config";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from "../../context/ThemeContext";
 
-const UsersGovList = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+const UserGovList = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const { theme } = useTheme();
-
   const breadcrumbs = [
     { children: <Link to="/">Home</Link> },
-    { title: "Dashboard" }
+    { title: "Dashboard" },
   ];
 
   const [data, setData] = useState(dataRows);
@@ -36,14 +39,14 @@ const UsersGovList = () => {
 
   return (
     <div>
-      <Breadcrumb items={breadcrumbs} />
-      <h1>Utilizadores Gov</h1>
+      <h1>Utilizadores</h1>
       <p>
-        Abaixo encontra a listagem de todos os utilizadores registados no AdminMonitorSuite, num total de 38 diretórios.
+        Abaixo encontra a listagem de todos os utilizadores registados no
+        AdminMonitorSuite, num total de 38 diretórios.
       </p>
 
       <div className="content bg-white">
-        <h3>Lista de Utilizadores</h3>
+        <h3>Lista de Utilizadores Gov</h3>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -66,7 +69,12 @@ const UsersGovList = () => {
               text="Apagar Utilizadores"
               icon="AMA-Apagar-Line"
               variant="danger"
-              onClick={() => console.log("Apagar Utilizadores selecionados:", checkboxesSelected)}
+              onClick={() =>
+                console.log(
+                  "Apagar Utilizadores selecionados:",
+                  checkboxesSelected
+                )
+              }
               disabled={checkboxesSelected.length === 0}
             />
           </div>
@@ -74,7 +82,7 @@ const UsersGovList = () => {
 
         <SortingTable
           darkTheme={theme === 'dark'}
-          headers={directoriesHeaders}
+          headers={dataHeaders}
           setDataList={setData}
           dataList={data}
           columnsOptions={columnsOptions}
@@ -90,4 +98,4 @@ const UsersGovList = () => {
   );
 };
 
-export default UsersGovList;
+export default UserGovList;

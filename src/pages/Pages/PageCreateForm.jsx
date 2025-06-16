@@ -23,35 +23,28 @@ const PageCreateForm = () => {
     console.log("User data:", data);
   };
 
-    const TabsWithComponenets = (<Tabs
-  defaultActiveKey="tab1"
-  tabs={[
-    {
-      component: <InsertUrl 
-        register={register}
-        errors={errors}
-      />,
-      eventKey: 'tab1',
-      title: 'Inserir URLs'
-    },
-    {
-      component: <InsertSiteMap
-        register={register}
-        errors={errors}
-      />,
-      eventKey: 'tab2',
-      title: 'Inserir Sitemap'
-    },
-    {
-      component: <InsertUrl
-        register={register}
-        errors={errors}
-        />,
-      eventKey: 'tab3',
-      title: 'Crawling'
-    }
-  ]}
-/>);
+  const TabsWithComponenets = (
+    <Tabs
+      defaultActiveKey="tab1"
+      tabs={[
+        {
+          component: <InsertUrl register={register} errors={errors} />,
+          eventKey: "tab1",
+          title: "Inserir URLs",
+        },
+        {
+          component: <InsertSiteMap register={register} errors={errors} />,
+          eventKey: "tab2",
+          title: "Inserir Sitemap",
+        },
+        {
+          component: <InsertCrawling register={register} errors={errors} />,
+          eventKey: "tab3",
+          title: "Crawling",
+        },
+      ]}
+    />
+  );
   return (
     <div>
       <h1>Criar Páginas Web</h1>

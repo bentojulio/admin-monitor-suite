@@ -2,12 +2,39 @@
 
 export const directoriesHeaders = [
   [
-    {type: "Checkbox", nRow: 2, name: "rank ", property: "title"},
-    {type: "SortingText", nRow: 2, name: "Email ", property: "email"},
-    {type: "SortingText", nRow: 2, name: "Nome do usuário", property: "username", justifyCenter: true},
-    {type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true},
-  ]
-]
+    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", label:"Selecionar"},
+    { type: "SortingText", nRow: 2, name: "Nome", property: "name" },
+    { type: "SortingText", nRow: 2, name: "Aplicação", property: "app" },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Nº de sítios web",
+      property: "websiteCount",
+      justifyCenter: true,
+    },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Data de registo",
+      property: "registeredAt",
+      justifyCenter: true,
+    },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Última emissão",
+      property: "lastEmission",
+      justifyCenter: true,
+    },
+    {
+      type: "Action",
+      nRow: 2,
+      name: "Editar",
+      property: "edit",
+      justifyCenter: true,
+    },
+  ],
+];
 
 export const columnsOptions = {
   id: { type: "Skip", center: false, bold: false, decimalPlace: false },

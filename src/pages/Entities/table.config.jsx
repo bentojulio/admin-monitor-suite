@@ -2,20 +2,56 @@
 
 export const directoriesHeaders = [
   [
-    {type: "Checkbox", nRow: 2, name: "rank ", property: "title"},
-    {type: "SortingText", nRow: 2, name: "Email ", property: "email"},
-    {type: "SortingText", nRow: 2, name: "Nome do usuário", property: "username", justifyCenter: true},
-    {type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true},
-  ]
-]
+    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", label:"Selecionar"},
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Nome abreviado",
+      property: "shortName",
+    },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Nome completo",
+      property: "fullName",
+    },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Data de criação",
+      property: "createdAt",
+      justifyCenter: true,
+    },
+    {
+      type: "SortingText",
+      nRow: 2,
+      name: "Nº de Sítios web",
+      property: "websiteCount",
+      justifyCenter: true,
+    },
+    {
+      type: "Action",
+      nRow: 2,
+      name: "Editar",
+      property: "edit",
+      justifyCenter: true,
+    },
+  ],
+];
 
 export const columnsOptions = {
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  email: { type: "Text", center: false, bold: false, decimalPlace: false },
-  username: { type: "Text", center: false, bold: false, decimalPlace: false },
-  type: { type: "Text", center: true, bold: false, decimalPlace: true },
- }
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
+  shortName: { type: "Text", center: false, bold: false, decimalPlace: false },
+  fullName: { type: "Text", center: false, bold: false, decimalPlace: false },
+  createdAt: { type: "Text", center: true, bold: false, decimalPlace: false },
+  websiteCount: {
+    type: "Text",
+    center: true,
+    bold: false,
+    decimalPlace: false,
+  },
+  edit: { type: "Action", center: true, bold: false, decimalPlace: false },
+};
 
 export const nameOfIcons = [
   "Selo Bronze",

@@ -17,7 +17,7 @@ const Login = () => {
   return (
     <div className="main-content">
       <div className="login-container">
-        <img src={Logo} alt="Logo" className="login-logo" />
+        <img src={Logo} alt="AdminMonitorSuite Login Logo" className="login-logo" />
         <form onSubmit={handleSubmit(onSubmit)}>
            <Input
             name="username"

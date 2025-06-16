@@ -1,6 +1,6 @@
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2,center: true, name: "Selecionar ", property: "id" },
+    { type: "Checkbox", nRow: 2,center: true, name: "Selecionar ", property: "id", label:"Selecionar"},
     { type: "SortingText", nRow: 2, center: true, name: "URL ", property: "url" },
     { type: "SortingText", nRow: 2, center: true, name: "Título", property: "title" },
     {
@@ -63,12 +63,13 @@ export const directoriesHeaders = [
       name: "Observatório",
       property: "observatory",
       justifyCenter: true,
+      label:"Observatório"
     },
   ],
 ];
 
 export const columnsOptions = {
-  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
   title: { type: "Text", center: true, bold: false, decimalPlace: false }, // Checkbox
   url: { type: "Link", center: true, bold: false, decimalPlace: false, href: (row) => "http://localhost:5173/dashboard/pages/view/" + row.title },
   point: { type: "Text", center: true, bold: false, decimalPlace: true },
@@ -87,7 +88,7 @@ export const columnsOptions = {
   a: { type: "Text", center: true, bold: false, decimalPlace: false },
   aa: { type: "Text", center: true, bold: false, decimalPlace: false },
   aaa: { type: "Text", center: true, bold: false, decimalPlace: false },
-  observatory: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  observatory: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Observatório"},
 };
 
 export const nameOfIcons = [

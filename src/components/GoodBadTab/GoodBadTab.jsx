@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Tabs } from 'ama-design-system'
 import { 
-  dataHeadersBad, 
-  dataBad, 
-  columnsOptionsBad,
+  dataHeaders, 
+  dataRows, 
+  columnsOptions,
   nameOfIcons, 
   paginationButtonsTexts 
 } from "./table.config.jsx";
@@ -12,8 +12,8 @@ import { useTheme } from '../../context/ThemeContext';
 
 export default function GoodBadTab() {
     const { theme } = useTheme();
-    const [dataGood, setDataGood] = useState([])
-    const [dataBad, setDataBad] = useState([])
+    const [dataGood, setDataGood] = useState(dataRows)
+    const [dataBad, setDataBad] = useState(dataRows)
     const [checkboxesSelected, setCheckboxesSelected] = useState([])
 
     useEffect(() => {
@@ -27,10 +27,10 @@ export default function GoodBadTab() {
             component:
                 <SortingTable
                     darkTheme={theme === 'dark'}
-                    headers={dataHeadersBad}
+                    headers={dataHeaders}
                     setDataList={setDataGood}
                     dataList={dataGood}
-                    columnsOptions={columnsOptionsBad}
+                    columnsOptions={columnsOptions}
                     nextPage={() => null}
                     caption="Boas Práticas"
                     iconsAltTexts={nameOfIcons}
@@ -45,10 +45,10 @@ export default function GoodBadTab() {
             component:
                 <SortingTable
                     darkTheme={theme === 'dark'}
-                    headers={dataHeadersBad}
+                    headers={dataHeaders}
                     setDataList={setDataBad}
                     dataList={dataBad}
-                    columnsOptions={columnsOptionsBad}
+                    columnsOptions={columnsOptions}
                     nextPage={() => null}
                     caption="Más Práticas"
                     iconsAltTexts={nameOfIcons}

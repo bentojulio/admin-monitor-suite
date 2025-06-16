@@ -15,7 +15,7 @@ export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barDat
       title: "Gráfico",
       component: (
         <div style={{ padding: 20 }}>
-          <Bar data={memoBarData} options={memoBarOptions} aria-label="Bar Chart" />
+          <Bar alt="Gráfico de Barras	" data={memoBarData} options={memoBarOptions} aria-label="Bar Chart" />
         </div>
       ),
     },

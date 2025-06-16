@@ -45,7 +45,7 @@ const mockRadarOptions = {
 export const RadarGraph = () => {
     return (
         <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto' }}>
-            <Radar data={mockRadarData} options={mockRadarOptions} />
+            <Radar alt="Gráfico de Radar" data={mockRadarData} options={mockRadarOptions} />
         </div>
     );
 };

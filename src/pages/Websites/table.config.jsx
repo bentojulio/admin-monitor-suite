@@ -4,7 +4,7 @@ const theme = "light"
 
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id" },
+    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", label:"Selecionar"},
     { type: "SortingText", nRow: 2, name: "Nome", property: "name" },
     { type: "SortingText", nRow: 2, name: "URL inicial", property: "url" },
     {
@@ -38,7 +38,7 @@ export const directoriesHeaders = [
 ];
 
 export const columnsOptions = {
-  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
   name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row)=>{
     return `http://localhost:5173/dashboard/websites/view/${row.name}`
   } },

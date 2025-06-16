@@ -2,7 +2,7 @@ const theme = "light"
 
 export const dataHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "Selecionar ", property: "id" },
+    { type: "Checkbox", nRow: 2, name: "Selecionar ", property: "id", label:"Selecionar" },
     { type: "SortingText", nRow: 2, name: "Nome ", property: "name", justifyCenter: false },
     { type: "SortingText", nRow: 2, name: "Tipo", property: "type", justifyCenter: true },
   ],
@@ -14,7 +14,8 @@ export const columnsOptions = {
     center: true, 
     bold: false, 
     decimalPlace: false,
-    property: "id"
+    property: "id",
+     label:"Selecionar"
   },
   name: {
     type: "Link",

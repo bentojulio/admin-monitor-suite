@@ -47,11 +47,14 @@ const EntitiesCreateForm = () => {
                 />
 
 
+               
+                <div className="px-4 d-flex justify-content-end">
                 <Button
                     type="submit"
                     text="Criar Entidade"
                     className="mt-3"
                 />
+                </div>
             </form>
         </div>
     );
