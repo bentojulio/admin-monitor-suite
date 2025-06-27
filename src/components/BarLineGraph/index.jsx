@@ -4,7 +4,7 @@ import { Bar } from "react-chartjs-2";
 
 import { useTheme } from '../../context/ThemeContext';
 
-export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barData, barOptions }) {
+export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barData, barOptions, darkTheme }) {
   const { theme } = useTheme();
   const memoBarData = useMemo(() => barData, [barData]);
   const memoBarOptions = useMemo(() => barOptions, [barOptions]);
@@ -20,6 +20,7 @@ export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barDat
             aria-label="Gráfico de barras mostrando a distribuição de pontuações de acessibilidade"
             data={memoBarData} 
             options={memoBarOptions} 
+            darkTheme={darkTheme}
           />
         </div>
       ),
@@ -29,10 +30,10 @@ export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barDat
       title: "Tabela",
       component: (
         <SortingTable
+          darkTheme={theme}
           hasSort={false}
           headers={dataHeaders}
           dataList={dataList}
-          darkTheme={theme}
           pagination={false}
           links={false}
           caption="Table Caption"

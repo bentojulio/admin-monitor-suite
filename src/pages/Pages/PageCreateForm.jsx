@@ -5,20 +5,22 @@ import { Link } from "react-router-dom";
 import InsertUrl from "./Tabs/insertUrl";
 import InsertSiteMap from "./Tabs/insertSiteMap";
 import InsertCrawling from "./Tabs/insertCrawling";
-
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '../../context/ThemeContext';
 const PageCreateForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { t } = useTranslation();
   const [breadcrumbs, setBreadcrumbs] = React.useState([
     { children: <Link to="/">Home</Link> },
     {
       title: "Dashboard",
     }
   ]);
-
+  const { theme } = useTheme();
   const onSubmit = (data) => {
     console.log("User data:", data);
   };
@@ -26,30 +28,31 @@ const PageCreateForm = () => {
   const TabsWithComponenets = (
     <Tabs
       defaultActiveKey="tab1"
+      darkTheme={theme}
       tabs={[
         {
-          component: <InsertUrl register={register} errors={errors} />,
+          component: <InsertUrl darkTheme={theme} register={register} errors={errors} />,
           eventKey: "tab1",
-          title: "Inserir URLs",
+          title: t('PAGES_PAGE.ADD.insert_url_tab'),
         },
         {
-          component: <InsertSiteMap register={register} errors={errors} />,
+          component: <InsertSiteMap darkTheme={theme} register={register} errors={errors} />,
           eventKey: "tab2",
-          title: "Inserir Sitemap",
+          title: t('PAGES_PAGE.ADD.insert_sitemap_tab'),
         },
         {
-          component: <InsertCrawling register={register} errors={errors} />,
+          component: <InsertCrawling darkTheme={theme} register={register} errors={errors} />,
           eventKey: "tab3",
-          title: "Crawling",
+          title: t('PAGES_PAGE.ADD.crawling_tab'),
         },
       ]}
     />
   );
   return (
     <div>
-      <h1>Criar Páginas Web</h1>
+      <h1>{t('PAGES_PAGE.ADD.title')}</h1>
       <p className="w-50">
-        Nesta página é possível adicionar amostras de páginas a um sítio web.
+        {t('PAGES_PAGE.ADD.description')}
       </p>
 
       <h2>Métodos de adicionar páginas a um sítio web:</h2>
@@ -64,11 +67,15 @@ const PageCreateForm = () => {
           <h2 className="mb-4">
             1. Em sítio web pretende efetuar a adição de páginas?
           </h2>
+          <div className="w-50">
           <Input
+            id="name"
+            darkTheme={theme}
             label="Sítio web (URL inicial):"
             {...register("name", { required: "Campo obrigatório" })}
             error={errors.name?.message}
           />
+          </div>
         </div>
 
         <div className="bg-white p-4 mt-5">

@@ -14,6 +14,7 @@ import {
 import { useTheme } from "../../context/ThemeContext";
 import { TabGlobalAMS } from "./components/TabGlobalAMS.jsx";
 import { TabGlobalObservatory } from "./components/TabGlobalObservatory.jsx";
+import { barOptionsDark } from "../Websites/table.config.jsx";
 const GlobalDirectories = () => {
   const { theme } = useTheme();
   const [statsTitle, setWebsiteStatsTitle] = useState([
@@ -50,7 +51,7 @@ const tabs = [
         theme={theme}
         columnsOptionsBar={columnsOptionsBar}
         barDataCopy={barDataCopy}
-        barOptionsCopy={barOptionsCopy}
+        barOptionsCopy={theme === "light" ? barOptionsCopy : barOptionsDark}
         dataHeadersBar={dataHeadersBar}
         dataListBar={dataListBar}
         headerBarlineBar={headerBarlineBar}
@@ -64,7 +65,7 @@ const tabs = [
         theme={theme}
         columnsOptionsBar={columnsOptionsBar}
         barDataCopy={barDataCopy}
-        barOptionsCopy={barOptionsCopy}
+        barOptionsCopy={theme === "light" ? barOptionsCopy : barOptionsDark}
         dataHeadersBar={dataHeadersBar}
         dataListBar={dataListBar}
         headerBarlineBar={headerBarlineBar}

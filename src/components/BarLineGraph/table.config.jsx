@@ -1,3 +1,5 @@
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const theme = "light"
 
 export const dataHeaders = [
@@ -23,7 +25,7 @@ export const columnsOptions = {
     bold: false,
     decimalPlace: false,
     property: "name",
-    href: (row) => "http://localhost:5173/dashboard/pages/view",
+    href: (row) => apiUrl + "dashboard/pages/view",
   },
   type: { 
     type: "Text", 

@@ -15,11 +15,13 @@ import {
  } from "../../components/BarLineGraph/table.config.jsx";
 import { useTheme } from "../../context/ThemeContext";
 import ContentListWebSites from "../Websites/components/ContentListWebSites.jsx";
-import { dataRows as dataRowsWebSites } from "../Websites/table.config.jsx";
+import { barOptionsDark, dataRows as dataRowsWebSites } from "../Websites/table.config.jsx";
+import { useTranslation } from "react-i18next"; 
 
 const ViewDirectories = () => {
   const { directoryName } = useParams();
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const [statsTitle, setWebsiteStatsTitle] = useState([
 
     { subtitle: 'Sítios Web', subtitle2: "" },
@@ -52,10 +54,10 @@ const ViewDirectories = () => {
     <div>
       <Breadcrumb data={breadcrumbs} />
 
-      <h1>Dados Globais do Diretório - {directoryName}</h1>
-      <p>Abaixo encontra a listagem de todos os Directórios registados no AdminMonitorSuite, num total de 38 diretórios.</p>
+      <h1>{t('DIRECTORIES_PAGE.LIST.title')} - {directoryName}</h1>
+      <p>{t('DIRECTORIES_PAGE.LIST.subtitle')}</p>
 
-      <div className="content bg-white">
+      <div>
         <ContentListWebSites
           checkboxesSelected={checkboxesSelected}
           setCheckboxesSelected={setCheckboxesSelected}
@@ -67,31 +69,31 @@ const ViewDirectories = () => {
       </div>
     
 
-      <div className="bg-white p-4 mt-5">
+      <div className="bg-white mt-5">
         <div>
-          <h2>Exportação de dados</h2>
-          <p>Para exportar todos os dados do Observatório à data de hoje, pressione o botão "Exportar CSV" abaixo.</p>
+          <h2>{t('DIRECTORIES_PAGE.LIST.export_data')}</h2>
+          <p>{t('DIRECTORIES_PAGE.LIST.export_data_description')}</p>
         </div>
-        <div className="d-flex bg-white justify-content-end align-items-end">
+        <div className="d-flex justify-content-start align-items-end">
           <Button
-            text={"Exportar CSV"}
+            darkTheme={theme}
+            text={t('DIRECTORIES_PAGE.LIST.export_csv')}
             className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
+            onClick={() => console.log(t('DIRECTORIES_PAGE.LIST.export_csv'))}
             />
         </div>
       </div>
       <div className="mt-5 bg-white p-4">
-        <h2 className="mb-4">Indicadores globais do Diretório</h2>
+        <h2 className="mb-4">{t('DIRECTORIES_PAGE.LIST.global_indicators')}</h2>
         <StatisticsHeader
-          darkTheme="light"
+          darkTheme={theme}
           gaugeDescription=""
-          gaugeTitle={[
-            'Pontuação média'
-          ]}
-          screenReaderTitle="Indicadores globais do Diretório"
+          gaugeTitle={[t('STATISTICS.gauge.label')]}
+          screenReaderTitle={t('DIRECTORIES_PAGE.LIST.global_indicators')}
           gaugeType=""
-          newestPage="Avaliação mais recente de uma página:"
-          oldestPage="Avaliação mais antiga de uma página:"
+          tag="h3"
+          newestPage={t('STATISTICS.newest_page_updated')}
+          oldestPage={t('STATISTICS.oldest_page_updated')}
           stats={{
             oldestPage: '16 de outubro de 2023',
             recentPage: '16 de outubro de 2023',
@@ -105,25 +107,26 @@ const ViewDirectories = () => {
             ]
           }}
           statsTitles={[
-            'Diretórios',
-            'Entidades',
-            'Sítios Web',
-            'Páginas',
-            'Páginas por sítio'
+            t('DIRECTORIES_PAGE.LIST.title'),
+            t('ENTITIES_PAGE.LIST.title'),
+            t('WEBSITES_PAGE.LIST.title'),
+            t('PAGES_PAGE.LIST.title'),
+            t('STATISTICS.average_page')
           ]}
-          subtitle="Metadados"
-          title="Estatísticas"
+          subtitle={t('STATISTICS.subtitle')}
+          title={t('STATISTICS.title')}
         />
       </div>
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Conformidade global do Diretório</h2>
         <StatisticsHeader
-          darkTheme={theme === 'dark'}
+          darkTheme={theme}
           gaugeDescription=""
           doubleRow={true}
           gaugeType={null}
           showGauge={false}
+          tag="h3"
           screenReaderTitle="Conformidade global do Diretório"
           stats={{
             recentPage: "",
@@ -150,18 +153,19 @@ const ViewDirectories = () => {
         <BarLineGraphTabs
           columnsOptions={columnsOptionsBar}
           barData={barDataCopy}
-          barOptions={barOptionsCopy}
+          barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
           dataHeaders={dataHeadersBar}
           dataList={dataListBar}
+          darkTheme={theme}
         />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Mancha Gráfica da Acessibilidade</h2>
-        <RadarGraph />
+        <RadarGraph darkTheme={theme}/>
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição detalhada das melhores práticas</h2>
-        <GoodBadTab />
+        <GoodBadTab darkTheme={theme}/>
       </div>
     </div>
   )

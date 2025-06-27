@@ -51,7 +51,7 @@ const ViewPages = () => {
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Avaliações efetuadas ao longo do tempo </h2>
         <SortingTable
-          darkTheme={theme === 'dark'}
+          darkTheme={theme}
           headers={directoriesHeadersPage}
           setDataList={setData}
           dataList={data}
@@ -65,17 +65,19 @@ const ViewPages = () => {
         />
       </div>
 
-      <div className="mt-5 bg-white p-4">
+      <div className="mt-5 bg-white">
         <h2>Exportação de dados</h2>
         <p>Para exportar os dados da última avaliação da página pressione o botão "Exportar úlitma avaliação da página em CSV". Para exportar os dados de todas as avaliações efetuadas à página pressione "Exportar todas as avaliações da página em CSV".
         </p>
-        <div className="d-flex justify-content-end align-items-end gap-3">
+        <div className="d-flex justify-content-start align-items-end gap-3">
           <Button
+            darkTheme={theme}
             text={"Exportar última avaliação da página em CSV"}
             className="btn-primary"
             onClick={() => console.log("Criar Utilizador")}
           />
           <Button
+            darkTheme={theme}
             text={"Exportar todas as avaliações da página em CSV"}
             className="btn-primary"
             onClick={() => console.log("Criar Utilizador")}

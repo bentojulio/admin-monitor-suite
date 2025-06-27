@@ -1,38 +1,39 @@
+import i18n from '../../i18n';
 
 
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", label:"Selecionar"},
+    { type: "Checkbox", nRow: 2, name: i18n.t('MISC.select'), property: "id", label: i18n.t('MISC.select') },
     {
       type: "SortingText",
       nRow: 2,
-      name: "Nome abreviado",
+      name: i18n.t('ENTITIES_PAGE.LIST.table.short_name_label'),
       property: "shortName",
     },
     {
       type: "SortingText",
       nRow: 2,
-      name: "Nome completo",
+      name: i18n.t('ENTITIES_PAGE.LIST.table.long_name_label'),
       property: "fullName",
     },
     {
       type: "SortingText",
       nRow: 2,
-      name: "Data de criação",
+      name: i18n.t('ENTITIES_PAGE.LIST.table.creation_label'),
       property: "createdAt",
       justifyCenter: true,
     },
     {
       type: "SortingText",
       nRow: 2,
-      name: "Nº de Sítios web",
+      name: i18n.t('ENTITIES_PAGE.LIST.table.websites_label'),
       property: "websiteCount",
       justifyCenter: true,
     },
     {
       type: "Action",
       nRow: 2,
-      name: "Editar",
+      name: i18n.t('ENTITIES_PAGE.LIST.table.edit_label'),
       property: "edit",
       justifyCenter: true,
     },
@@ -63,22 +64,15 @@ export const nameOfIcons = [
 ]
 
 export const paginationButtonsTexts = [
-  "Primeira página",
-  "Página anterior",
-  "Página seguinte",
-  "Última página"
-]
+  i18n.t('FIRST_PAGE_LABEL'),
+  i18n.t('PREVIOUS_PAGE_LABEL'),
+  i18n.t('NEXT_PAGE_LABEL'),
+  i18n.t('LAST_PAGE_LABEL'),
+];
 
-export const nItemsPerPageText=[
-  "Ver ",
-  " itens por página"
-]
+export const nItemsPerPageText = [i18n.t('ITEMS_PER_PAGE_LABEL')];
 
-export const itemsPaginationText = [
-  " de ",
-  " itens"
-]
-
+export const itemsPaginationText = [i18n.t('RANGE_PAGE_LABEL_1'), i18n.t('RANGE_PAGE_LABEL_2')];
 
 export const dataRows = [
   {

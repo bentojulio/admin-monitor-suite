@@ -1,40 +1,48 @@
 import React from 'react';
 import { Input, Button, Select, Tabs } from "ama-design-system";
+import { useTranslation } from "react-i18next";
 
-const Associations = ({ register, errors }) => {
+const Associations = ({ register, errors, darkTheme }) => {
+  const { t } = useTranslation();
     return (
-                <div>
-          <h2 className="mb-4">Associações</h2>
+                <div  className='w-50 d-flex flex-column gap-3'>
+          <h2 className="mb-4">{t('WEBSITES_PAGE.ADD.associations_label')}</h2>
 
           <Select
-            label="Associar Entidade(s) (opcional):"
+          darkTheme={darkTheme}
+            id="entities"
+            label={t('WEBSITES_PAGE.ADD.entities_label')  + ` ${t('HEADER.optional')}`}
             {...register("entities")}
             options={[
-              { value: "entidade1", label: "Entidade 1" },
-              { value: "entidade2", label: "Entidade 2" },
-              { value: "entidade3", label: "Entidade 3" },
+              { value: "entidade1", label: t('WEBSITES_PAGE.ADD.entity_1') },
+              { value: "entidade2", label: t('WEBSITES_PAGE.ADD.entity_2') },
+              { value: "entidade3", label: t('WEBSITES_PAGE.ADD.entity_3') },
             ]}
             isMulti
           />
 
           <Select
-            label="Associar Utilizador(es) (opcional):"
+          darkTheme={darkTheme}
+            id="users"
+            label={t('WEBSITES_PAGE.ADD.users_label')  + ` ${t('HEADER.optional')}`}
             {...register("users")}
             options={[
-              { value: "utilizador1", label: "Utilizador 1" },
-              { value: "utilizador2", label: "Utilizador 2" },
-              { value: "utilizador3", label: "Utilizador 3" },
+              { value: "utilizador1", label: t('WEBSITES_PAGE.ADD.user_1') },
+              { value: "utilizador2", label: t('WEBSITES_PAGE.ADD.user_2') },
+              { value: "utilizador3", label: t('WEBSITES_PAGE.ADD.user_3') },
             ]}
             isMulti
           />
 
           <Select
-            label="Associar Categoria(s) (opcional):"
+          darkTheme={darkTheme}
+            id="categories"
+            label={t('WEBSITES_PAGE.ADD.categories_label')  + ` ${t('HEADER.optional')}`}
             {...register("categories")}
             options={[
-              { value: "categoria1", label: "Categoria 1" },
-              { value: "categoria2", label: "Categoria 2" },
-              { value: "categoria3", label: "Categoria 3" },
+              { value: "categoria1", label: t('WEBSITES_PAGE.ADD.category_1') },
+              { value: "categoria2", label: t('WEBSITES_PAGE.ADD.category_2') },
+              { value: "categoria3", label: t('WEBSITES_PAGE.ADD.category_3') },
             ]}
             isMulti
           />

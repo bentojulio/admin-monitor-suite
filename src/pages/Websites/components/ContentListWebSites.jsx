@@ -7,47 +7,59 @@ import {
   nameOfIcons,
   paginationButtonsTexts,
 } from "../table.config";
+import { useTranslation } from "react-i18next";
+
 export default function ContentListWebSites({ checkboxesSelected, setCheckboxesSelected, data, setData }) {
   const { theme } = useTheme();
-
+  const { t } = useTranslation();
   return (
-    <>
-      <h2>Lista de sítios web</h2>
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <span>Filtrar Sítios Web:</span>
+    <div className="content bg-white">
+      <h2>{t('WEBSITES_PAGE.LIST.title')}</h2>
+      <div className="d-flex gap-2 align-items-center mb-3">
+        <span>{t('MISC.filter')} {t('WEBSITES_PAGE.LIST.title')}:</span>
         <InputSearch
-          placeholder={"Pesquisar Sítios Web..."}
-          style={{ width: "87%" }}
+            darkTheme={theme}
+
+          placeholder={t('MISC.filter') + ' ' + t('WEBSITES_PAGE.LIST.title') + '...'}
+          style={{ width: "50%" }}
         />
       </div>
-      <div className="d-flex gap-4 justify-content-end mb-4">
+      <div className="d-flex gap-4 justify-content-start mb-4">
         <Button
-          text={"Apagar Sítios Web"}
+          darkTheme={theme}
+
+          text={t('WEBSITES_PAGE.LIST.delete_websites')}
           icon={"AMA-Adicionar-Line"}
           className="btn-primary"
-          onClick={() => console.log("Criar Utilizador")}
+          onClick={() => console.log(t('WEBSITES_PAGE.LIST.delete_websites'))}
         />
         <Button
-          text={"Apagar páginas"}
+          darkTheme={theme}
+
+          text={t('PAGES_PAGE.LIST.delete_pages')}
           icon={"AMA-Adicionar-Line"}
           className="btn-primary"
-          onClick={() => console.log("Criar Utilizador")}
+          onClick={() => console.log(t('PAGES_PAGE.LIST.delete_pages'))}
         />
         <Button
-          text={"Reavaliar sítios"}
+          darkTheme={theme}
+
+          text={t('WEBSITES_PAGE.LIST.re_evaluate_websites')}
           icon={"AMA-Adicionar-Line"}
           className="btn-primary"
-          onClick={() => console.log("Criar Utilizador")}
+          onClick={() => console.log(t('WEBSITES_PAGE.LIST.re_evaluate_websites'))}
         />
         <Button
-          text={"Crawling sítios web"}
+          darkTheme={theme}
+
+          text={t('WEBSITES_PAGE.LIST.crawler')}
           icon={"AMA-Adicionar-Line"}
           className="btn-primary"
-          onClick={() => console.log("Criar Utilizador")}
+          onClick={() => console.log(t('WEBSITES_PAGE.LIST.crawler'))}
         />
       </div>
       <SortingTable
-       darkTheme={theme}
+        darkTheme={theme}
         headers={directoriesHeaders}
         setDataList={setData}
         dataList={data}
@@ -59,6 +71,6 @@ export default function ContentListWebSites({ checkboxesSelected, setCheckboxesS
         project={""}
         setCheckboxesSelected={setCheckboxesSelected}
       />
-    </>
+    </div>
   );
 }

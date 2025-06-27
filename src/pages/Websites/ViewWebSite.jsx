@@ -15,7 +15,7 @@ import {
   nItemsPerPageText,
   paginationButtonsTexts,
 } from "../../components/GoodBadTab/table.config.jsx";
-import { dataRows, horizontalData, optionsHorizontalBar } from "./table.config.jsx";
+import { barOptionsDark, dataRows, horizontalData, optionsHorizontalBar, optionsHorizontalBarDark } from "./table.config.jsx";
 import {
   barData,
   barOptions,
@@ -27,7 +27,9 @@ import { useTheme } from '../../context/ThemeContext';
 import {
   dataRows as dataRowsBar
 } from "../Pages/table.config.jsx";
+import { useTranslation } from "react-i18next";
 const ViewWebSites = () => {
+  const { t } = useTranslation();
   const { websiteName, directoryName } = useParams();
   const { theme } = useTheme();
   const [statsTitle, setWebsiteStatsTitle] = useState([
@@ -63,8 +65,8 @@ const ViewWebSites = () => {
     <div>
       <Breadcrumb data={breadcrumbs} />
 
-      <h1>Lista de páginas do sítio Web - {websiteName}</h1>
-      <p>Abaixo encontra a listagem de todos os Directórios registados no AdminMonitorSuite, num total de 38 diretórios.</p>
+      <h1>{t('WEBSITES_PAGE.LIST.pages_list_title', { websiteName })}</h1>
+      <p>{t('WEBSITES_PAGE.LIST.subtitle')}</p>
 
       <div className="content bg-white">
         <ContentListPages
@@ -75,26 +77,28 @@ const ViewWebSites = () => {
         />
 
       </div>
-      <div className="mt-5 bg-white p-4 d-flex flex-column gap-3">
-        <h2>Exportação de dados</h2>
-        <p>Para exportar todos os dados do Observatório à data de hoje, pressione o botão "Exportar CSV" abaixo.</p>
-        <div className="d-flex justify-content-end align-items-end">
+      <div className="mt-5 bg-white d-flex flex-column gap-3">
+        <h2>{t('WEBSITES_PAGE.LIST.export_data')}</h2>
+        <p>{t('WEBSITES_PAGE.LIST.export_data_description')}</p>
+        <div className="d-flex justify-content-start align-items-end">
           <Button
-            text={"Exportar CSV"}
+            darkTheme={theme}
+            text={t('WEBSITES_PAGE.LIST.export_csv')}
             className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
+            onClick={() => console.log(t('WEBSITES_PAGE.LIST.export_csv'))}
           />
         </div>
       </div>
 
-      <div className="mt-5 bg-white p-4">
+      <div className="mt-5 bg-white">
         <h2 className="mb-4">Indicadores globais do sítio web</h2>
         <StatisticsHeader
-          darkTheme="light"
+          darkTheme={theme}
           gaugeDescription=""
           gaugeTitle={[
             'Pontuação média'
           ]}
+          tag="h3"
           screenReaderTitle="Indicadores globais do sítio web"
           gaugeType=""
           newestPage="Avaliação mais recente de uma página:"
@@ -118,10 +122,11 @@ const ViewWebSites = () => {
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Conformidade do sítio web</h2>
         <StatisticsHeader
-          darkTheme="light"
+          darkTheme={theme}
           gaugeDescription=""
           doubleRow={true}
           gaugeType={null}
+          tag="h3"
           showGauge={false}
           screenReaderTitle="Conformidade do sítio web"
           stats={{
@@ -147,8 +152,9 @@ const ViewWebSites = () => {
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição das pontuações AccessMonitor no universo das 37 páginas analisadas no sítio web</h2>
         <BarLineGraphTabs
+        
           barData={barData}
-          barOptions={barOptions}
+          barOptions={ theme === "light" ? barOptions : barOptionsDark}
           columnsOptions={columnsOptionsBad}
           dataHeaders={dataHeadersBad}
           dataList={dataBad}
@@ -158,7 +164,7 @@ const ViewWebSites = () => {
         <h2 className="mb-4">Más Práticas de acessibilidade encontradas no sítio web</h2>
         <BarLineGraphTabs
           barData={horizontalData}
-          barOptions={optionsHorizontalBar}
+          barOptions={theme === "light" ? optionsHorizontalBar: optionsHorizontalBarDark}
           columnsOptions={columnsOptionsBad}
           dataHeaders={dataHeadersBad}
           dataList={dataBad}
@@ -171,7 +177,7 @@ const ViewWebSites = () => {
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição detalhada das melhores práticas</h2>
         <SortingTable
-          darkTheme={theme === 'dark'}
+          darkTheme={theme}
           headers={dataHeadersBad}
           setDataList={setDataBad}
           dataList={dataBad}

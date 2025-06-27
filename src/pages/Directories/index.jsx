@@ -4,9 +4,11 @@ import { useTheme } from '../../context/ThemeContext';
 import "./style.users.css";
 import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
 import { Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const DirectoriesList = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const breadcrumbs = [
     { children: <Link to="/">Home</Link> },
     {
@@ -20,28 +22,45 @@ const DirectoriesList = () => {
     <div>
       <Breadcrumb data={breadcrumbs} />
 
-      <h1>Directórios</h1>
+      <h1>{t('DIRECTORIES_PAGE.LIST.title')}</h1>
       <p>
-        Abaixo encontra a listagem de todos os Directórios registados no
-        AdminMonitorSuite, num total de 38 diretórios.
+        {t('DIRECTORIES_PAGE.LIST.subtitle')}
       </p>
 
       <div className="content bg-white">
-        <h2>Lista de Directórios</h2>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <span>Filtrar Directórios:</span>
+        <h3>{t('DIRECTORIES_PAGE.LIST.title')}</h3>
+        <div className="d-flex  gap-2 align-items-center mb-3">
+          <span>{t('MISC.filter')}</span>
           <InputSearch
-            placeholder={"Pesquisar Directórios..."}
-            style={{ width: "87%" }}
+            darkTheme={theme}
+            placeholder={t('MISC.filter') + '...'}
+            style={{ width: "50%" }}
           />
         </div>
-        <div className="d-flex gap-4 justify-content-end mb-4">
+        <div className="d-flex gap-4 justify-content-start mb-4">
           <Button
-            text={"Apagar Directórios"}
+            darkTheme={theme}
+            text={t('DIRECTORIES_PAGE.LIST.re_evaluate_pages')}
             icon={"AMA-Adicionar-Line"}
             className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
+            onClick={() => console.log(t('DIRECTORIES_PAGE.LIST.delete_directories'))}
           />
+          <Button
+            darkTheme={theme}
+            text={t('DIRECTORIES_PAGE.LIST.delete_page')}
+            icon={"AMA-Adicionar-Line"}
+            className="btn-primary"
+            onClick={() => console.log(t('DIRECTORIES_PAGE.LIST.delete_directories'))}
+          />
+          <Button
+            darkTheme={theme}
+            text={t('DIRECTORIES_PAGE.LIST.delete_directories')}
+            icon={"AMA-Adicionar-Line"}
+            className="btn-primary"
+            onClick={() => console.log(t('DIRECTORIES_PAGE.LIST.delete_directories'))}
+          />
+
+
         </div>
         <SortingTable
           darkTheme={theme}
@@ -50,7 +69,7 @@ const DirectoriesList = () => {
           dataList={data}
           columnsOptions={columnsOptions}
           nextPage={() => null}
-          caption={"Estatísticas do diretório" + " " + "Os 25 Portais + Procurados da AP"}
+          caption={t('DIRECTORIES_PAGE.LIST.table.title')}
           iconsAltTexts={nameOfIcons}
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}

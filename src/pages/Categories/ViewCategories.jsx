@@ -52,28 +52,30 @@ const ViewCategories = () => {
     <div className={theme === 'dark' ? 'dark-theme' : 'light-theme'}>
       <div className="flex justify-between items-center mb-4">
         <Breadcrumb
-          darkTheme={theme === 'dark'}
+          darkTheme={theme}
           data={breadcrumbs}
         />
       </div>
       <div>
         <h1>Dados Globais da Categoria</h1>
-      <div className="bg-white p-4">
+      <div className="bg-white mt-5">
         <ContentListWebSites
-          darkTheme={theme === 'dark'}
+          darkTheme={theme}
           checkboxesSelected={checkboxesSelected}
           setCheckboxesSelected={setCheckboxesSelected}
           data={data}
           setData={setData}
         />
       </div>
-      <div className="bg-white p-4 mt-5">
+      <div className="bg-white mt-5">
         <div>
           <h2>Exportação de dados</h2>
           <p>Para exportar todos os dados do Observatório à data de hoje, pressione o botão "Exportar CSV" abaixo.</p>
         </div>
-        <div className="d-flex bg-white justify-content-end align-items-end">
+        <div className="d-flexjustify-content-end align-items-end">
           <Button
+          darkTheme={theme}
+
             text={"Exportar CSV"}
             className="btn-primary"
             onClick={() => console.log("Criar Utilizador")}
@@ -81,16 +83,18 @@ const ViewCategories = () => {
         </div>
       </div>
 
-      <div className="mt-5 bg-white p-4">
+      <div className="mt-5 bg-white">
         <h2 className="mb-4">Indicadores globais da Categoria</h2>
         <StatisticsHeader
-          darkTheme="light"
+                    darkTheme={theme}
+
           gaugeDescription=""
           gaugeTitle={[
             'Pontuação média'
           ]}
           screenReaderTitle="Indicadores globais da Categoria"
           gaugeType=""
+          tag="h3"
           newestPage="Avaliação mais recente de uma página:"
           oldestPage="Avaliação mais antiga de uma página:"
           stats={{
@@ -120,11 +124,13 @@ const ViewCategories = () => {
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Conformidade global da Categoria</h2>
         <StatisticsHeader
-          darkTheme={theme === 'dark'}
+                    darkTheme={theme}
+
           gaugeDescription=""
           doubleRow={true}
           gaugeType={null}
           showGauge={false}
+          tag="h3"
           screenReaderTitle="Conformidade global da Categoria"
           stats={{
             recentPage: "",

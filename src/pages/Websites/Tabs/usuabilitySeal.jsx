@@ -1,24 +1,30 @@
 import React from 'react';
 import { Input, Button, Select, Tabs } from "ama-design-system";
+import { useTranslation } from 'react-i18next';
 
-const UsuabilitySeal = ({ register, errors }) => {
+const UsuabilitySeal = ({ register, errors, darkTheme }) => {
+    const { t } = useTranslation();
     return (
-         <div>
-            <h2 className="mb-4">Selo de Usabilidade e Acessibilidade</h2>
+         <div  className='w-50 d-flex flex-column gap-3'>
+            <h2 className="mb-4">{t('WEBSITES_PAGE.ADD.stamp_label')}</h2>
             <Select
-              label="Tipo de Selo?"
-              {...register("type_seal", { required: "Campo obrigatório" })}
+            darkTheme={darkTheme}
+              id="type_seal"
+              label={t('WEBSITES_PAGE.ADD.stamp_type_label')}
+              {...register("type_seal", { required: t('MISC.required_field') })}
               error={errors.type_seal?.message}
               options={[
-                { value: "1", label: "Bronze" },
-                { value: "2", label: "Prata" },
-                { value: "3", label: "Ouro" },
+                { value: "1", label: t('WEBSITES_PAGE.ADD.stamp_bronze') },
+                { value: "2", label: t('WEBSITES_PAGE.ADD.stamp_silver') },
+                { value: "3", label: t('WEBSITES_PAGE.ADD.stamp_gold') },
               ]}
             />
             <Input
-              label="Data do Selo (atribuição/renovação):"
+            darkTheme={darkTheme}
+              id="usability_seal_date"
+              label={t('WEBSITES_PAGE.ADD.stamp_date_label')}
               type="date"
-              {...register("usability_seal_date", { required: "Campo obrigatório" })}
+              {...register("usability_seal_date", { required: t('MISC.required_field') })}
               error={errors.usability_seal_date?.message}
             />
           </div>

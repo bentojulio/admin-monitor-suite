@@ -1,46 +1,25 @@
+import i18n from '../../i18n';
 // headers da tabela
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const theme = "light"
 
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", label:"Selecionar"},
-    { type: "SortingText", nRow: 2, name: "Nome", property: "name" },
-    { type: "SortingText", nRow: 2, name: "URL inicial", property: "url" },
-    {
-      type: "SortingText",
-      nRow: 2,
-      name: "Nº de páginas",
-      property: "pages",
-      justifyCenter: true,
-    },
-    {
-      type: "SortingText",
-      nRow: 2,
-      name: "Data de criação",
-      property: "createdAt",
-      justifyCenter: true,
-    },
-    {
-      type: "Action",
-      nRow: 2,
-      name: "Editar",
-      property: "edit",
-      justifyCenter: true,
-    },
-    {
-      type: "SortingText",
-      nRow: 2,
-      name: "Selos digitais",
-      property: "badges",
-    },
+    { type: "Checkbox", nRow: 2, name: i18n.t('MISC.select'), property: "id", label: i18n.t('MISC.select') },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.name_label'), property: "name" },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.url_label'), property: "url" },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.pages_label'), property: "pages", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.creation_label'), property: "createdAt", justifyCenter: true },
+    { type: "Action", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.edit_label'), property: "edit", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.stamp_label'), property: "badges" },
   ],
 ];
 
 export const columnsOptions = {
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
   name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row)=>{
-    return `http://localhost:5173/dashboard/websites/view/${row.name}`
+    return `${apiUrl}dashboard/websites/view/${row.name}`
   } },
   url: { type: "Text", center: false, bold: false, decimalPlace: false },
   pages: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
@@ -59,22 +38,15 @@ export const nameOfIcons = [
 ]
 
 export const paginationButtonsTexts = [
-  "Primeira página",
-  "Página anterior",
-  "Página seguinte",
-  "Última página"
-]
+  i18n.t('FIRST_PAGE_LABEL'),
+  i18n.t('PREVIOUS_PAGE_LABEL'),
+  i18n.t('NEXT_PAGE_LABEL'),
+  i18n.t('LAST_PAGE_LABEL'),
+];
 
-export const nItemsPerPageText=[
-  "Ver ",
-  " itens por página"
-]
+export const nItemsPerPageText = [i18n.t('ITEMS_PER_PAGE_LABEL')];
 
-export const itemsPaginationText = [
-  " de ",
-  " itens"
-]
-
+export const itemsPaginationText = [i18n.t('RANGE_PAGE_LABEL_1'), i18n.t('RANGE_PAGE_LABEL_2')];
 
 export const dataRows = [
   {
@@ -197,6 +169,100 @@ export const barOptions = {
       },
       grid: {
         color: theme === "light" ? 'rgba(0,0,0, 0.1)' : 'rgba(255, 255, 255, 0.2)'
+      }
+    }
+  }
+};
+
+export const optionsHorizontalBarDark = {
+  indexAxis: 'y', // This makes the bar chart horizontal
+  responsive: true,
+  maintainAspectRatio: true,
+  plugins: {
+    legend: {
+      position: 'top',
+      labels: {
+        color: 'white', // Color of the legend text
+      }
+    },
+  },
+  scales: {
+    x: {
+      title: {
+        display: true,
+        text: "Teste de label 1",
+        color:  'white', // Color of Title on X axis
+        font: {
+          size: 14
+        }
+      },
+      ticks: {
+        color: 'white' // Color of Text on X axis
+      },
+      grid: {
+        color: 'rgba(255, 255, 255, 0.2)' // Color of Dividers vertically
+      }
+    },
+    y: {
+      title: {
+        display: true,
+        color: 'white', // Color of Title on Y axis
+        font: {
+          size: 14
+        }
+      },
+      ticks: {
+        color: 'white', // Color of Text on Y axis
+        
+      },
+      grid: {
+        color: 'rgba(255, 255, 255, 0.2)' // Color of Dividers horizontaly
+      }
+    }
+  }
+};
+
+export const barOptionsDark = {
+  responsive: true,
+  maintainAspectRatio: true,
+  plugins: {
+    legend: {
+      position: 'top',
+      labels: {
+        color: 'white',
+      }
+    },
+  },
+  scales: {
+    x: {
+      title: {
+        display: true,
+        text: "Teste de label 1",
+        color: 'white',
+        font: {
+          size: 14
+        }
+      },
+      ticks: {
+        color: 'white'
+      },
+      grid: {
+        color: 'rgba(255, 255, 255, 0.2)'
+      }
+    },
+    y: {
+      title: {
+        display: true,
+        color: 'white',
+        font: {
+          size: 14
+        }
+      },
+      ticks: {
+        color: 'white',
+      },
+      grid: {
+        color: 'rgba(255, 255, 255, 0.2)'
       }
     }
   }

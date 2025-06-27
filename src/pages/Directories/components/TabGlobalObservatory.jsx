@@ -33,13 +33,14 @@ export const TabGlobalObservatory = ({ theme, statsTitle, columnsOptionsBar, bar
       <p>Abaixo encontra a listagem de todos os Directórios registados no AdminMonitorSuite, num total de 38 diretórios.</p>
 
       <div className="content bg-white">
-        <div className="bg-white p-1">
+        <div>
           <h2>Exportação de dados</h2>
           <p>Para exportar todos os dados do Observatório à data de hoje, pressione o botão "Exportar CSV" abaixo.</p>
           
         </div>
-        <div className="d-flex justify-content-end align-items-end">
+        <div className="d-flex justify-content-start align-items-end">
         <Button
+            darkTheme={theme}
             text={"Exportar CSV"}
             className="btn-primary"
             onClick={() => console.log("Criar Utilizador")}
@@ -54,6 +55,7 @@ export const TabGlobalObservatory = ({ theme, statsTitle, columnsOptionsBar, bar
           gaugeTitle={[
             'Pontuação média'
           ]}
+          tag="h3"
           screenReaderTitle="Indicadores globais do Observatório"
           gaugeType=""
           newestPage="Avaliação mais recente de uma página:"
@@ -89,6 +91,7 @@ export const TabGlobalObservatory = ({ theme, statsTitle, columnsOptionsBar, bar
           doubleRow={true}
           gaugeType={null}
           showGauge={false}
+          tag="h3"
           screenReaderTitle="Conformidade global do Observatório"
           stats={{
             recentPage: "",

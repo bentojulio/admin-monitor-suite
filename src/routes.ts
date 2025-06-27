@@ -22,6 +22,9 @@ import ViewWebSites from "./pages/Websites/ViewWebSite";
 import ViewPages from "./pages/Pages/ViewPages";
 import ViewCategories from "./pages/Categories/ViewCategories";
 import GlobalDirectories from "./pages/Directories/GlobalDirectories";
+import CrawlerList from "./pages/Crawler";
+import LogsList from "./pages/Logs";
+import AccessibilityDeclarationList from "./pages/AccessiblityDeclaration";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -85,6 +88,24 @@ const router = createBrowserRouter([
           { path: "", element: React.createElement(UsersGovList) },
           { path: "create", element: React.createElement(UsersGovCreateForm) },
        ],
+      },
+      { path: "crawler",
+        children: [
+          { path: "", element: React.createElement(CrawlerList) },
+       ],
+      },
+      {
+        path:"logs",
+        children: [
+          {
+            path: "",
+            element:React.createElement(LogsList),
+          },
+        ],
+      },
+      {
+        path: "acessiblityDeclaration",
+        element: React.createElement(AccessibilityDeclarationList),
       }
     ],
   },

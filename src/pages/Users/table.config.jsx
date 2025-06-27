@@ -1,48 +1,53 @@
-
+import i18n from '../../i18n';
 
 export const directoriesHeaders = [
   [
-    { type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", label:"Selecionar"},
-    { type: "SortingText", nRow: 2, name: "Nome", property: "name" },
-    { type: "SortingText", nRow: 2, name: "Aplicação", property: "app" },
-    {
-      type: "SortingText",
-      nRow: 2,
-      name: "Nº de sítios web",
-      property: "websiteCount",
-      justifyCenter: true,
-    },
-    {
-      type: "SortingText",
-      nRow: 2,
-      name: "Data de registo",
-      property: "registeredAt",
-      justifyCenter: true,
-    },
-    {
-      type: "SortingText",
-      nRow: 2,
-      name: "Última emissão",
-      property: "lastEmission",
-      justifyCenter: true,
-    },
-    {
-      type: "Action",
-      nRow: 2,
-      name: "Editar",
-      property: "edit",
-      justifyCenter: true,
-    },
+    { type: "Checkbox", nRow: 2, name: i18n.t('MISC.select'), property: "id", label: i18n.t('MISC.select') },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.username_label'), property: "name" },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.app_label'), property: "app" },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.websites_label'), property: "websiteCount", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.register_label'), property: "registeredAt", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.last_login_label'), property: "lastEmission", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.edit_label'), property: "edit", justifyCenter: true },
   ],
 ];
 
 export const columnsOptions = {
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  email: { type: "Text", center: false, bold: false, decimalPlace: false },
-  username: { type: "Text", center: false, bold: false, decimalPlace: false },
-  type: { type: "Text", center: true, bold: false, decimalPlace: true },
- }
+  id: { type: "Checkbox", center: false, bold: false, decimalPlace: false },
+  name: { type: "Text", center: false, bold: false, decimalPlace: false },
+  app: { type: "Text", center: false, bold: false, decimalPlace: false },
+  websiteCount: {
+    type: "Text",
+    center: true,
+    bold: false,
+    decimalPlace: false,
+  },
+  registeredAt: {
+    type: "Text",
+    center: true,
+    bold: false,
+    decimalPlace: false,
+  },
+  lastEmission: {
+    type: "Text",
+    center: true,
+    bold: false,
+    decimalPlace: false,
+  },
+  edit: { type: "Button",text:i18n.t('USERS_PAGE.LIST.table.edit_label'), onClick: ()=>{alert("Redirecionar para pagina de editar")}, center: true, bold: false, decimalPlace: false },
+};
+
+export const dataRows = [
+  {
+    id: 1,
+    name: "Joana Costa",
+    app: "MyMonitor",
+    websiteCount: 4,
+    registeredAt: "2023-11-01",
+    lastEmission: "2024-10-25",
+    edit: i18n.t('USERS_PAGE.LIST.table.edit_label'),
+  },
+];
 
 export const nameOfIcons = [
   "Selo Bronze",
@@ -54,50 +59,15 @@ export const nameOfIcons = [
 ]
 
 export const paginationButtonsTexts = [
-  "Primeira página",
-  "Página anterior",
-  "Página seguinte",
-  "Última página"
-]
+  i18n.t('FIRST_PAGE_LABEL'),
+  i18n.t('PREVIOUS_PAGE_LABEL'),
+  i18n.t('NEXT_PAGE_LABEL'),
+  i18n.t('LAST_PAGE_LABEL'),
+];
 
-export const nItemsPerPageText=[
-  "Ver ",
-  " itens por página"
-]
+export const nItemsPerPageText = [i18n.t('ITEMS_PER_PAGE_LABEL')];
 
-export const itemsPaginationText = [
-  " de ",
-  " itens"
-]
-
-
-export const dataRows = [
-  {
-    "id": 22,
-    "email": "Portal Mais Transparência <code>teste</code>",
-    "username": "Agência para a Modernização Administrativa",
-    "type": "MyMonitor",
-
-  },
-  {
-    "id": 23,
-    "email": "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
-    "username": "Instituto da Segurança Social, I.P.",
-    "type": "MyMonitor",
-  },
-  {
-    "id": 31,
-    "email": "Portal do SNS 24",
-    "username": "Serviços Partilhados do Ministério da Saúde, E.P.E.",
-    "type": "AcessMonitor",
-  },
-  {
-    "id": 25,
-    "email": "Comissão Nacional de Eleições",
-    "username": "Comissão Nacional de Eleições",
-    "type": "AcessMonitor",
-  }
-]
+export const itemsPaginationText = [i18n.t('RANGE_PAGE_LABEL_1'), i18n.t('RANGE_PAGE_LABEL_2')];
 
 export const options = [
   {

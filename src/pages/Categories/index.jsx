@@ -4,11 +4,14 @@ import "./style.users.css";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
+import { useTranslation } from 'react-i18next';
+
 const CategoriesList = () => {
 
   const { theme } = useTheme();
   const [data, setData] = useState(dataRows)
   const [checkboxesSelected, setCheckboxesSelected] = useState([])
+  const { t } = useTranslation();
   const breadcrumbs = [
     { children: <Link to="/">Home</Link> },
 
@@ -21,45 +24,52 @@ const CategoriesList = () => {
     <div>
       <Breadcrumb data={breadcrumbs} />
 
-      <h1>Categorias</h1>
-      <p>Abaixo encontra a listagem de todas as Categorias registadas no AdminMonitorSuite, num total de 38 diretórios.</p>
+      <h1>{t('CATEGORIES_PAGE.LIST.title')}</h1>
+      <p>{t('CATEGORIES_PAGE.LIST.subtitle')}</p>
 
       <div className="content bg-white bg-white">
 
-        <h2>Lista de Categorias</h2>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <span>Filtrar Categorias:</span>
+        <h2>{t('CATEGORIES_PAGE.LIST.title')}</h2>
+        <div className="d-flex gap-2 align-items-center mb-3">
+          <span>{t('MISC.filter')}</span>
           <InputSearch
-            placeholder={"Pesquisar Categorias..."}
-            style={{ width: "87%" }}
+            darkTheme={theme}
+            placeholder={t('MISC.filter') + '...'}
+            style={{ width: "50%" }}
           />
         </div>
-        <div className="d-flex gap-4 justify-content-end mb-4">
+        <div className="d-flex gap-4 justify-content-start mb-4">
 
           <Button
-            text={"Reavaliar"}
+            darkTheme={theme}
+
+            text={t('CATEGORIES_PAGE.LIST.re_evaluate_tags')}
             icon={"AMA-Adicionar-Line"}
             className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
+            onClick={() => console.log(t('CATEGORIES_PAGE.LIST.re_evaluate_tags'))}
           />
           <Button
-            text={"Crawling"}
+            darkTheme={theme}
+            text={t('CATEGORIES_PAGE.LIST.crawler')}
             icon={"AMA-Adicionar-Line"}
+
             className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
+            onClick={() => console.log(t('CATEGORIES_PAGE.LIST.crawler'))}
           />
 
           <Button
-            text={"Apagar Páginas"}
+            darkTheme={theme}
+            text={t('CATEGORIES_PAGE.LIST.delete_pages')}
             icon={"AMA-Adicionar-Line"}
             className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
+            onClick={() => console.log(t('CATEGORIES_PAGE.LIST.delete_pages'))}
           />
           <Button
-            text={"Apagar Categorias"}
+            darkTheme={theme}
+            text={t('CATEGORIES_PAGE.LIST.delete_tags')}
             icon={"AMA-Adicionar-Line"}
             className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
+            onClick={() => console.log(t('CATEGORIES_PAGE.LIST.delete_tags'))}
           />
         </div>
         <SortingTable
@@ -69,7 +79,7 @@ const CategoriesList = () => {
           dataList={data}
           columnsOptions={columnsOptions}
           nextPage={() => null}
-          caption={"Estatísticas do diretório" + " " + "Os 25 Portais + Procurados da AP"}
+          caption={t('CATEGORIES_PAGE.LIST.table.title')}
           iconsAltTexts={nameOfIcons}
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
