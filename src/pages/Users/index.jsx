@@ -16,6 +16,7 @@ import {
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
+import { useTranslation } from 'react-i18next';
 
 const UserList = () => {
   const {
@@ -24,6 +25,7 @@ const UserList = () => {
     formState: { errors },
   } = useForm();
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const breadcrumbs = [
     { children: <Link to="/">Home</Link> },
     { title: "Dashboard" },
@@ -39,53 +41,32 @@ const UserList = () => {
 
   return (
     <div>
-      <h1>Utilizadores</h1>
+      <h1>{t('USERS_PAGE.LIST.title')}</h1>
       <p>
-        Abaixo encontra a listagem de todos os utilizadores registados no
-        AdminMonitorSuite, num total de 38 diretórios.
+        {t('USERS_PAGE.LIST.subtitle')}
       </p>
 
       <div className="content bg-white">
-        <h2>Lista de Utilizadores</h2>
+        <h2>{t('USERS_PAGE.LIST.title')}</h2>
 
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <span>Filtrar utilizadores:</span>
+          <div className="d-flex gap-2 align-items-center mb-4">
+            <span>{t('MISC.filter')}</span>
             <InputSearch
-              placeholder="Pesquisar utilizadores..."
-              style={{ width: "87%" }}
-              // Você pode conectar esse campo ao formulário com register se quiser buscar no submit
+              darkTheme={theme}
+              placeholder={t('MISC.filter') + '...'}
+              style={{ width: "50%" }}
             />
           </div>
 
-          <div className="d-flex gap-4 justify-content-end mb-4">
-            <Button
-              text="Criar Utilizador"
-              icon="AMA-Adicionar-Line"
-              className="btn-primary"
-              onClick={() => console.log("Criar Utilizador")}
-            />
-            <Button
-              text="Apagar Utilizadores"
-              icon="AMA-Apagar-Line"
-              variant="danger"
-              onClick={() =>
-                console.log(
-                  "Apagar Utilizadores selecionados:",
-                  checkboxesSelected
-                )
-              }
-              disabled={checkboxesSelected.length === 0}
-            />
-          </div>
 
         <SortingTable
-          darkTheme={theme === 'dark'}
+          darkTheme={theme}
           headers={directoriesHeaders}
           setDataList={setData}
           dataList={data}
           columnsOptions={columnsOptions}
           nextPage={() => null}
-          caption="Estatísticas do diretório: Os 25 Portais + Procurados da AP"
+          caption={t('DIRECTORIES_PAGE.LIST.subtitle')}
           iconsAltTexts={nameOfIcons}
           paginationButtonsTexts={paginationButtonsTexts}
           project=""

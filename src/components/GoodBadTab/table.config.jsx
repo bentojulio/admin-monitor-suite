@@ -1,3 +1,5 @@
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export const dataHeaders = [
   [
     { type: "SortingText", nRow: 2, name: "Práticas ", property: "name", justifyCenter: false },
@@ -14,7 +16,7 @@ export const columnsOptions = {
     center: true,
     bold: false,
     decimalPlace: false,
-    href: (row) => "http://localhost:5173/dashboard/pages/view/" + row.name,
+    href: (row) => apiUrl + "dashboard/pages/view/" + row.name,
   },
   praticesPerPage: {
     type: "Text",   

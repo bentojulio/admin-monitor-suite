@@ -125,9 +125,16 @@ main {
   margin-top: 90px;
   grid-area: content;
   background-color: #F5F5F5;
-  padding: 60px;
+  padding: 35px;
   min-height: calc(100vh - 90px);
   z-index: 1;
+}
+
+.last_column_no_gauge {
+  margin-left: 45px !important;
+}
+.last_column {
+  margin-right: 30px !important;
 }
 .dark-theme main {
   background-color:#2D3241;
@@ -180,3 +187,38 @@ main {
   outline: 2px solid #fff;
 }
 
+.bg-white {
+  background-color: var(--ama-color-background-white) !important;
+  padding: 30px 30px important;
+}
+
+.last_column_no_gauge {
+    width: 62.8vw !important;
+}
+
+
+h2 {
+  font-size: 0.2rem !important;
+}
+
+.dark-theme .ama.tabs-container .nav-tabs{
+  background-color: var(--ama-color-background-dark-darker) !important;
+  color: var( --ama-color-text-blue) !important
+}
+.dark-theme .ama.tabs-container .nav-tabs .nav-link{
+  color: var( --ama-color-text-blue) !important;
+
+}
+.dark-theme .ama.tabs-container .nav-tabs .nav-link.active{
+  border-bottom-color: var( --ama-color-text-blue);
+  color: var( --ama-color-text-blue) !important;
+  background-color: var(--ama-color-background-dark-darker);
+}
+
+.dark-theme .ama.section_container.dark {
+  background-color: var(--ama-color-background-dark-darker) !important;
+} 
+
+.dark-theme .ama.section_container.dark .grid_container .last_column{
+  background-color: var(--ama-color-background-dark-lighter) !important;
+}

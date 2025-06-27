@@ -1,0 +1,540 @@
+{
+  "HEADER": {
+    "name": "Consola de administração",
+    "logout": "Sair",
+    "optional": "(opcional)"
+  },
+  "LOGIN": {
+    "title": "Iniciar sessão",
+    "machineIP_label": "IP da máquina a se ligar",
+    "email_label": "Utilizador",
+    "password_label": "Palavra-chave",
+    "email_error": "Introduza um email válido. <strong>Ex.: nome@serviço.com</strong>",
+    "show_password": "Carregue aqui para mostrar a palavra-chave",
+    "hide_password": "Carregue aqui para esconder a palavra-chave",
+    "submit": "Iniciar sessão",
+    "messages": {
+      "password_match": "Utilizador ou palavra-chave incorretos",
+      "no_user": "Utilizador ou palavra-chave incorretos",
+      "system_error": "Erro no sistema. Por favor tente mais tarde"
+    }
+  },
+  "ADMIN_CONSOLE": {
+    "add_button": "Adicionar conteúdo",
+    "bottom_sheet": {
+      "user": {
+        "title": "Utilizador",
+        "subtitle": "Criar um novo utilizador"
+      },
+      "directory": {
+        "title": "Diretório",
+        "subtitle": "Criar um novo diretório"
+      },
+      "tag": {
+        "title": "Categoria",
+        "subtitle": "Criar uma nova categoria"
+      },
+      "entity": {
+        "title": "Entidade",
+        "subtitle": "Criar uma nova entidade"
+      },
+      "website": {
+        "title": "Sítio web",
+        "subtitle": "Criar um novo sítio web"
+      },
+      "page": {
+        "title": "Páginas",
+        "subtitle": "Criar novas páginas"
+      }
+    }
+  },
+  "MENU": {
+    "home": "Início",
+    "govUsers": "Utilizadores Gov",
+    "users": "Utilizadores",
+    "directories": "Diretórios",
+    "tags": "Categorias",
+    "entities": "Entidades",
+    "websites": "Sítios web",
+    "ay11Statements": "Declarações de acessibilidade",
+    "crawler": "Crawler",
+    "pages": "Páginas",
+    "settings": "Definições",
+    "csv": "CSV",
+    "export_data": "Exportar dados",
+    "export_data_description": "Para exportar todos os dados do Observatório à data de hoje, pressione o botão 'Exportar CSV' abaixo.",
+    "export_csv": "Exportar CSV",
+    "global_indicators": "Indicadores globais do Diretório",
+    "table": {
+      "name_label": "Nome",
+      "type_label": "Tipo",
+      "observatory_label": "Observatório"
+    },
+    "my_monitor": "My Monitor",
+    "study_monitor": "Study Monitor",
+    "access_monitor": "Access Monitor",
+    "admin_evaluations": "Avaliações do administrador",
+    "user_evaluations": "Avaliações do My Monitor/Study Monitor",
+    "evaluations_since": "Nº de pedidos de avaliação desde",
+    "pages_being_evaluated": "Nº de páginas em avaliação no momento",
+    "waiting_evaluations": "Nº de páginas à espera de avaliação",
+    "evaluations_error": "Nº de páginas sem avaliação devido a um erro",
+    "generate_observatory_title": "Sincronização de estatísticas globais do Observatório",
+    "generate_observatory_description": "A informação processada no /AMS (back office) é sincronizada com o Observatório todos os dias à meia-noite, atualizando assim os dados deste. Para forçar a atualização dos dados do Observatório a qualquer momento do dia pressione no botão abaixo. A duração da sincronização depende do número de páginas, o que poderá levar até 5 minutos a ser concluída.",
+    "generate_observatory_button": "Sincronizar Observatório"
+  },
+  "HOME_PAGE": {
+    "title": "Bem-vindo",
+    "subtitle": "Sumário das aplicações",
+    "users_label": "Utilizadores",
+    "directories_label": "Diretórios",
+    "tags_label": "Categorias",
+    "entities_label": "Entidades",
+    "websites_label": "Sítios web",
+    "pages_label": "Páginas",
+    "sentence": "Total de {{value}}",
+    "observatory": "Observatório",
+    "monitor": "My Monitor",
+    "studies": "Study Monitor",
+    "admin_evaluations": "Avaliações do administrador",
+    "user_evaluations": "Avaliações do My Monitor/Study Monitor",
+    "evaluations_since": "Nº de pedidos de avaliação desde",
+    "pages_being_evaluated": "Nº de páginas em avaliação no momento",
+    "waiting_evaluations": "Nº de páginas à espera de avaliação",
+    "evaluations_error": "Nº de páginas sem avaliação devido a um erro",
+    "generate_observatory_title": "Sincronização de estatísticas globais do Observatório",
+    "generate_observatory_description": "A informação processada no /AMS (back office) é sincronizada com o Observatório todos os dias à meia-noite, atualizando assim os dados deste. Para forçar a atualização dos dados do Observatório a qualquer momento do dia pressione no botão abaixo. A duração da sincronização depende do número de páginas, o que poderá levar até 5 minutos a ser concluída.",
+    "generate_observatory_button": "Sincronizar Observatório",
+    "generate_observatory_data_message": "Os dados do Observatório estão a ser sincronizados",
+    "evaluation_state_title": "Estado das avaliações",
+    "evaluation_am_state_title": "Avaliações do Access Monitor",
+    "evaluation_observatory_state_title": "Avaliações AMS/Observatório",
+    "evaluation_mm_state_title": "Avaliações do My Monitor",
+    "evaluation_sm_state_title": "Avaliações do Study Monitor",
+    "reset_evaluation_list": "Reiniciar",
+    "reset_evaluation_list_message": "Lista de avaliações reiniciada com sucesso",
+    "delete_evaluation_list": "Apagar",
+    "delete_evaluation_list_confirmation": "Confirme que pretende apagar a lista de avaliações"
+  },
+  "ITEMS_PER_PAGE_LABEL": "Itens por página",
+  "NEXT_PAGE_LABEL": "Próxima página",
+  "PREVIOUS_PAGE_LABEL": "Página anterior",
+  "FIRST_PAGE_LABEL": "Primeira página",
+  "LAST_PAGE_LABEL": "Última página",
+  "RANGE_PAGE_LABEL_1": "0 de {{length}}",
+  "RANGE_PAGE_LABEL_2": "{{startIndex}} - {{endIndex}} de {{length}}",
+  "USERS_PAGE": {
+    "title": "Utilizador:",
+    "LIST": {
+      "title": "Utilizadores",
+      "subtitle": "Lista de todos os utilizadores das aplicações Study Monitor e My Monitor",
+      "table": {
+        "id_label": "ID",
+        "username_label": "Nome de utilizador",
+        "app_label": "Aplicação",
+        "websites_label": "Nº de sítios web",
+        "register_label": "Data de registo",
+        "last_login_label": "Último login",
+        "edit_label": "Editar",
+        "edit_tooltip": "Editar este utilizador",
+        "see_tooltip": "Ver utilizador"
+      }
+    },
+    "ADD": {
+      "title": "Criar novo utilizador",
+      "subtitle": "Criar um novo utilizador para uma das seguintes aplicações: Study Monitor ou My Monitor",
+      "user_data": "Dados do utilizador",
+      "username_label": "Nome de utilizador",
+      "username_exists": "O nome de utilizador inserido já existe",
+      "password_label": "Palavra-chave",
+      "password_hint": "A palavra-chave deve ter pelo menos 8 caracteres, 1 maiúscula, 1 minúscula, 1 número e 1 carácter especial",
+      "password_short": "A palavra-chave tem menos de 8 caracteres",
+      "password_uppercase": "A palavra-chave não contém nenhuma maiúscula",
+      "password_lowercase": "A palavra-chave não contém nenhuma minúscula",
+      "password_number": "A palavra-chave não contém nenhum número",
+      "password_special": "A palavra-chave não contém nenhum carácter especial",
+      "confirm_password_label": "Confirmar palavra-chave",
+      "confirm_password_error": "As palavras-chave não coincidem",
+      "names_label": "Nome de contacto",
+      "emails_label": "Email de contacto",
+      "emails_error": "O email é <strong>inválido</strong>",
+      "choose_app": "Aplicação",
+      "transfer_label": "Transferir páginas do observatório",
+      "websites_label": "Escolher sítios web",
+      "tags_label": "Escolher categorias",
+      "reset": "Limpar",
+      "submit": "Criar",
+      "messages": {
+        "success": "Utilizador criado com sucesso",
+        "error": "Erro ao criar utilizador"
+      }
+    },
+    "UPDATE": {
+      "title": "Utilizador",
+      "subtitle": "Editar",
+      "description": "Editar este utilizador",
+      "default": "Desfazer alterações",
+      "submit": "Atualizar",
+      "delete": {
+        "title": "Apagar",
+        "description": "Apagar este utilizador",
+        "list": {
+          "title": "Importante:",
+          "item1": "O utilizador e todos os seus dados serão apagados",
+          "item2": "Se o utilizador pertencer à aplicação Study Monitor, todos os seus sítios web e categorias serão apagados",
+          "item3": "Esta ação não pode ser desfeita"
+        },
+        "submit": "Apagar utilizador"
+      },
+      "messages": {
+        "success": "Utilizador atualizado com sucesso",
+        "error": "Erro ao atualizar utilizador"
+      }
+    },
+    "DELETE": {
+      "title": "Apagar",
+      "description": "Apagar este utilizador",
+      "list": {
+        "title": "Importante:",
+        "item1": "Este utilizador será apagado",
+        "item2": "Esta ação não pode ser desfeita"
+      },
+      "submit": "Apagar utilizador",
+      "messages": {
+        "success": "Utilizador apagado com sucesso",
+        "error": "Erro ao apagar utilizador"
+      }
+    }
+  },
+  "GOV_USERS_PAGE": {
+    "title": "Utilizador Gov:",
+    "LIST": {
+      "title": "Utilizadores Gov",
+      "subtitle": "Lista de todos os utilizadores das aplicações Study Monitor e My Monitor",
+      "table": {
+        "id_label": "ID",
+        "username_label": "Nome de utilizador",
+        "app_label": "Aplicação",
+        "websites_label": "Nº de Cartão de Cidadão",
+        "register_label": "Data de registo",
+        "last_login_label": "Último login",
+        "edit_label": "Editar",
+        "edit_tooltip": "Editar este utilizador",
+        "see_tooltip": "Ver utilizador",
+        "citizen_number_label": "Nº de Cartão de Cidadão"
+      }
+    },
+    "ADD": {
+      "title": "Criar novo utilizador Gov",
+      "subtitle": "Criar um novo utilizador Gov para uma das seguintes aplicações: Study Monitor ou My Monitor",
+      "user_data": "Dados do utilizador Gov",
+      "username_label": "Nome de utilizador Gov",
+      "username_exists": "O nome de utilizador Gov inserido já existe",
+      "card_citizen_label": "Nº de Cartão de Cidadão",
+      "users_associated_label":"Utilizador(es) associado(s)",
+      "confirm_password_label": "Confirmar palavra-chave Gov",
+      "confirm_password_error": "As palavras-chave Gov não coincidem",
+      "names_label": "Nome de contacto Gov",
+      "emails_label": "Email de contacto Gov",
+      "emails_error": "O email Gov é <strong>inválido</strong>",
+      "choose_app": "Aplicação Gov",
+      "transfer_label": "Transferir páginas do observatório Gov",
+      "websites_label": "Escolher sítios web Gov",
+      "tags_label": "Escolher categorias Gov",
+      "reset": "Limpar Gov",
+      "submit": "Criar Gov",
+      "messages": {
+        "success": "Utilizador Gov criado com sucesso",
+        "error": "Erro ao criar utilizador Gov"
+      }
+    },
+    "UPDATE": {
+      "title": "Utilizador Gov",
+      "subtitle": "Editar",
+      "description": "Editar este utilizador Gov",
+      "default": "Desfazer alterações",
+      "submit": "Atualizar",
+      "delete": {
+        "title": "Apagar",
+        "description": "Apagar este utilizador Gov",
+        "list": {
+          "title": "Importante:",
+          "item1": "O utilizador Gov e todos os seus dados serão apagados",
+          "item2": "Se o utilizador Gov pertencer à aplicação Study Monitor, todos os seus sítios web e categorias serão apagados",
+          "item3": "Esta ação não pode ser desfeita"
+        },
+        "submit": "Apagar utilizador Gov"
+      },
+      "messages": {
+        "success": "Utilizador Gov atualizado com sucesso",
+        "error": "Erro ao atualizar utilizador Gov"
+      }
+    },
+    "DELETE": {
+      "title": "Apagar",
+      "description": "Apagar este utilizador Gov",
+      "list": {
+        "title": "Importante:",
+        "item1": "Este utilizador Gov será apagado",
+        "item2": "Esta ação não pode ser desfeita"
+      },
+      "submit": "Apagar utilizador Gov",
+      "messages": {
+        "success": "Utilizador Gov apagado com sucesso",
+        "error": "Erro ao apagar utilizador Gov"
+      }
+    }
+  },
+  "LOGS_PAGE": {
+    "LIST":{
+    "title": "Logs",
+    "subtitle": "Lista de todos os logs",
+    "table": {
+      "id_label": "ID",
+      "user_label": "Utilizador",
+      "action_label": "Ação",
+      "date_label": "Data",
+      "details_label": "Detalhes",
+      "view_results": "Ver resultados"
+    },
+    "delete_logs": "Apagar registos",
+    "delete_logs_confirmation": "Confirme que pretende apagar os registos",
+    "dowload_logs": "Exportar registos"
+  } 
+  },
+  "DIRECTORIES_PAGE": {
+    "LIST": {
+      "title": "Diretórios",
+      "subtitle": "Lista de todos os diretórios",
+      "delete_users": "Apagar utilizadores",
+      "delete_directories": "Apagar diretórios",
+      "re_evaluate_pages": "Re-avaliar",
+      "delete_page":" Apagar páginas",
+      "export_data": "Exportar dados",
+      "export_data_description": "Para exportar todos os dados do Observatório à data de hoje, pressione o botão 'Exportar CSV' abaixo.",
+      "export_csv": "Exportar CSV",
+      "global_indicators": "Indicadores globais do Diretório",
+      "table": {
+        "name_label": "Nome",
+        "type_label": "Tipo",
+        "observatory_label": "Observatório"
+      }
+    },
+    "ADD": {
+      "title": "Criar novo diretório",
+      "description": "Criar um novo diretório para as aplicações Study Monitor ou My Monitor",
+      "name_label": "Nome do diretório",
+      "show_in_observatory": "Mostrar este diretório no observatório",
+      "choose_format": "Escolha como formatar o diretório",
+      "intersection": "Intersecção",
+      "union": "União",
+      "select_categories": "Selecione as categorias para formar o novo diretório",
+      "create_button": "Criar diretório"
+    }
+  },
+  "CATEGORIES_PAGE": {
+    "LIST": {
+      "title": "Categorias",
+      "subtitle": "Lista de todas as categorias",
+      "re_evaluate_tags": "Re-avaliar categorias",
+      "crawler": "Crawler",
+      "delete_pages": "Apagar páginas",
+      "delete_tags": "Apagar categorias",
+      "table": {
+        "id_label": "ID",
+        "name_label": "Nome",
+        "websites_label": "Nº de sítios web"
+      }
+    },
+    "ADD": {
+      "title": "Criar nova categoria",
+      "description": "Criar uma nova categoria para as aplicações Study Monitor ou My Monitor",
+      "name_label": "Nome da categoria",
+      "directories_label": "Diretórios",
+      "websites_label": "Sítios web",
+      "create_button": "Criar categoria",
+      "create_button_tooltip": "Criar uma nova categoria para as aplicações Study Monitor ou My Monitor"
+    }
+  },
+  "ENTITIES_PAGE": {
+    "LIST": {
+      "title": "Entidades",
+      "subtitle": "Lista de todas as entidades",
+      "delete_entities": "Apagar entidades",
+      "table": {
+        "short_name_label": "Nome abreviado",
+        "long_name_label": "Nome completo",
+        "creation_label": "Data de criação",
+        "websites_label": "Nº de sítios web",
+        "edit_label": "Editar"
+      }
+    },
+    "ADD": {
+      "title": "Criar nova entidade",
+      "description": "Criar uma nova entidade para as aplicações Study Monitor ou My Monitor",
+      "short_name_label": "Nome abreviado",
+      "short_name_exists": "O nome abreviado inserido já existe",
+      "long_name_label": "Nome completo",
+      "creation_label": "Data de criação",
+      "websites_label": "Associar sítio(s) web",
+      "re_evaluate_label": "Re-avaliar",
+      "re_evaluate_tooltip": "Re-avaliar os sítios web da entidade",
+      "edit_label": "Editar",
+      "edit_tooltip": "Editar esta entidade",
+      "see_tooltip": "Ver entidade"
+    }
+  },
+  "WEBSITES_PAGE": {
+    "LIST": {
+      "title": "Sítios web",
+      "subtitle": "Lista de todos os sítios web",
+      "delete_websites": "Apagar sítios web",
+      "re_evaluate_websites": "Re-avaliar sítios web",
+      "crawler": "Crawler",
+      "pages_list_title": "Lista de páginas",
+      "page_list_subtitle": "Lista de todas as páginas do sítio web",
+      "export_data": "Exportar dados",
+      "export_data_description": "Para exportar todos os dados do sítio web à data de hoje, pressione o botão 'Exportar CSV' abaixo.",
+      "export_csv": "Exportar CSV",
+      "table": {
+        "name_label": "Nome",
+        "url_label": "Url",
+        "pages_label": "Nº de páginas (avaliadas)",
+        "creation_label": "Data de criação",
+        "edit_label": "Editar",
+        "stamp_label": "Selos digitais",
+        "stamp_tooltip": "Criar/atualizar selo digital",
+        "title_label": "Título",
+        "score_label": "Pontuação",
+        "last_updated_label": "Última avaliação",
+        "elements_label": "Número de elementos",
+        "a_label": "Nº erros A",
+        "aa_label": "Nº erros AA",
+        "aaa_label": "Nº erros AAA",
+        "observatory_label": "Observatório"
+      }
+    },
+    "ADD": {
+      "title": "Criar novo sítio web",
+      "description": "Criar um novo sítio web para as aplicações Study Monitor ou My Monitor",
+      "new_website": "Novo sítio web",
+      "name_label": "Nome",
+      "declaration_label": "Declaração de acessibilidade",
+      "compliance_label": "Conformidade",
+      "declaration_date_label": "Data da declaração",
+      "email_label": "Email",
+      "stamp_label": "Selo de usabilidade e acessibilidade",
+      "stamp_type_label": "Tipo de selo",
+      "stamp_bronze": "Bronze",
+      "stamp_silver": "Prata",
+      "stamp_gold": "Ouro",
+      "stamp_date_label": "Data do selo",
+      "associations_label": "Associações",
+      "entities_label": "Entidade(s)",
+      "entity_1": "Entidade 1",
+      "entity_2": "Entidade 2",
+      "entity_3": "Entidade 3",
+      "users_label": "Utilizador(es)",
+      "user_1": "Utilizador 1",
+      "user_2": "Utilizador 2",
+      "user_3": "Utilizador 3",
+      "categories_label": "Categoria(s)",
+      "category_1": "Categoria 1",
+      "category_2": "Categoria 2",
+      "category_3": "Categoria 3"
+    }
+  },
+  "MISC": {
+    "filter": "Filtro",
+    "skip_to_main": "Saltar para o conteúdo principal",
+    "loading": "A carregar...",
+    "required_field": "Este campo é <strong>obrigatório</strong>",
+    "at_least_one_required": "<strong>Obrigatório</strong> preencher, pelo menos, um dos campos",
+    "message_close": "Fechar",
+    "success": "Sucesso",
+    "unexpected_error": "Ocorreu um erro inesperado. Por favor tente aceder mais tarde.",
+    "error_contact": "Se o problema persistir, contacte-nos...",
+    "go_to_top": "Ir para o topo",
+    "select": "Selecionar",
+    "rank": "Ranking",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "PAGES_PAGE": {
+    "title": "Página:",
+    "subtitle": "Utilizador:",
+    "LIST": {
+      "title": "Páginas",
+      "subtitle": "Lista de todas as páginas",
+      "delete_pages": "Apagar páginas",
+      "table": {
+        "id_label": "ID",
+        "uri_label": "Uri",
+        "score_label": "Pontuação",
+        "last_updated_label": "Última avaliação",
+        "elements_label": "Número de elementos",
+        "type_elements_label": "Número de tipos de elementos",
+        "state": "Estado",
+        "state_evaluating": "A página está a ser avaliada",
+        "state_waiting": "A página está à espera de ser avaliada",
+        "state_error": "A avaliação da página resultou em erro",
+        "observatory_label": "Observatório",
+        "delete_label": "Apagar",
+        "delete_tooltip": "Apagar esta página",
+        "see_tooltip": "Ver página"
+      }
+    },
+    "ADD": {
+      "title": "Criar nova página",
+      "description": "Criar uma nova página para as aplicações Study Monitor ou My Monitor",
+      "insert_url_tab": "Inserir URL",
+      "insert_sitemap_tab": "Inserir Sitemap",
+      "crawling_tab": "Crawling"
+    }
+  },
+  "CRAWLER_PAGE": {
+    "LIST": {
+      "title": "Lista de Crawlers",
+      "table": {
+        "delete_crawlers": "Apagar crawlers",
+        "title": "Resultados do Crawler",
+        "select_label": "Selecionar",
+        "initial_url_label": "Url Inicial",
+        "start_date_label": "Data de Início",
+        "status_label": "Estado",
+        "results_label": "Resultados"
+      }
+    }
+  },
+  "STATISTICS": {
+    "title": "Estatísticas",
+    "subtitle": "Metadados",
+    "export_data": "Exportar dados",
+    "oldest_page_updated": "Página mais antiga",
+    "newest_page_updated": "Página mais recente",
+    "total_pages_updated": "Total de páginas",
+    "average_page": "Média das páginas",
+    "total_websites_updated": "Total de sítios web",
+    "total_categories": "Total de categorias",
+    "total_entities": "Total de entidades",
+    "export_data_description": "Para exportar todos os dados do sítio web à data de hoje, pressione o botão 'Exportar CSV' abaixo.",
+    "export_csv": "Exportar CSV",
+    "table": {
+      "name_label": "Nome",
+      "url_label": "Url",
+      "pages_label": "Nº de páginas (avaliadas)",
+      "creation_label": "Data de criação",
+      "edit_label": "Editar",
+      "stamp_label": "Selos digitais",
+      "stamp_tooltip": "Criar/atualizar selo digital",
+      "title_label": "Título",
+      "score_label": "Pontuação",
+      "last_updated_label": "Última avaliação",
+      "elements_label": "Número de elementos",
+      "a_label": "Nº erros A",
+      "aa_label": "Nº erros AA",
+      "aaa_label": "Nº erros AAA",
+      "observatory_label": "Observatório"
+    }
+  }
+} 

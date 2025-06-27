@@ -8,24 +8,29 @@ import {
   paginationButtonsTexts,
 } from "../table.config";
 import { useTheme } from "../../../context/ThemeContext";
+import { useTranslation } from 'react-i18next';
+
 export default function ContentListPages ({ checkboxesSelected, setCheckboxesSelected, data, setData}){
   const { theme } = useTheme();
+  const { t } = useTranslation();
   return(
      <div>
 
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <span>Filtrar Páginas Web:</span>
+        <div className="d-flex  gap-2 align-items-center mb-3">
+          <span>{t('MISC.filter')} {t('PAGES_PAGE.LIST.title')}:</span>
           <InputSearch
-            placeholder={"Pesquisar Páginas Web..."}
-            style={{ width: "87%" }}
+            darkTheme={theme}
+            placeholder={t('MISC.filter') + ' ' + t('PAGES_PAGE.LIST.title') + '...'}
+            style={{ width: "50%" }}
             />
         </div>
-        <div className="d-flex gap-4 justify-content-end mb-4">
+        <div className="d-flex gap-4 justify-content-start mb-4">
           <Button
-            text={"Apagar Páginas Web"}
+            darkTheme={theme}
+            text={t('PAGES_PAGE.LIST.delete_pages')}
             icon={"AMA-Adicionar-Line"}
             className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
+            onClick={() => console.log(t('PAGES_PAGE.LIST.delete_pages'))}
             />
         </div>
         <SortingTable
@@ -35,11 +40,7 @@ export default function ContentListPages ({ checkboxesSelected, setCheckboxesSel
           dataList={data}
           columnsOptions={columnsOptions}
           nextPage={() => null}
-          caption={
-            "Estatísticas do diretório" +
-            " " +
-            "Os 25 Portais + Procurados da AP"
-          }
+          caption={t('PAGES_PAGE.LIST.table.title')}
           iconsAltTexts={nameOfIcons}
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}

@@ -1,50 +1,46 @@
 import React, { useState } from "react";
-import { Button, InputSearch, SortingTable } from "ama-design-system";
-import { useTheme } from '../../context/ThemeContext';
-import "./style.users.css";
+import { InputSearch, SortingTable, Button } from "ama-design-system";
+import { useTheme } from '../../context/ThemeContext.jsx';
+import { useTranslation } from 'react-i18next';
 import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
-import { useTranslation } from "react-i18next";
 
-const EntitiesList = () => {
-  const { t } = useTranslation();
+export default function CrawlerList() {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const [data, setData] = useState(dataRows);
   const [checkboxesSelected, setCheckboxesSelected] = useState([]);
 
   return (
     <div>
-      <h2>{t('ENTITIES_PAGE.LIST.title')}</h2>
-      <p>
-        {t('ENTITIES_PAGE.LIST.subtitle')}
-      </p>
-
+      <h1>{t('CRAWLER_PAGE.LIST.title')}</h1>
       <div className="content bg-white">
-        <h3>{t('ENTITIES_PAGE.LIST.title')}</h3>
-        <div className="d-flex  gap-2 align-items-center mb-3">
+        <h2>{t('CRAWLER_PAGE.LIST.table.title')}</h2>
+        <div className="d-flex gap-2 align-items-center mb-3">
           <span>{t('MISC.filter')}</span>
           <InputSearch
             darkTheme={theme}
             placeholder={t('MISC.filter') + '...'}
             style={{ width: "50%" }}
+            id="search"
           />
         </div>
         <div className="d-flex gap-4 justify-content-start mb-4">
           <Button
             darkTheme={theme}
-            text={t('ENTITIES_PAGE.LIST.delete_entities')}
-            icon={"AMA-Adicionar-Line"}
+            text={t('CRAWLER_PAGE.LIST.table.delete_crawlers')}
             className="btn-primary"
-            onClick={() => console.log(t('ENTITIES_PAGE.ADD.title'))}
+            onClick={() => console.log(t('CRAWLER_PAGE.LIST.table.create_button'))}
           />
         </div>
+        
         <SortingTable
-         darkTheme={theme}
+          darkTheme={theme}
           headers={directoriesHeaders}
           setDataList={setData}
           dataList={data}
           columnsOptions={columnsOptions}
           nextPage={() => null}
-          caption={t('ENTITIES_PAGE.LIST.table.title')}
+          caption={t('CRAWLER_PAGE.LIST.table.title')}
           iconsAltTexts={nameOfIcons}
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
@@ -53,6 +49,4 @@ const EntitiesList = () => {
       </div>
     </div>
   );
-};
-
-export default EntitiesList;
+} 

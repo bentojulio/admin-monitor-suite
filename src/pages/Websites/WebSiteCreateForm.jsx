@@ -4,17 +4,20 @@ import { useForm } from "react-hook-form";
 import AcessibilityDeclaration from "./Tabs/acessiblityDeclaration";
 import UsuabilitySeal from "./Tabs/usuabilitySeal";
 import Associations from "./Tabs/associations";
+import { useTranslation } from "react-i18next";
+import { useTheme } from "../../context/ThemeContext";
 const WebSiteCreateForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const { t } = useTranslation();
   const onSubmit = (data) => {
     console.log("User data:", data);
   };
-
+  const { theme } = useTheme();
+  console.log("Theme:", theme);
   const TabsWithComponenets = (<Tabs
   defaultActiveKey="tab1"
   tabs={[
@@ -22,83 +25,86 @@ const WebSiteCreateForm = () => {
       component: <AcessibilityDeclaration 
         register={register}
         errors={errors}
+        darkTheme={theme}
       />,
       eventKey: 'tab1',
-      title: 'Declaração de Acessibilidade'
+      title: t('WEBSITES_PAGE.ADD.declaration_label')
     },
     {
       component: <UsuabilitySeal 
         register={register}
         errors={errors}
+        darkTheme={theme}
       />,
       eventKey: 'tab2',
-      title: 'Selo de Usabilidade e Acessibilidade'
+      title: t('WEBSITES_PAGE.ADD.stamp_label')
     },
     {
       component: <Associations
         register={register}
         errors={errors}
+        darkTheme={theme}
         />,
       eventKey: 'tab3',
-      title: 'Associações'
+      title: t('WEBSITES_PAGE.ADD.associations_label')
     }
   ]}
 />)
 
   return (
     <div>
-      <h1>Criar Sítios Web</h1>
+      <h1>{t('WEBSITES_PAGE.ADD.title')}</h1>
       <p className="w-50">
-        O sítio web é a unidade de análise mais relevante do Observatório.
-        A análise das práticas de acessibilidade faz-se à amostra de páginas
-        que fazem parte do sítio. Os sítios são agregados em Categorias e
-        Diretórios e pertencem a Entidades.
+        {t('WEBSITES_PAGE.ADD.description')}
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Seção 1: Informações básicas */}
         <div className="bg-white p-4">
-          <h2 className="mb-4">Novo Website</h2>
-
+          
+          <h2 className="mb-4">{t('WEBSITES_PAGE.ADD.new_website')}</h2>
+          <div className="w-50 d-flex flex-column gap-4">
           <Input
-            label="Nome"
-            {...register("name", { required: "Campo obrigatório" })}
+            id="name"
+            label={t('WEBSITES_PAGE.ADD.name_label')}
+            {...register("name", { required: t('MISC.required_field') })}
             error={errors.name?.message}
+            darkTheme={theme}
           />
 
           <Input
+            id="initial_url"
             label="URL Inicial"
             {...register("initial_url", { required: "Campo obrigatório" })}
             error={errors.initial_url?.message}
+            darkTheme={theme}
           />
+          </div>
         </div>
 
         {/* Seção 2: Declaração e Selo */}
         <div className="bg-white p-4 mt-5">
             {TabsWithComponenets}
-        </div>
-
-        {/* Seção 3: Associações */}
-        <div className="bg-white d-flex align-items-end justify-content-between p-4 flex-column">
-
-             {/* Botões */}
-        <div className="d-flex justify-content-end gap-3">
+            <div className="d-flex justify-content-start gap-3 mt-4">
           <Button
             type="submit"
             text="Guardar e Sair"
             variant="primary"
             style={{width: "150px"}}
+            darkTheme={theme}
             onClick={() => console.log("Guardar e Sair")}
           />
           <Button
             type="button"
             style={{width: "150px"}}
             text="Sair"
-            variant="ghost"
+            variant="danger"
+            darkTheme={theme}
             onClick={() => console.log("Sair")}
           />
         </div>
         </div>
+
 
      
       </form>

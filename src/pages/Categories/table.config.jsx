@@ -1,15 +1,18 @@
+import i18n from '../../i18n';
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export const directoriesHeaders = [
   [
-    {type: "Checkbox", nRow: 2, name: "Selecionar", property: "id", justifyCenter: true},
-    {type: "SortingText", nRow: 2, name: "Nome", property: "name"},
-    {type: "SortingText", nRow: 2, name: "Nº sítios Web", property: "numberSites", justifyCenter: true},
+    {type: "Checkbox", nRow: 2, name: i18n.t('MISC.select'), property: "id", justifyCenter: true},
+    {type: "SortingText", nRow: 2, name: i18n.t('CATEGORIES_PAGE.LIST.table.name_label'), property: "name"},
+    {type: "SortingText", nRow: 2, name: i18n.t('CATEGORIES_PAGE.LIST.table.websites_label'), property: "numberSites", justifyCenter: true},
   ]
 ]
 
 export const columnsOptions = {
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label: "Selecionar" },
   name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => {
-    return `http://localhost:5173/dashboard/categories/view/${row.name}`
+    return `${apiUrl}dashboard/categories/view/${row.name}`
   } },
   numberSites: { type: "Text", center: false, bold: false, decimalPlace: false },
  }
@@ -24,21 +27,15 @@ export const nameOfIcons = [
 ]
 
 export const paginationButtonsTexts = [
-  "Primeira página",
-  "Página anterior",
-  "Página seguinte",
-  "Última página"
+  i18n.t('FIRST_PAGE_LABEL'),
+  i18n.t('PREVIOUS_PAGE_LABEL'),
+  i18n.t('NEXT_PAGE_LABEL'),
+  i18n.t('LAST_PAGE_LABEL'),
 ]
 
-export const nItemsPerPageText=[
-  "Ver ",
-  " itens por página"
-]
+export const nItemsPerPageText=[i18n.t('ITEMS_PER_PAGE_LABEL')]
 
-export const itemsPaginationText = [
-  " de ",
-  " itens"
-]
+export const itemsPaginationText = [i18n.t('RANGE_PAGE_LABEL_1'), i18n.t('RANGE_PAGE_LABEL_2')]
 
 const generateAccessibleId = (name) => {
   // Convert name to lowercase and replace spaces with hyphens

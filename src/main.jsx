@@ -1,3 +1,4 @@
+import './i18n';
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -16,6 +17,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  LineController,
   RadialLinearScale,
   ArcElement,
 } from "chart.js";
@@ -29,6 +31,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  LineController,
   RadialLinearScale,
   ArcElement
 );

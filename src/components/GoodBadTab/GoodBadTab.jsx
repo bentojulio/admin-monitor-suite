@@ -26,7 +26,7 @@ export default function GoodBadTab() {
             title: "Boas Práticas",
             component:
                 <SortingTable
-                    darkTheme={theme === 'dark'}
+                    darkTheme={theme}
                     headers={dataHeaders}
                     setDataList={setDataGood}
                     dataList={dataGood}
@@ -44,7 +44,7 @@ export default function GoodBadTab() {
             title: "Más Práticas",
             component:
                 <SortingTable
-                    darkTheme={theme === 'dark'}
+                    darkTheme={theme}
                     headers={dataHeaders}
                     setDataList={setDataBad}
                     dataList={dataBad}
@@ -60,7 +60,7 @@ export default function GoodBadTab() {
     ]
     return (
         <>
-            <Tabs tabs={tabs} />
+            <Tabs tabs={tabs} defaultActiveKey={"tab1"}/>
         </>
     )
 }

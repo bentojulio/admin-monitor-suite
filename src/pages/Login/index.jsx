@@ -5,7 +5,9 @@ import Logo from "../../assets/logo-ams.svg";
 import { useAuth } from "../../context/AuthContext";
 import './login.css'
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 const Login = () => {
+  const { t } = useTranslation();
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const { login, loading } = useAuth();
   const [loginError, setLoginError] = useState('');
@@ -35,18 +37,18 @@ const Login = () => {
       <a 
         href="#main-content" 
         className="skip-link"
-        aria-label="Saltar para o conteúdo principal"
+        aria-label={t('LOGIN.skip_link_label')}
       >
-        Saltar para o conteúdo principal
+        {t('LOGIN.skip_link_text')}
       </a>
       <div className="main-content">
         <div className="login-container" id="main-content" role="main">
-          <h1 className="login-title visually-hidden">Login</h1>
-          <img src={Logo} alt="AdminMonitorSuite Login Logo" className="login-logo" />
+          <h1 className="login-title visually-hidden">{t('LOGIN.title')}</h1>
+          <img src={Logo} alt={t('LOGIN.logo_alt')} className="login-logo" />
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
               name="machineIP"
-              label="IP da Máquina"
+              label={t('LOGIN.machineIP_label')}
               type="url"
               onChange={handleInputChange}
              
@@ -54,25 +56,25 @@ const Login = () => {
             />
             <Input
               name="email"
-              label="Email"
+              label={t('LOGIN.email_label')}
               type="email"
               onChange={handleInputChange}
            error={errors.email?.message}
             />
             <Input
               name="password"
-              label="Password"
+              label={t('LOGIN.password_label')}
               type="password"
               onChange={handleInputChange}
-              showPassTextAria="Mostrar senha"
-              hidePassTextAria="Ocultar senha"
+              showPassTextAria={t('LOGIN.showPassTextAria')}
+              hidePassTextAria={t('LOGIN.hidePassTextAria')}
               
               error={errors.password?.message}
             />
 
             <Button 
               type="submit" 
-              text={loading ? "A carregar..." : "Login"}
+              text={loading ? t('LOGIN.loading_text') : t('LOGIN.submit')}
               disabled={loading}
             />
           </form>
