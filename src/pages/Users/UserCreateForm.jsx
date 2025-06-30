@@ -1,6 +1,7 @@
 import React from 'react';
-import { Input, Button, RadioGroup } from 'ama-design-system';
+import { Input, Button, RadioGroup, Breadcrumb } from 'ama-design-system';
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 const UsersCreateForm = () => {
@@ -11,9 +12,15 @@ const UsersCreateForm = () => {
         console.log("User data:", data);
         // Add user creation logic here
     };
-
+    const breadcrumbs = [
+        { children: <Link to="/dashboard/home">Início</Link> },
+        {
+            title: t('USERS_PAGE.ADD.title'),
+        }
+    ];
     return (
         <div>
+            <Breadcrumb data={breadcrumbs} />
             <h1>{t('USERS_PAGE.ADD.title')}</h1>
             <form className="bg-white p-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
                 <div className='w-50 d-flex flex-column gap-3'>

@@ -9,7 +9,7 @@ const DirectoriesCreateForm = () => {
     const { t } = useTranslation();
     const { theme } = useTheme();
     const breadcrumbs = [
-        { children: <Link to="/dashboard/home">Home</Link> },
+        { children: <Link to="/dashboard/home">Início</Link> },
 
         {
             title: t('DIRECTORIES_PAGE.ADD.title'),
@@ -56,17 +56,16 @@ const DirectoriesCreateForm = () => {
                     <div>
                         <label>{t('DIRECTORIES_PAGE.ADD.choose_format')}</label>
                         <RadioGroup
-                            id="choose_format"
                             darkTheme={theme}
                             data={[
                                 {
-                                    id: '1',
+                                    id: 'id_intersection',
                                     name: t('DIRECTORIES_PAGE.ADD.intersection')
                                 },
                                 {
-                                    id: '2',
+                                    id: 'id_union',
                                     name: t('DIRECTORIES_PAGE.ADD.union')
-                                },
+                                }
                             ]}
                             inline
                             onChange={() => { }}

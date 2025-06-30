@@ -2,6 +2,8 @@ import React from 'react';
 import { Input, Button, RadioGroup, Select } from 'ama-design-system';
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Breadcrumb } from 'ama-design-system';
+import { Link } from "react-router-dom";
 import { useTheme } from '../../context/ThemeContext';
 const UsersGovCreateForm = () => {
     const { t } = useTranslation();
@@ -11,9 +13,15 @@ const UsersGovCreateForm = () => {
         console.log("User data:", data);
         // Add user creation logic here
     };
-
+    const breadcrumbs = [
+        { children: <Link to="/dashboard/home">Início</Link> }, 
+        {
+            title: t('GOV_USERS_PAGE.ADD.title'),
+        }
+    ];
     return (
         <div>
+            <Breadcrumb data={breadcrumbs} />
             <h1>{t('GOV_USERS_PAGE.ADD.title')}</h1>
             <form className="bg-white p-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
                 <div className='w-50 d-flex flex-column gap-3'>

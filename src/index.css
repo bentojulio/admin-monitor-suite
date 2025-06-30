@@ -222,3 +222,15 @@ h2 {
 .dark-theme .ama.section_container.dark .grid_container .last_column{
   background-color: var(--ama-color-background-dark-lighter) !important;
 }
+
+.dark-theme .ama.breadcrumbs .breadcrumb li.breadcrumb-item {
+  color: var(--ama-color-text-blue-light) !important;
+} 
+.dark-theme .ama.breadcrumbs .breadcrumb li.breadcrumb-item a{
+  color: var(--ama-color-text-blue-light) !important;
+} 
+
+
+.field-search{
+    width: 50% !important;
+}

@@ -21,7 +21,7 @@ export default function ContentListPages ({ checkboxesSelected, setCheckboxesSel
           <InputSearch
             darkTheme={theme}
             placeholder={t('MISC.filter') + ' ' + t('PAGES_PAGE.LIST.title') + '...'}
-            style={{ width: "50%" }}
+            label={t('MISC.filter') + ' ' + t('PAGES_PAGE.LIST.title')}
             />
         </div>
         <div className="d-flex gap-4 justify-content-start mb-4">

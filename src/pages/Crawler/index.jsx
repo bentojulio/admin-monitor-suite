@@ -1,17 +1,24 @@
 import React, { useState } from "react";
-import { InputSearch, SortingTable, Button } from "ama-design-system";
+import { InputSearch, SortingTable, Button, Breadcrumb } from "ama-design-system";
+import { Link } from "react-router";
 import { useTheme } from '../../context/ThemeContext.jsx';
 import { useTranslation } from 'react-i18next';
 import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
 
 export default function CrawlerList() {
-  const { theme } = useTheme();
   const { t } = useTranslation();
+  const breadcrumbs = [
+    { children: <Link to="/">Início</Link> },
+    { title: "Crawler" },
+  ];
+
+  const { theme } = useTheme();
   const [data, setData] = useState(dataRows);
   const [checkboxesSelected, setCheckboxesSelected] = useState([]);
 
   return (
     <div>
+      <Breadcrumb data={breadcrumbs} />
       <h1>{t('CRAWLER_PAGE.LIST.title')}</h1>
       <div className="content bg-white">
         <h2>{t('CRAWLER_PAGE.LIST.table.title')}</h2>
@@ -20,7 +27,7 @@ export default function CrawlerList() {
           <InputSearch
             darkTheme={theme}
             placeholder={t('MISC.filter') + '...'}
-            style={{ width: "50%" }}
+            label={t('MISC.filter')}
             id="search"
           />
         </div>

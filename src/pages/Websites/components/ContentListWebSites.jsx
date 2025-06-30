@@ -18,10 +18,9 @@ export default function ContentListWebSites({ checkboxesSelected, setCheckboxesS
       <div className="d-flex gap-2 align-items-center mb-3">
         <span>{t('MISC.filter')} {t('WEBSITES_PAGE.LIST.title')}:</span>
         <InputSearch
-            darkTheme={theme}
-
+          darkTheme={theme}
+          label={t('MISC.filter') + ' ' + t('WEBSITES_PAGE.LIST.title')}
           placeholder={t('MISC.filter') + ' ' + t('WEBSITES_PAGE.LIST.title') + '...'}
-          style={{ width: "50%" }}
         />
       </div>
       <div className="d-flex gap-4 justify-content-start mb-4">
