@@ -2,11 +2,11 @@ import './i18n';
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-
 import "ama-design-system/dist/index.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
 import { ThemeProvider } from "./context/ThemeContext";
+import { AuthProvider } from "./context/AuthContext";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,6 +21,7 @@ import {
   RadialLinearScale,
   ArcElement,
 } from "chart.js";
+import App from './App';
 
 ChartJS.register(
   CategoryScale,
@@ -38,8 +39,10 @@ ChartJS.register(
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+      <AuthProvider>
     <ThemeProvider>
-      <RouterProvider router={router} />
+        <RouterProvider router={router} />
     </ThemeProvider>
+      </AuthProvider>
   </React.StrictMode>
 );

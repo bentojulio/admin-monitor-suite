@@ -13,6 +13,8 @@
     "show_password": "Carregue aqui para mostrar a palavra-chave",
     "hide_password": "Carregue aqui para esconder a palavra-chave",
     "submit": "Iniciar sessão",
+    "loading_text": "A iniciar sessão...",
+    "loading_error": "Erro ao iniciar sessão. Por favor tente novamente.",
     "skip_link_text": "Saltar para o conteúdo principal",
     "messages": {
       "password_match": "Utilizador ou palavra-chave incorretos",

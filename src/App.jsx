@@ -4,11 +4,9 @@ import Routes from './routes';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Routes />
-      </AuthProvider>
-    </BrowserRouter>
+        <BrowserRouter>
+              <Routes />
+        </BrowserRouter>
   );
 }
 
