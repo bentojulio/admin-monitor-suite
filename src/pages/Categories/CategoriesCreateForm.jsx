@@ -14,7 +14,7 @@ const CategoriesCreateForm = () => {
     };
 
     const breadcrumbs = [
-        { children: <Link to="/dashboard/home">Home</Link> },
+        { children: <Link to="/dashboard/home">Início</Link> },
 
         {
             title: t('CATEGORIES_PAGE.ADD.title'),

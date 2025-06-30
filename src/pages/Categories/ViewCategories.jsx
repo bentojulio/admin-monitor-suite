@@ -17,10 +17,10 @@ import {
 const ViewCategories = () => {
   const breadcrumbs = [
     {
-      children: <Link to="/">Home</Link>
+      children: <Link to="/">Início</Link>
     },
     {
-      title: "Categories",
+      title: "Categorias",
     }
   ]
   const { theme } = useTheme();

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const Home = () => {
         const breadcrumbs = [
-    { children: <Link to="/">Home</Link> },
+    { children: <Link to="/">Início</Link> },
 
     {
       title: "Dashboard",
@@ -58,7 +58,7 @@ const Home = () => {
             </div>
 
             <div className="cards-dashboard p-4 bg-white">
-                <h3 className="text-start">{t('HOME_PAGE.observatory')}</h3>
+                <h2 className="text-start">{t('HOME_PAGE.observatory')}</h2>
                 <div className="d-flex gap-2 flex-grow-1 flex-wrap">
 
                 {cards.map((card, index) => (

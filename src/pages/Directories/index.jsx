@@ -28,13 +28,13 @@ const DirectoriesList = () => {
       </p>
 
       <div className="content bg-white">
-        <h3>{t('DIRECTORIES_PAGE.LIST.title')}</h3>
+        <h2>{t('DIRECTORIES_PAGE.LIST.title')}</h2>
         <div className="d-flex  gap-2 align-items-center mb-3">
           <span>{t('MISC.filter')}</span>
           <InputSearch
             darkTheme={theme}
             placeholder={t('MISC.filter') + '...'}
-            style={{ width: "50%" }}
+            label={t('MISC.filter')}
           />
         </div>
         <div className="d-flex gap-4 justify-content-start mb-4">

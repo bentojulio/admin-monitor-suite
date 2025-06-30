@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, InputSearch, SortingTable } from "ama-design-system";
+import { Button, InputSearch, SortingTable, Breadcrumb } from "ama-design-system";
+import { Link } from "react-router-dom";
 import { useTheme } from '../../context/ThemeContext';
 import "./style.users.css";
 import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
@@ -10,22 +11,30 @@ const EntitiesList = () => {
   const { theme } = useTheme();
   const [data, setData] = useState(dataRows);
   const [checkboxesSelected, setCheckboxesSelected] = useState([]);
+  const breadcrumbs = [
+    { children: <Link to="/">Início</Link> },
 
+    {
+      title: "Entidades",
+    }
+  ];
   return (
     <div>
+            <Breadcrumb data={breadcrumbs} />
+      
       <h2>{t('ENTITIES_PAGE.LIST.title')}</h2>
       <p>
         {t('ENTITIES_PAGE.LIST.subtitle')}
       </p>
 
       <div className="content bg-white">
-        <h3>{t('ENTITIES_PAGE.LIST.title')}</h3>
+        <h2>{t('ENTITIES_PAGE.LIST.title')}</h2>
         <div className="d-flex  gap-2 align-items-center mb-3">
           <span>{t('MISC.filter')}</span>
           <InputSearch
             darkTheme={theme}
             placeholder={t('MISC.filter') + '...'}
-            style={{ width: "50%" }}
+            label={t('MISC.filter')}
           />
         </div>
         <div className="d-flex gap-4 justify-content-start mb-4">

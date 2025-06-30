@@ -24,11 +24,12 @@ const UserGovList = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  
   const { theme } = useTheme();
   const { t } = useTranslation();
   const breadcrumbs = [
-    { children: <Link to="/">Home</Link> },
-    { title: "Dashboard" },
+    { children: <Link to="/">Início</Link> },
+    { title: "Utilizadores Gov" },
   ];
 
   const [data, setData] = useState(dataRows);
@@ -41,26 +42,25 @@ const UserGovList = () => {
 
   return (
     <div>
+      <Breadcrumb data={breadcrumbs} />
       <h1>{t('GOV_USERS_PAGE.LIST.title')}</h1>
       <p>
         {t('GOV_USERS_PAGE.LIST.subtitle')}
       </p>
 
       <div className="content bg-white">
-        <h3>{t('GOV_USERS_PAGE.LIST.title')}</h3>
+        <h2>{t('GOV_USERS_PAGE.LIST.title')}</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex  gap-2 align-items-center mb-3">
             <span>{t('MISC.filter')}</span>
             <InputSearch
               darkTheme={theme}
               placeholder={t('MISC.filter') + '...'}
-              style={{ width: "50%" }}
+              label={t('MISC.filter')}
             />
           </div>
 
 
-        </form>
 
         <SortingTable
           darkTheme={theme}

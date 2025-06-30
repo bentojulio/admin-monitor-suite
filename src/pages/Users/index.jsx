@@ -27,8 +27,8 @@ const UserList = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const breadcrumbs = [
-    { children: <Link to="/">Home</Link> },
-    { title: "Dashboard" },
+    { children: <Link to="/">Início</Link> },
+    { title: "Utilizadores" },
   ];
 
   const [data, setData] = useState(dataRows);
@@ -41,6 +41,7 @@ const UserList = () => {
 
   return (
     <div>
+      <Breadcrumb data={breadcrumbs} />
       <h1>{t('USERS_PAGE.LIST.title')}</h1>
       <p>
         {t('USERS_PAGE.LIST.subtitle')}
@@ -54,7 +55,7 @@ const UserList = () => {
             <InputSearch
               darkTheme={theme}
               placeholder={t('MISC.filter') + '...'}
-              style={{ width: "50%" }}
+              label={t('MISC.filter')}
             />
           </div>
 

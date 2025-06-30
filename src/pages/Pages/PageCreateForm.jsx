@@ -22,9 +22,9 @@ const PageCreateForm = () => {
   } = useForm();
   const { t } = useTranslation();
   const [breadcrumbs, setBreadcrumbs] = React.useState([
-    { children: <Link to="/">Home</Link> },
+    { children: <Link to="/">Início</Link> },
     {
-      title: "Dashboard",
+      title: "Criar Página",
     },
   ]);
   const { theme } = useTheme();
@@ -57,6 +57,7 @@ const PageCreateForm = () => {
   );
   return (
     <div>
+      <Breadcrumb data={breadcrumbs} />
       <h1>{t('PAGES_PAGE.ADD.title')}</h1>
       <p className="w-50">
         {t('PAGES_PAGE.ADD.description')}

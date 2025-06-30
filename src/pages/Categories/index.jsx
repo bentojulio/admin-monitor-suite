@@ -13,7 +13,7 @@ const CategoriesList = () => {
   const [checkboxesSelected, setCheckboxesSelected] = useState([])
   const { t } = useTranslation();
   const breadcrumbs = [
-    { children: <Link to="/">Home</Link> },
+    { children: <Link to="/">Início</Link> },
 
     {
       title: "Categorias",
@@ -35,7 +35,7 @@ const CategoriesList = () => {
           <InputSearch
             darkTheme={theme}
             placeholder={t('MISC.filter') + '...'}
-            style={{ width: "50%" }}
+            label={t('MISC.filter')}
           />
         </div>
         <div className="d-flex gap-4 justify-content-start mb-4">

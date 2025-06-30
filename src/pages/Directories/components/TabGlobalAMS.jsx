@@ -57,7 +57,7 @@ export const TabGlobalAMS = ({
         </div>
       </div>
       <div className="mt-5 bg-white p-4">
-        <h2 className="mb-4">Indicadores globais do AMS</h2>
+        <h3 className="mb-4">Indicadores globais do AMS</h3>
         <StatisticsHeader
           darkTheme={theme}
           gaugeDescription=""
@@ -94,7 +94,7 @@ export const TabGlobalAMS = ({
       </div>
 
       <div className="mt-5 bg-white p-4">
-        <h2 className="mb-4">Conformidade global do AMS</h2>
+        <h3 className="mb-4">Conformidade global do AMS</h3>
         <StatisticsHeader
          darkTheme={theme}          gaugeDescription=""
           doubleRow={true}
@@ -124,7 +124,7 @@ export const TabGlobalAMS = ({
       </div>
 
       <div className="mt-5 bg-white p-4">
-        <h2 className="mb-4">Distribuição das pontuações AccessMonitor no universo do AMS</h2>
+        <h3 className="mb-4">Distribuição das pontuações AccessMonitor no universo do AMS</h3>
         <BarLineGraphTabs 
           columnsOptions={columnsOptionsBar}
           barData={barDataCopy}
@@ -135,11 +135,11 @@ export const TabGlobalAMS = ({
         />
       </div>
       <div className="mt-5 bg-white p-4">
-        <h2 className="mb-4">Mancha Gráfica da Acessibilidade</h2>
+        <h3 className="mb-4">Mancha Gráfica da Acessibilidade</h3>
         <RadarGraph />
       </div>
       <div className="mt-5 bg-white p-4">
-        <h2 className="mb-4">Distribuição detalhada das melhores práticas</h2>
+        <h3 className="mb-4">Distribuição detalhada das melhores práticas</h3>
         <GoodBadTab />
       </div>
         </div>

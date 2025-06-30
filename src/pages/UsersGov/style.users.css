@@ -2,3 +2,7 @@
     background-color: white;
     padding: 25px;
 }
+
+.field-search input.form-control {
+    width: 50% !important;
+}
