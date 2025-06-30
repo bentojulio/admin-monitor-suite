@@ -13,13 +13,17 @@ const Login = () => {
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
   const onSubmit = async (data) => {
-    console.log(data);
-    setLoginError('');
-   // const result = await login(data.email, data.password, data.machineIP);
-   navigate('/dashboard/home');
-    if (!result.success) {
-      setLoginError(result.error);
-    }
+  
+   localStorage.setItem('@AMS:apiUrl', data.machineIP);
+
+  
+   const result = await login(data.username, data.password, data.machineIP);
+  
+   if (result.success) {
+     navigate('/dashboard/home');
+   } else {
+     setLoginError(result.error);
+   }
   };
 
   const handleInputChange = (e) => {
@@ -55,9 +59,9 @@ const Login = () => {
               error={errors.machineIP?.message}
             />
             <Input
-              name="email"
+              name="username"
               label={t('LOGIN.email_label')}
-              type="email"
+              type="text"
               onChange={handleInputChange}
            error={errors.email?.message}
             />
