@@ -26,6 +26,7 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const login = async (email, password, machineIP) => {
