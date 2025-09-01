@@ -3,48 +3,48 @@ import i18n from '../../i18n';
 export const directoriesHeaders = [
   [
     { type: "Checkbox", nRow: 2, name: i18n.t('MISC.select'), property: "id", label: i18n.t('MISC.select') },
-    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.username_label'), property: "name" },
-    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.app_label'), property: "app" },
-    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.websites_label'), property: "websiteCount", justifyCenter: true },
-    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.register_label'), property: "registeredAt", justifyCenter: true },
-    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.last_login_label'), property: "lastEmission", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.username_label'), property: "Username" },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.app_label'), property: "Type" },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.websites_label'), property: "Websites", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.register_label'), property: "Register_Date", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.last_login_label'), property: "Last_Login", justifyCenter: true },
     { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.edit_label'), property: "edit", justifyCenter: true },
   ],
 ];
 
-export const columnsOptions = {
+export const columnsOptions = (navigate)=>({
   id: { type: "Checkbox", center: false, bold: false, decimalPlace: false },
-  name: { type: "Text", center: false, bold: false, decimalPlace: false },
-  app: { type: "Text", center: false, bold: false, decimalPlace: false },
-  websiteCount: {
+  Username: { type: "Text", center: false, bold: false, decimalPlace: false },
+  Type: { type: "Text", center: false, bold: false, decimalPlace: false },
+  Websites: {
     type: "Text",
     center: true,
     bold: false,
     decimalPlace: false,
   },
-  registeredAt: {
+  Register_Date: {
     type: "Text",
     center: true,
     bold: false,
     decimalPlace: false,
   },
-  lastEmission: {
+  Last_Login: {
     type: "Text",
     center: true,
     bold: false,
     decimalPlace: false,
   },
-  edit: { type: "Button",text:i18n.t('USERS_PAGE.LIST.table.edit_label'), onClick: ()=>{alert("Redirecionar para pagina de editar")}, center: true, bold: false, decimalPlace: false },
-};
+  edit: { type: "Button",text:i18n.t('USERS_PAGE.LIST.table.edit_label'), onClick: (row)=>{navigate(`${import.meta.env.VITE_ROUTE_URL}dashboard/users/edit/${row.id}`)}, center: true, bold: false, decimalPlace: false },
+});
 
 export const dataRows = [
   {
     id: 1,
-    name: "Joana Costa",
-    app: "MyMonitor",
-    websiteCount: 4,
-    registeredAt: "2023-11-01",
-    lastEmission: "2024-10-25",
+    Username: "Joana Costa",
+    Type: "MyMonitor",
+    Websites: 4,
+    Register_Date: "2023-11-01",
+    Last_Login: "2024-10-25",
     edit: i18n.t('USERS_PAGE.LIST.table.edit_label'),
   },
 ];

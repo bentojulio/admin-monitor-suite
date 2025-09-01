@@ -12,18 +12,25 @@ const Login = () => {
   const { login, loading } = useAuth();
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
-  const onSubmit = async (data) => {
-  
-   localStorage.setItem('@AMS:apiUrl', data.machineIP);
 
-  
-   const result = await login(data.username, data.password, data.machineIP);
-  
-   if (result.success) {
-     navigate('/dashboard/home');
-   } else {
-     setLoginError(result.error);
-   }
+  const onSubmit = async (data) => {
+    try {
+      
+ 
+      localStorage.setItem('@AMS:apiUrl', data.machineIP);
+      const result = await login(data.username, data.password, data.machineIP);
+      if (result.success) {
+        navigate('/dashboard/home');
+      } else {
+        setLoginError(result.error);
+      }
+    } catch (error) {
+      if(error.status === 401){
+        setLoginError("Credenciais inválidas");
+      } else{
+        setLoginError("Erro ao fazer login");
+      }
+    }
   };
 
   const handleInputChange = (e) => {
@@ -75,7 +82,7 @@ const Login = () => {
               
               error={errors.password?.message}
             />
-
+            {loginError && <p className="error-message">{loginError}</p>}
             <Button 
               type="submit" 
               text={loading ? t('LOGIN.loading_text') : t('LOGIN.submit')}

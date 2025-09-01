@@ -36,7 +36,7 @@ export function BarLineGraphTabs({ columnsOptions, dataList, dataHeaders, barDat
           dataList={dataList}
           pagination={false}
           links={false}
-          caption="Table Caption"
+          caption="Distribuição das pontuações AccessMonitor no universo do Diretório"
           columnsOptions={columnsOptions}
         />
       ),

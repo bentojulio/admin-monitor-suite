@@ -10,7 +10,25 @@ import {
 import { useTranslation } from "react-i18next";
 import i18n from "../../../i18n";
 
-export default function ContentListWebSites({ title= i18n.t('WEBSITES_PAGE.LIST.title'), checkboxesSelected, setCheckboxesSelected, data, setData }) {
+export default function ContentListWebSites({
+  title= i18n.t('WEBSITES_PAGE.LIST.title'),
+  checkboxesSelected,
+  setCheckboxesSelected,
+  data,
+  setData,
+  totalItems,
+  currentPage,
+  itemsPerPage,
+  onPageChange,
+  onItemsPerPageChange,
+  search,
+  handleSearchChange,
+  onDeleteWebsites,
+  onDeletePagesWebsites,
+  onReevaluateWebsites,
+  onCrawlWebsites,
+  navigate,
+}) {
   const { t } = useTranslation();
   const { theme } = useTheme();
   return (
@@ -22,40 +40,42 @@ export default function ContentListWebSites({ title= i18n.t('WEBSITES_PAGE.LIST.
           darkTheme={theme}
           label={t('MISC.filter') + ' ' + t('WEBSITES_PAGE.LIST.title_list')}
           placeholder={t('MISC.filter') + ' ' + t('WEBSITES_PAGE.LIST.title_list') + '...'}
+          value={search}
+          onChange={handleSearchChange}
         />
       </div>
       <div className="d-flex gap-4 justify-content-start mb-4">
         <Button
           darkTheme={theme}
-
           text={t('WEBSITES_PAGE.LIST.delete_websites')}
           icon={"AMA-Adicionar-Line"}
           className="btn-primary"
-          onClick={() => console.log(t('WEBSITES_PAGE.LIST.delete_websites'))}
+          onClick={onDeleteWebsites}
+          disabled={checkboxesSelected.length === 0}
         />
         <Button
           darkTheme={theme}
-
           text={t('PAGES_PAGE.LIST.delete_pages')}
           icon={"AMA-Adicionar-Line"}
           className="btn-primary"
-          onClick={() => console.log(t('PAGES_PAGE.LIST.delete_pages'))}
+          onClick={onDeletePagesWebsites}
+          disabled={checkboxesSelected.length === 0}
         />
         <Button
           darkTheme={theme}
-
           text={t('WEBSITES_PAGE.LIST.re_evaluate_websites')}
           icon={"AMA-Adicionar-Line"}
           className="btn-primary"
-          onClick={() => console.log(t('WEBSITES_PAGE.LIST.re_evaluate_websites'))}
+          onClick={onReevaluateWebsites}
+          disabled={checkboxesSelected.length === 0}
         />
         <Button
           darkTheme={theme}
-
           text={t('WEBSITES_PAGE.LIST.crawler')}
           icon={"AMA-Adicionar-Line"}
           className="btn-primary"
-          onClick={() => console.log(t('WEBSITES_PAGE.LIST.crawler'))}
+          onClick={onCrawlWebsites}
+          disabled={checkboxesSelected.length === 0}
         />
       </div>
       <SortingTable
@@ -63,13 +83,35 @@ export default function ContentListWebSites({ title= i18n.t('WEBSITES_PAGE.LIST.
         headers={directoriesHeaders}
         setDataList={setData}
         dataList={data}
-        columnsOptions={columnsOptions}
-          nextPage={() => null}
-          caption={t('WEBSITES_PAGE.LIST.table.title')}
+        columnsOptions={columnsOptions(navigate)}
+        nextPage={() => null}
+        caption={t('WEBSITES_PAGE.LIST.table.title')}
         iconsAltTexts={nameOfIcons}
-        paginationButtonsTexts={paginationButtonsTexts}
         project={""}
         setCheckboxesSelected={setCheckboxesSelected}
+        pagination={true}
+        totalItems={totalItems}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        onPageChange={onPageChange}
+        onItemsPerPageChange={onItemsPerPageChange}
+        paginationButtonsTexts={[
+          "Primeira página",
+          "Página anterior",
+          "Página seguinte",
+          "Última página"
+        ]}
+        nItemsPerPageTexts={[
+          "Ver",           // see
+          "por página",    // per_page
+          "Selector de itens por página", // selectorAria
+          "Navegação do seletor de itens por página" // selectorNav
+        ]}
+        itemsPaginationTexts={[
+          " de ",    // of
+          " itens "  // items
+        ]}
+        rowKey="WebsiteId"
       />
     </div>
   );

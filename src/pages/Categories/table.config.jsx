@@ -1,21 +1,28 @@
 import i18n from '../../i18n';
-const apiUrl = import.meta.env.VITE_API_URL;
+import { useNavigate } from 'react-router-dom';
+const apiUrl = import.meta.env.VITE_API_URL + import.meta.env.VITE_ROUTE_URL;
 
 export const categoriesHeaders = [
   [
     {type: "Checkbox", nRow: 2, name: i18n.t('MISC.select'), property: "id", justifyCenter: true},
-    {type: "SortingText", nRow: 2, name: i18n.t('CATEGORIES_PAGE.LIST.table.name_label'), property: "name"},
-    {type: "SortingText", nRow: 2, name: i18n.t('CATEGORIES_PAGE.LIST.table.websites_label'), property: "numberSites", justifyCenter: true},
+    {type: "SortingText", nRow: 2, name: i18n.t('CATEGORIES_PAGE.LIST.table.name_label'), property: "Name"},
+    {type: "SortingText", nRow: 2, name: i18n.t('CATEGORIES_PAGE.LIST.table.websites_label'), property: "Websites", justifyCenter: true},
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.edit_label'), property: "edit", justifyCenter: true },
+
   ]
 ]
 
-export const columnsOptions = {
+export const columnsOptions = (navigate)=>({
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label: "Selecionar" },
-  name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => {
-    return `${apiUrl}dashboard/categories/view/${row.name}`
+  Name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => {
+    return `${apiUrl}dashboard/categories/view/${row.Name}`
   } },
-  numberSites: { type: "Text", center: false, bold: false, decimalPlace: false },
- }
+  Websites: { type: "Text", center: false, bold: false, decimalPlace: false },
+  edit: { type: "Button",text:i18n.t('USERS_PAGE.LIST.table.edit_label'), onClick: (row)=>{ 
+    navigate(`${import.meta.env.VITE_ROUTE_URL}dashboard/categories/edit/${row.id}`)
+  }, center: true, bold: false, decimalPlace: false },
+ })
+
 
 export const nameOfIcons = [
   "Selo Bronze",
@@ -51,23 +58,23 @@ const generateAccessibleId = (name) => {
 export const dataRows = [
   {
     id: generateAccessibleId("Portal Mais Transparência"),
-    name: "Portal Mais Transparência",
-    numberSites: "12",
+    Name: "Portal Mais Transparência",
+    Websites: "12",
   },
   {
     id: generateAccessibleId("Instituto da Segurança Social"),
-    name: "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
-    numberSites: "24",
+    Name: "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
+    Websites: "24",
   },
   {
     id: generateAccessibleId("Portal do SNS 24"),
-    name: "Portal do SNS 24",
-    numberSites: "23",
+    Name: "Portal do SNS 24",
+    Websites: "23",
   },
   {
     id: generateAccessibleId("Comissão Nacional de Eleições"),
-    name: "Comissão Nacional de Eleições",
-    numberSites: "64",
+    Name: "Comissão Nacional de Eleições",
+    Websites: "64",
   }
 ]
 
@@ -94,20 +101,19 @@ export const options = [
 
 export const detailsTableHeaders = [
   [
-    { type: "Text", nRow: 1, bigWidth: "50%", name: i18n.t("WEBSITES_PAGE.table_best_practices.practice_label"), property: "practices" },
-    { type: "Text", nRow: 1, bigWidth: "30%", name: i18n.t("WEBSITES_PAGE.table_best_practices.details_practice_label"), justifyCenter: true, property: "practicesPerPage" },
+    { type: "Text", nRow: 1, bigWidth: "50%", name: i18n.t("WEBSITES_PAGE.table_best_practices.practice_label"), property: "practice" },
     { type: "Text", nRow: 1, name: i18n.t("WEBSITES_PAGE.table_best_practices.n_pages_label"), justifyCenter: true, property: "pages" },
-    { type: "Text", nRow: 1, name: i18n.t("WEBSITES_PAGE.table_best_practices.n_errors_label"), justifyCenter: true, property: "occurences" },
-    { type: "Text", nRow: 1, name: i18n.t("WEBSITES_PAGE.table_best_practices.lvl_label"), justifyCenter: true, property: "lvl" },
+    { type: "Text", nRow: 1, name: i18n.t("WEBSITES_PAGE.table_best_practices.n_errors_label"), justifyCenter: true, property: "occurrences" },
+    { type: "Text", nRow: 1, name: i18n.t("WEBSITES_PAGE.table_best_practices.lvl_label"), justifyCenter: true, property: "level" },
+
   ]
 ]
 
   export const columnsOptionsDetails = {
-    practices: { type: "DangerousHTML", center: false, bold: false, decimalPlace: false, property: "name" },
-    practicesPerPage: { type: "MultiText", center: true, bold: false, decimalPlace: false, property: "practicesPerPage" },
+    practice: { type: "DangerousHTML", center: false, bold: false, decimalPlace: false, property: "pratice" },
     pages: { type: "Number", center: true, bold: false, decimalPlace: false, property: "pages" },
-    occurences: { type: "Number", center: true, bold: false, decimalPlace: false, property: "occurences" },
-    lvl: { type: "Text", center: true, bold: false, decimalPlace: false, ariaLabel: true, property: "lvl" },
+    occurrences: { type: "Number", center: true, bold: false, decimalPlace: false, property: "occurrences" },
+    level: { type: "Text", center: true, bold: false, decimalPlace: false, ariaLabel: true, property: "level" },
   }
 
   export const ariaLabels = {
@@ -119,24 +125,16 @@ export const detailsTableHeaders = [
  export const detailsTable = [
         {
             "practices": "Verifiquei que todas as ligações têm nome acessível.",
-            "practicesPerPage": [
-                "de 28 a 77 ocorrências em 12 páginas",
-                "de 78 a 83 ocorrências em 9 páginas",
-                "de 84 a 97 ocorrências em 9 páginas"
-            ],
+           
             "pages": 42,
-            "occurences": 5471,
-            "lvl": "AA",
+            "occurrences": 5471,
+            "level": "AA",
         },
         {
             "practices": "Encontrei um elemento com a semântica de banner.",
-            "practicesPerPage": [
-                "de 28 a 77 ocorrências em 12 páginas",
-                "de 78 a 83 ocorrências em 9 páginas",
-                "de 84 a 97 ocorrências em 9 páginas"
-            ],
+          
             "pages": 42,
-            "occurences": 1402,
-            "lvl": "AA",
+            "occurrences": 1402,
+            "level": "AA",
         }
     ]

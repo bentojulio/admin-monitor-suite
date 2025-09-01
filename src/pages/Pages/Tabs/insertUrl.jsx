@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextArea, Button } from "ama-design-system";
-const InsertUrl = ({ register, errors, darkTheme}) => {
+const InsertUrl = ({ register, errors, darkTheme, onSubmit, setUrls}) => {
     return (
       <>
                 <div className="d-flex flex-row justify-content-between flex-column border-left">
@@ -17,17 +17,18 @@ const InsertUrl = ({ register, errors, darkTheme}) => {
                 rows={10}
                 className="w-50"
                 darkTheme={darkTheme}
+                onChange={(e) => setUrls("urls", e.target.value)}
               />
              
             </div>
             <div className="d-flex justify-content-start">
               
             <Button
-                type="submit"
+                type="button"
                 text="Adicionar Páginas"
                 variant="primary"
                 darkTheme={darkTheme}
-                onClick={() => console.log("Páginas adicionadas")}
+                onClick={onSubmit}
                 />
                 </div>
 </>

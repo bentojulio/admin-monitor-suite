@@ -1,26 +1,26 @@
 import i18n from '../../i18n';
-
+import { useNavigate } from 'react-router-dom';
 
 export const dataHeaders = [
   [
     { type: "Checkbox", nRow: 2, name: i18n.t('MISC.select'), property: "id", justifyCenter: true, label: i18n.t('MISC.select') },
     { type: "SortingText", nRow: 2, name: i18n.t('GOV_USERS_PAGE.LIST.table.username_label'), property: "name", justifyCenter: true },
-    { type: "SortingText", nRow: 2, name: i18n.t('GOV_USERS_PAGE.LIST.table.citizen_number_label'), property: "citizenNumber", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('GOV_USERS_PAGE.LIST.table.citizen_number_label'), property: "ccNumber", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('USERS_PAGE.LIST.table.register_label'), property: "registerDate", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('GOV_USERS_PAGE.LIST.table.last_login_label'), property: "lastLogin", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('GOV_USERS_PAGE.LIST.table.edit_label'), property: "edit", justifyCenter: true },
   ],
 ];
 
-export const columnsOptions = {
-  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
-  name: { type: "Text", center: true, bold: false, decimalPlace: false },
-  citizenNumber: { type: "Text", center: true, bold: false, decimalPlace: false },
-
-};
 
 export const dataRows = [
   {
     id: 1,
     name: "Joana Costa",
-    citizenNumber: "3435566"
+    ccNumber: "3435566",
+    registerDate: "2023-11-01",
+    lastLogin: "2024-10-25",
+    edit: i18n.t('USERS_PAGE.LIST.table.edit_label'),
   },
 ];
 
