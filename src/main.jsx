@@ -38,11 +38,9 @@ ChartJS.register(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
       <AuthProvider>
-    <ThemeProvider>
-        <RouterProvider router={router} />
-    </ThemeProvider>
+        <ThemeProvider>
+            <RouterProvider router={router} />
+        </ThemeProvider>
       </AuthProvider>
-  </React.StrictMode>
 );

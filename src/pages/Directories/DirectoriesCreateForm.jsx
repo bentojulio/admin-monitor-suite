@@ -1,23 +1,163 @@
-import React from 'react';
-import { Input, Button, CheckGroup, RadioGroup, Breadcrumb, Select } from 'ama-design-system';
+import React, { useState, useEffect } from 'react';
+import { Input, Button, CheckGroup, RadioGroup, Breadcrumb, MultiSelect } from 'ama-design-system';
 import { useForm } from "react-hook-form";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
+import { api } from '../../config/api';
+import { Modal } from '../../components/Modal';
+
 const DirectoriesCreateForm = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue, watch, trigger, reset } = useForm({
+        mode: 'onChange'
+    });
     const { t } = useTranslation();
     const { theme } = useTheme();
+    const [tags, setTags] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [showInObservatory, setShowInObservatory] = useState('yes');
+    const [format, setFormat] = useState('1');
+    const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+    const [feedbackMessage, setFeedbackMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
+    const { id } = useParams();
+    // Watch form values for validation
+    const watchedName = watch("name");
+    const [defaultTags, setDefaultTags] = useState([]);
+    const [isNameInvalid, setIsNameInvalid] = useState(false);
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await api.get('/tag/all');
+                setCategories(response.data.result.map(item => ({
+                    value: item.TagId,
+                    label: item.Name
+                })));
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                setFeedbackMessage("Erro ao carregar categorias. Tente novamente.");
+                setShowFeedbackModal(true);
+            }
+        }
+        const fetchDirectory = async () => {
+            const response = await api.get(`/directory/info/${id}`);
+            const dir = response.data.result;
+            setValue("name", dir.Name);
+            setShowInObservatory(dir.Show_in_Observatory === 1 ? 'yes' : 'no');
+            setFormat(dir.Method ? String(dir.Method) : '1');
+            setTags(dir.tags.map(tag => tag.TagId));
+            setDefaultTags(dir.tags.map(tag => tag.TagId));
+            trigger("tags");
+        }
+        fetchCategories();
+        fetchDirectory();
+    }, [id, reset]);
+
     const breadcrumbs = [
         { children: <Link to="/dashboard/global">Global</Link> },
-
         {
             title: t('DIRECTORIES_PAGE.ADD.title'),
         }
     ];
-    const onSubmit = (data) => {
-        console.log("User data:", data);
-        // Add user creation logic here
+
+    // Validation function for entities
+    const validateEntities = () => {
+        if (tags.length === 0) {
+            return "Pelo menos uma categoria deve ser selecionada";
+        }
+        return true;
+    };
+
+    // Handle radio button changes
+    const handleShowInObservatoryChange = (value) => {
+        setShowInObservatory(value);
+        setValue("show_in_observatory", value);
+    };
+
+    const handleFormatChange = (value) => {
+        setFormat(value);
+        setValue("format", value);
+    };
+
+    // Handle entities change with validation
+    const handleEntitiesChange = (newEntities) => {
+        console.log('New entities:', newEntities);
+        setTags(newEntities || []);
+        setValue("tags", newEntities || []);
+        trigger("tags");
+    };
+
+    const handleValidateName = async (data) => {
+        const response = await api.get(`/directory/exists/${data}`);
+        setIsNameInvalid(response.data.result);
+    }
+
+    const onSubmit = async (data) => {
+        console.log('Form data:', data);
+        console.log('Tags:', tags);
+        // Validate entities before submission
+        const entitiesValidation = validateEntities();
+        if (entitiesValidation !== true) {
+            setFeedbackMessage(entitiesValidation);
+            setShowFeedbackModal(true);
+            return;
+        }
+
+        // Validate name length
+        if (data.name && data.name.length < 3) {
+            setFeedbackMessage("O nome do diretório deve ter pelo menos 3 caracteres");
+            setShowFeedbackModal(true);
+            return;
+        }
+
+        if (data.name && data.name.length > 100) {
+            setFeedbackMessage("O nome do diretório não pode exceder 100 caracteres");
+            setShowFeedbackModal(true);
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            const formData = {
+                name: data.name,
+                observatory: showInObservatory === 'yes' ? 1 : 0,
+                method: format === '1' ? 1 : 0,
+                tags: tags
+
+            };
+            let response;
+            if (id) {
+                formData.directoryId = Number(id);
+                formData.defaultTags = defaultTags;
+                response = await api.post(`/directory/update`, formData);
+            } else {
+                response = await api.post('/directory/create', formData);
+            }
+            if (response.status === 201 || response.status === 200) {
+                setFeedbackMessage(id ? "Diretório atualizado com sucesso!" : "Diretório criado com sucesso!");
+                setValue("name", "");
+                setShowInObservatory('yes');
+                setFormat('1');
+                setTags([]);
+                navigate('/dashboard/directories');
+            } else {
+                setFeedbackMessage("Erro ao salvar diretório. Tente novamente.");
+            }
+        } catch (error) {
+            console.error('Error saving directory:', error);
+            if (error.response?.status === 409) {
+                setFeedbackMessage("Já existe um diretório com este nome. Escolha outro nome.");
+            } else if (error.response?.status === 400) {
+                setFeedbackMessage("Dados inválidos. Verifique as informações inseridas.");
+            } else {
+                setFeedbackMessage("Erro ao salvar diretório. Tente novamente.");
+            }
+        } finally {
+            setIsSubmitting(false);
+            setShowFeedbackModal(true);
+        }
     };
 
     return (
@@ -35,17 +175,32 @@ const DirectoriesCreateForm = () => {
             </ul>
                 <div className='w-50 d-flex flex-column gap-3'>
                     <Input
-                        id="name"
                         label={t('DIRECTORIES_PAGE.ADD.name_label')}
                         name="name"
                         darkTheme={theme}
+                        value={watchedName}
+                        placeholder="Nome do diretório"
                         type="text"
-                        {...register("name", { required: true })}
-                        error={errors.name ? "Campo obrigatório" : undefined}
+                        {...register("name", { 
+                            required: <div dangerouslySetInnerHTML={{__html: t('MISC.required_field')}} />,
+                            minLength: {
+                                value: 3,
+                                message: "Nome deve ter pelo menos 3 caracteres"
+                            },
+                            maxLength: {
+                                value: 100,
+                                message: "Nome não pode exceder 100 caracteres"
+                            }
+                        })}
+                            onChange={(e) => {
+                            setValue("name", e.target.value);
+                            handleValidateName(e.target.value);
+                        }}
+                        error={errors.name?.message || isNameInvalid ? "O nome do diretório já existe" : ""}
                     />
 
                     <fieldset>
-                        <label>{t('DIRECTORIES_PAGE.ADD.show_in_observatory')}</label>
+                        <legend>{t('DIRECTORIES_PAGE.ADD.show_in_observatory')} *</legend>
                         <RadioGroup
                             darkTheme={theme}
                             data={[
@@ -59,61 +214,94 @@ const DirectoriesCreateForm = () => {
                                 }
                             ]}
                             inline
-                            onChange={() => { }}
-                            value="1"
+                            onChange={handleShowInObservatoryChange}
+                            value={showInObservatory}
                             name="show_in_observatory"
                         />
+                        {errors.show_in_observatory && (
+                            <div className="text-danger mt-1">{errors.show_in_observatory.message}</div>
+                        )}
                     </fieldset>
 
                     <fieldset>
-                        <label>{t('DIRECTORIES_PAGE.ADD.choose_format')}</label>
+                        <legend>{t('DIRECTORIES_PAGE.ADD.choose_format')} *</legend>
                         <RadioGroup
                             darkTheme={theme}
                             data={[
                                 {
-                                    id: 'id_intersection',
+                                    id: '1',
                                     name: t('DIRECTORIES_PAGE.ADD.intersection')
                                 },
                                 {
-                                    id: 'id_union',
+                                    id: '2',
                                     name: t('DIRECTORIES_PAGE.ADD.union')
                                 }
                             ]}
                             inline
-                            onChange={() => { }}
-                            value="1"
+                            onChange={handleFormatChange}
+                            value={format}
                             name="format"
                         />
+                        {errors.format && (
+                            <div className="text-danger mt-1">{errors.format.message}</div>
+                        )}
                     </fieldset>
 
-                    <Select
-                        id="entities"
-                        darkTheme={theme}
-                        label={t('DIRECTORIES_PAGE.ADD.select_categories')}
-                        name="entities"
-                        {...register("entities", { required: true })}
-                        error={errors.entities ? "Campo obrigatório" : undefined}
-                        options={[
-                            { value: "1", label: "Categoria 1" },
-                            { value: "2", label: "Categoria 2" },
-                            { value: "3", label: "Categoria 3" },
-                            { value: "4", label: "Categoria 4" },
-                        ]}
-                    >
-                    </Select>
-
+                    <div>
+                        <label>{t('DIRECTORIES_PAGE.ADD.select_categories')} *</label>
+                        <MultiSelect
+                            id="entities"
+                            darkTheme={theme}
+                            name="tags"
+                            value={tags || []}
+                            onChange={handleEntitiesChange}
+                            options={categories}
+                            placeholder="Selecione pelo menos uma categoria"
+                        />
+                        {(tags || []).length === 0 && (
+                            <div className="text-danger mt-1">Pelo menos uma categoria deve ser selecionada</div>
+                        )}
+                    </div>
 
                     <div className="d-flex justify-content-start">
                         <Button
                             type="submit"
                             darkTheme={theme}
-                            text={t('ADMIN_CONSOLE.save_and_exit')}
-
+                            text={isSubmitting ? (id ? "A atualizar..." : "A guardar...") : (id ? "Atualizar e Sair" : t('ADMIN_CONSOLE.save_and_exit'))}
+                            disabled={isSubmitting || !watchedName || (tags || []).length === 0 || isNameInvalid}
+                        />
+                        <Button
+                            type="button"
+                            className="ms-3"
+                            darkTheme={theme}
+                            text="Sair"
+                            variant="danger"
+                            onClick={() => navigate('/dashboard/directories')}
                         />
                     </div>
                 </div>
             </form>
+
+            <Modal
+                isOpen={showFeedbackModal}
+                onRequestClose={() => setShowFeedbackModal(false)}
+                title={id ? "Editar Diretório" : "Criar Diretório"}
+            >
+                <p>{feedbackMessage}</p>
+                <Button
+                    darkTheme={theme}
+                    text="OK"
+                    className="btn-primary"
+                    onClick={() => {
+                        setShowFeedbackModal(false);
+                        if (feedbackMessage === (id ? "Diretório atualizado com sucesso!" : "Diretório criado com sucesso!")) {
+                            navigate('/dashboard/directories');
+                        }
+                    }}
+                />
+            </Modal>
         </div>
     );
 }
+
 export default DirectoriesCreateForm;

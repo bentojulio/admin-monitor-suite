@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from "ama-design-system";
 
-const InsertCrawling = ({ darkTheme}) => {
+const InsertCrawling = ({ darkTheme, onSubmit}) => {
   return (
     <>
     <div className="d-flex flex-column justify-content-between">
@@ -15,7 +15,7 @@ const InsertCrawling = ({ darkTheme}) => {
         type="button"
         text="Gerar Crawler"
         variant="primary"
-        onClick={() => console.log("Crawling solicitado")}
+        onClick={onSubmit}
       />
     </div>
     </>

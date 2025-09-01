@@ -23,16 +23,16 @@ const DashboardLayout = () => {
         icon: "AMA-Visible-Line", 
         url: "/",
         submenu: [
-          { id: "global", label: "Global", icon: "AMA-MarcadorGrande-Line", url: "/dashboard/global" },
-          { id: "directories", label: "Diretórios", icon: "AMA-Pasta-Line", url: "/dashboard/directories" },
-          { id: "categories", label: "Categorias/Tags", icon: "AMA-MarcadorGrande-Line", url: "/dashboard/categories" },
-          { id: "entities", label: "Entidades", icon: "AMA-Edificio-Line", url: "/dashboard/entities" },
-          { id: "websites", label: "Sítio web", icon: "AMA-Globo-Line", url: "/dashboard/websites" },
-          { id: "pages", label: "Páginas", icon: "AMA-Paginas-Line", url: "/dashboard/pages" },
-          { id: "users", label: "Utilizadores", icon: "AMA-Pessoa-Line", url: "/dashboard/users" },
-          { id: "usersgov", label: "Utilizadores Gov", icon: "AMA-DuasPessoas-Line", url: "/dashboard/usersgov" },
+          { id: "/dashboard/global", label: "Global", icon: "AMA-MarcadorGrande-Line", url: "/dashboard/global" },
+          { id: "/dashboard/directories", label: "Diretórios", icon: "AMA-Pasta-Line", url: "/dashboard/directories" },
+          { id: "/dashboard/categories", label: "Categorias/Tags", icon: "AMA-MarcadorGrande-Line", url: "/dashboard/categories" },
+          { id: "/dashboard/entities", label: "Entidades", icon: "AMA-Edificio-Line", url: "/dashboard/entities" },
+          { id: "/dashboard/websites", label: "Sítio web", icon: "AMA-Globo-Line", url: "/dashboard/websites" },
+          { id: "/dashboard/pages", label: "Páginas", icon: "AMA-Paginas-Line", url: "/dashboard/pages" },
+          { id: "/dashboard/users", label: "Utilizadores", icon: "AMA-Pessoa-Line", url: "/dashboard/users" },
+          { id: "/dashboard/usersgov", label: "Utilizadores Gov", icon: "AMA-DuasPessoas-Line", url: "/dashboard/usersgov" },
                {
-            id: "crawler",
+            id: "/dashboard/crawler",
             label: "Crawlers",
             icon: "AMA-DownloadSetacurta-Line",
             url: "/dashboard/crawler",
@@ -46,13 +46,13 @@ const DashboardLayout = () => {
         icon: "AMA-Mais-Line",
         url: "/dashboard/users/create",
         submenu: [
-          { id: "directories/create", label: "Diretórios", icon: "AMA-Pasta-Line", url: "/dashboard/directories/create" },
-          { id: "categories/create", label: "Categorias", icon: "AMA-MarcadorGrande-Line", url: "/dashboard/categories/create" },
-          { id: "entities/create", label: "Entidades", icon: "AMA-Edificio-Line", url: "/dashboard/entities/create" },
-          { id: "websites/create", label: "Sítios web", icon: "AMA-Globo-Line", url: "/dashboard/websites/create" },
-          { id: "pages/create", label: "Páginas", icon: "AMA-Paginas-Line", url: "/dashboard/pages/create" },
-          { id: "users/create", label: "Utilizadores", icon: "AMA-Pessoa-Line", url: "/dashboard/users/create" },
-          { id: "usersgov/create", label: "Utilizadores Gov", icon: "AMA-DuasPessoas-Line", url: "/dashboard/usersgov/create" }
+          { id: "/dashboard/directories/create", label: "Diretórios", icon: "AMA-Pasta-Line", url: "/dashboard/directories/create" },
+          { id: "/dashboard/categories/create", label: "Categorias", icon: "AMA-MarcadorGrande-Line", url: "/dashboard/categories/create" },
+          { id: "/dashboard/entities/create", label: "Entidades", icon: "AMA-Edificio-Line", url: "/dashboard/entities/create" },
+          { id: "/dashboard/websites/create", label: "Sítios web", icon: "AMA-Globo-Line", url: "/dashboard/websites/create" },
+          { id: "/dashboard/pages/create", label: "Páginas", icon: "AMA-Paginas-Line", url: "/dashboard/pages/create" },
+          { id: "/dashboard/users/create", label: "Utilizadores", icon: "AMA-Pessoa-Line", url: "/dashboard/users/create" },
+          { id: "/dashboard/usersgov/create", label: "Utilizadores Gov", icon: "AMA-DuasPessoas-Line", url: "/dashboard/usersgov/create" }
         ],
         activeItem: "home",
       },
@@ -63,19 +63,19 @@ const DashboardLayout = () => {
         url: "/dashboard/statistics",
         submenu: [
           {
-            id: "logs",
+            id: "/dashboard/logs",
             label: "Logs",
             icon: "AMA-SiteAcessibilidade-Line",
             url: "/dashboard/logs"
           }
         ]
-      },
-      {
+      }
+     /* {
         id: "/dashboard/acessiblityDeclaration",
         label: "Declarações de Acessibilidade",
         icon: "AMA-DeclaracaoDark-Line",
         url: "/dashboard/acessiblityDeclaration"
-      }
+      }*/
     ]
   };
 
@@ -141,10 +141,9 @@ const DashboardLayout = () => {
             text={"Sair"}
             darkTheme={theme}
             onClick={() => {
-             
-              // Implement logout functionality here
-              console.log("Logout clicked");
-              navigate("/login"); // Redirect to login page after logout
+              localStorage.removeItem('@AMS:user');
+              localStorage.removeItem('@AMS:token');
+              navigate("/login");
             }}
             iconRight={<Icon
               size={16}
@@ -155,7 +154,15 @@ const DashboardLayout = () => {
         </div>
       </header>
       <aside>
+      {
+        localStorage.getItem("@AMS:apiUrl").includes("http://10.55.37.17")  ?
+         <h2>AMS - <abbr title="Desenvolvimento">DEV</abbr></h2> :  
+        localStorage.getItem("@AMS:apiUrl").includes("https://accessmonitor.acessibilidade.gov.pt")
+        ? <h2>AMS - <abbr title="Produção">PROD</abbr></h2>
+        : <h2>AMS - <abbr title="Pré-produção">PREPROD</abbr></h2>
+        }
         <DashboardMenu
+          basename="/ams-react"
           activeItem={activeItem}
           menuItems={propsDashboardMenu.menuItems}
           onMenuItemClick={handleMenuItemClick}

@@ -3,6 +3,7 @@ import i18n from "../../i18n";
 
 export const directoriesHeaders = [
   [
+    { type: "Hidden", nRow: 2, name: i18n.t('CRAWLER_PAGE.LIST.table.website_label'), property: "websiteId" },
     { type: "Checkbox", nRow: 2, name: i18n.t('CRAWLER_PAGE.LIST.table.select_label'), property: "id", label: i18n.t('CRAWLER_PAGE.LIST.table.select_label') },
     { type: "SortingText", nRow: 2, name: i18n.t('CRAWLER_PAGE.LIST.table.initial_url_label'), property: "url" },
     { type: "SortingText", nRow: 2, name: i18n.t('CRAWLER_PAGE.LIST.table.start_date_label'), property: "startDate" },
@@ -12,13 +13,19 @@ export const directoriesHeaders = [
 ];
 
 // Column rendering options
-export const columnsOptions = {
+export const columnsOptions = (navigate) => {
+  return {
+  websiteId: { type: "Hidden", center: false, bold: false, decimalPlace: false },
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
   url: { type: "Text", center: false, bold: false, decimalPlace: false },
   startDate: { type: "Text", center: false, bold: false, decimalPlace: false },
   status: { type: "Text", center: false, bold: false, decimalPlace: false },
-  results: { type: "Text", center: false, bold: false, decimalPlace: false },
-};
+  results: {
+    type: "Button", text: "Ver", onClick: (row) => {
+      navigate(`/dashboard/crawler/details/${row.id}/${row.websiteId}`)
+    }, center: false, bold: false, decimalPlace: false
+  },
+};}
 
 // Mock data
 export const dataRows = [
@@ -37,6 +44,24 @@ export const dataRows = [
     results: 10,
   },
 ];
+
+export const directoriesHeadersCrawlDetails = [
+  [
+    { type: "SortingText", nRow: 2, name: "", property: "Uri" },
+    { type: "SortingText", nRow: 2, justifyCenter: true, name: "Observatório", property: "Observatory" },
+    { type: "SortingText", nRow: 2, justifyCenter: true, name: "Importar", property: "Import" },
+  ]
+];
+
+export const columnsOptionsCrawlDetails = {
+  Uri: { type: "Link", center: false, href: (row) => {
+    return `${row.Uri}`
+  }, bold: false, decimalPlace: false },
+  Observatory: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  Import: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+};
+
+
 
 // Icon alt texts and pagination (optional, can be empty or copied from other modules)
 export const nameOfIcons = [];

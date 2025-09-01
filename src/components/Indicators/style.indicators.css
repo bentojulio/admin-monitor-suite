@@ -31,3 +31,17 @@
   gap: 16px;
 }
 
+#indicators .list-group {
+  font-size: 1.25rem;
+  max-width:70%;
+}
+#indicators .list-group .w-100{
+  max-width: 100%;
+}
+
+.list-group-item .badge{
+  color: var(--ama-color-text-dark) !important;
+}
+.dark-theme .list-group-item .badge{
+  color: var(--ama-color-text-light) !important;
+}

@@ -21,11 +21,14 @@ import ViewDirectories from "./pages/Directories/ViewDirectories";
 import ViewWebSites from "./pages/Websites/ViewWebSite";
 import ViewPages from "./pages/Pages/ViewPages";
 import ViewCategories from "./pages/Categories/ViewCategories";
-import GlobalDirectories from "./pages/Directories/GlobalDirectories";
+import GlobalDirectories from "./pages/GlobalDirectories/GlobalDirectories";
 import CrawlerList from "./pages/Crawler";
 import LogsList from "./pages/Logs";
 import AccessibilityDeclarationList from "./pages/AccessiblityDeclaration";
 import ViewEntities from "./pages/Entities/ViewEntities";
+import DetailsPage from "./pages/Pages/DetailsPage";
+import DetailsCrawler from "./pages/Crawler/DetailsCrawler";
+import EvaluationWithErrors from "./pages/EvaluationWithErrors";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -45,6 +48,7 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: React.createElement(UsersList) },
           { path: "create", element: React.createElement(UsersCreateForm) },
+          { path: "edit/:id", element: React.createElement(UsersCreateForm)}
        ],
       },
       { path: "entities",
@@ -52,6 +56,7 @@ const router = createBrowserRouter([
           { path: "", element: React.createElement(EntitiesList) },
           { path: "create", element: React.createElement(EntitiesCreateForm) },
           { path: "view/:entityName", element: React.createElement(ViewEntities)},
+          { path: "edit/:id", element: React.createElement(EntitiesCreateForm)}
        ],
       },
       { path: "directories",
@@ -59,41 +64,47 @@ const router = createBrowserRouter([
           { path: "", element: React.createElement(DirectoriesList) },
           { path: "create", element: React.createElement(DirectoriesCreateForm) },
           { path: "view/:directoryName", element: React.createElement(ViewDirectories)},
+          { path:"edit/:id", element: React.createElement(DirectoriesCreateForm)}
        ],
       },
       { path: "websites",
         children: [
           { path: "", element: React.createElement(WebSiteList) },
           { path: "create", element: React.createElement(WebSiteCreateForm) },
-          { path:"view", element: React.createElement(ViewWebSites)},
-          { path:"view/:websiteName", element: React.createElement(ViewWebSites)}
-
+          { path: "view", element: React.createElement(ViewWebSites)},
+          { path: "view/:id/:websiteName", element: React.createElement(ViewWebSites)},
+          { path: "edit/:id", element: React.createElement(WebSiteCreateForm)}
        ],
       },
       { path: "categories",
         children: [
           { path: "", element: React.createElement(CategoriesList) },
           { path: "create", element: React.createElement(CategoriesCreateForm) },
-          { path:"view/:categoryName", element: React.createElement(ViewCategories)}
+          { path: "view/:categoryName", element: React.createElement(ViewCategories)},
+          { path: "edit/:id", element: React.createElement(CategoriesCreateForm)}
        ],
       },
       { path: "pages",
         children: [
           { path: "", element: React.createElement(PageList) },
           { path: "create", element: React.createElement(PageCreateForm) },
-          { path:"view", element: React.createElement(ViewPages)},
-          { path:"view/:pageName", element: React.createElement(ViewPages)}
+          { path: "view", element: React.createElement(ViewPages)},
+          { path: "view/:pageUrl", element: React.createElement(ViewPages)},
+          { path: "details/:pageUrl/:id", element: React.createElement(DetailsPage)},
+          { path: "edit/:id", element: React.createElement(PageCreateForm)}
        ],
       },
       { path: "usersgov",
         children: [
           { path: "", element: React.createElement(UsersGovList) },
           { path: "create", element: React.createElement(UsersGovCreateForm) },
+          { path: "edit/:id", element: React.createElement(UsersGovCreateForm)}
        ],
       },
       { path: "crawler",
         children: [
           { path: "", element: React.createElement(CrawlerList) },
+          { path: "details/:id/:websiteId", element: React.createElement(DetailsCrawler)}
        ],
       },
       {
@@ -108,9 +119,13 @@ const router = createBrowserRouter([
       {
         path: "acessiblityDeclaration",
         element: React.createElement(AccessibilityDeclarationList),
+      },
+      {
+        path: "evaluation-with-errors/:type",
+        element: React.createElement(EvaluationWithErrors),
       }
     ],
   },
-]);
+], { basename: "/ams-react" });
 
 export default router;

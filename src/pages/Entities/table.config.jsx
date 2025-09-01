@@ -1,5 +1,5 @@
 import i18n from '../../i18n';
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL + import.meta.env.VITE_ROUTE_URL;
 
 export const directoriesHeaders = [
   [
@@ -8,30 +8,30 @@ export const directoriesHeaders = [
       type: "SortingText",
       nRow: 2,
       name: i18n.t('ENTITIES_PAGE.LIST.table.short_name_label'),
-      property: "shortName",
+      property: "Short_Name",
     },
     {
       type: "SortingText",
       nRow: 2,
       name: i18n.t('ENTITIES_PAGE.LIST.table.long_name_label'),
-      property: "fullName",
+      property: "Long_Name",
     },
     {
       type: "SortingText",
       nRow: 2,
       name: i18n.t('ENTITIES_PAGE.LIST.table.creation_label'),
-      property: "createdAt",
+      property: "Creation_at",
       justifyCenter: true,
     },
     {
       type: "SortingText",
       nRow: 2,
       name: i18n.t('ENTITIES_PAGE.LIST.table.websites_label'),
-      property: "websiteCount",
+      property: "Websites",
       justifyCenter: true,
     },
     {
-      type: "Action",
+      type: "SortingText",
       nRow: 2,
       name: i18n.t('ENTITIES_PAGE.LIST.table.edit_label'),
       property: "edit",
@@ -40,19 +40,21 @@ export const directoriesHeaders = [
   ],
 ];
 
-export const columnsOptions = {
+export const columnsOptions = (navigate)=>({
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
-  shortName: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/entities/view/" + row.shortName },
-  fullName: { type: "Text", center: false, bold: false, decimalPlace: false },
-  createdAt: { type: "Text", center: true, bold: false, decimalPlace: false },
-  websiteCount: {
+  Short_Name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/entities/view/" + row.Long_Name },
+  Long_Name: { type: "Text", center: false, bold: false, decimalPlace: false },
+  Creation_at: { type: "Text", center: true, bold: false, decimalPlace: false },
+  Websites: {
     type: "Text",
     center: true,
     bold: false,
     decimalPlace: false,
   },
-  edit: { type: "Action", center: true, bold: false, decimalPlace: false },
-};
+  edit: { type: "Button",text:i18n.t('USERS_PAGE.LIST.table.edit_label'), onClick: (row)=>{ 
+    navigate(`${import.meta.env.VITE_ROUTE_URL}dashboard/entities/edit/${row.id}`)
+  }, center: true, bold: false, decimalPlace: false },
+});
 
 export const nameOfIcons = [
   "Selo Bronze",
@@ -76,11 +78,12 @@ export const itemsPaginationText = [i18n.t('RANGE_PAGE_LABEL_1'), i18n.t('RANGE_
 
 export const dataRows = [
   {
-    "id": 22,
-    "email": "Portal Mais Transparência <code>teste</code>",
-    "username": "Agência para a Modernização Administrativa",
-    "type": "MyMonitor",
-
+    id: 1,
+    Short_Name: "AMA",
+    Long_Name: "Agência para a Modernização Administrativa",
+    Creation_at: "2023-01-15",
+    Websites: 5,
+    edit: "Editar",
   },
   {
     "id": 23,

@@ -1,32 +1,35 @@
 import i18n from '../../i18n';
 // headers da tabela
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL + import.meta.env.VITE_ROUTE_URL;
 
 const theme = "light"
 
 export const directoriesHeaders = [
   [
     { type: "Checkbox", nRow: 2, name: i18n.t('MISC.select'), property: "id", label: i18n.t('MISC.select') },
-    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.name_label'), property: "name" },
-    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.url_label'), property: "url" },
-    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.pages_label'), property: "pages", justifyCenter: true },
-    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.creation_label'), property: "createdAt", justifyCenter: true },
-    { type: "Action", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.edit_label'), property: "edit", justifyCenter: true },
-    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.stamp_label'), property: "badges" },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.name_label'), property: "Name" },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.url_label'), property: "StartingUrl" },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.pages_label'), property: "Pages", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.creation_label'), property: "Creation_Date", justifyCenter: true },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.stamp_label'), property: "Declaration" },
+    { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.edit_label'), property: "edit", justifyCenter: true },
   ],
 ];
 
-export const columnsOptions = {
+// opções de renderização de colunas
+export const columnsOptions = (navigate) => ({
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
-  name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row)=>{
-    return `${apiUrl}dashboard/websites/view/${row.name}`
+  Name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row)=>{
+    return `${apiUrl}dashboard/websites/view/${row.id}/${row.Name}`
   } },
-  url: { type: "Text", center: false, bold: false, decimalPlace: false },
-  pages: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
-  createdAt: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
-  edit: { type: "Action", center: true, bold: false, decimalPlace: false },
-  badges: { type: "Text", center: false, bold: false, decimalPlace: false },
-};
+  StartingUrl: { type: "Text", center: false, bold: false, decimalPlace: false },
+  Pages: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
+  Creation_Date: { type: "Text", center: true, bold: false, decimalPlace: false }, // alinhado ao centro
+  Declaration: { type: "Text", center: false, bold: false, decimalPlace: false },
+  edit: { type: "Button", text: i18n.t('WEBSITES_PAGE.LIST.table.edit_label'), onClick: (row) => { 
+    navigate(`${import.meta.env.VITE_ROUTE_URL}dashboard/websites/edit/${row.id}`)
+  }, center: true, bold: false, decimalPlace: false },
+});
 
 export const nameOfIcons = [
   "Selo Bronze",
@@ -50,13 +53,13 @@ export const itemsPaginationText = [i18n.t('RANGE_PAGE_LABEL_1'), i18n.t('RANGE_
 
 export const dataRows = [
   {
-    id: "", // utilizado pelo checkbox
-    name: "Agência para a Modernização",
-    url: "https://exemplo.pt",
-    pages: 18,
-    createdAt: "05/06/2025",
-    edit: "Editar", // usado pelo botão de ação
-    badges: "Selo Ouro",
+    id: 1,
+    Name: "Agência para a Modernização",
+    StartingUrl: "https://exemplo.pt",
+    Pages: "18",
+    Creation_Date: "05/06/2025",
+    Declaration: "Selo Ouro",
+    edit: "Editar",
   },
 ];
 
@@ -107,7 +110,7 @@ export const optionsHorizontalBar = {
     x: {
       title: {
         display: true,
-        text: "Teste de label 1",
+        text: "Nº de Ocorrências",
         color: theme === "light" ? 'rgba(0,0,0, 1)' : 'white', // Color of Title on X axis
         font: {
           size: 14
@@ -319,7 +322,7 @@ export const horizontalData = {
   datasets: [
     {
       type: 'bar',
-      label: "teste de label",
+      label: "Nº de Páginas",
       data: [
         42,
         39,

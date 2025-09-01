@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button, StatisticsHeader, Breadcrumb, SortingTable } from "ama-design-system";
 import "./style.users.css";
+import { useParams } from "react-router-dom";
 import { directoriesHeadersPage, dataRowsPage, columnsOptionsPage, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
 import { RadarGraph } from "../../components/RadarGraph/index.jsx";
 import GoodBadTab from "../../components/GoodBadTab/GoodBadTab.jsx";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BarLineGraphTabs } from "../../components/BarLineGraph/index.jsx";
 import { 
   barData,
@@ -14,6 +15,8 @@ import {
   dataList as dataListBar
  } from "../../components/BarLineGraph/table.config.jsx";
 import { useTheme } from '../../context/ThemeContext';
+import { api } from "../../config/api";
+import moment from "moment";
 
 const ViewPages = () => {
   const { theme } = useTheme();
@@ -37,6 +40,8 @@ const ViewPages = () => {
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [data, setData] = useState(dataRowsPage)
   const [checkboxesSelected, setCheckboxesSelected] = useState([])
+  const { pageUrl } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     const currentPath = location.pathname;
     const lastPath = localStorage.getItem('currentPath');
@@ -62,6 +67,22 @@ const ViewPages = () => {
         { title: "Página" }
       ]);
     }
+
+    const fetchData = async () => {
+      const response = await api.get(`/evaluation/admin/page/${encodeURIComponent(pageUrl)}`); 
+      setData(response.data.result.map(item => ({
+        id: item.EvaluationId,
+        date_avaliation: moment(item.Evaluation_Date).format('DD/MM/YYYY'),
+        score: item.Score,
+        elementsNumber: 12,
+        A: item.A,
+        AA: item.AA,
+        AAA: item.AAA,
+        state: "Relatório",
+      })));
+
+    }
+    fetchData();
   }, []);
   return (
     <div>
@@ -69,13 +90,13 @@ const ViewPages = () => {
 
       <h1>Página</h1>
       <div className="mt-5 bg-white p-4">
-        <h2 className="mb-4">Avaliações efetuadas ao longo do tempo </h2>
+        <h2 className="mb-4">Avaliações efetuadas ao longo do tempo</h2>
         <SortingTable
           darkTheme={theme}
           headers={directoriesHeadersPage}
           setDataList={setData}
           dataList={data}
-          columnsOptions={columnsOptionsPage}
+          columnsOptions={columnsOptionsPage(navigate, pageUrl)}
           nextPage={() => null}
           caption="Histórico de avaliações da página"
           iconsAltTexts={nameOfIcons}

@@ -9,19 +9,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
 
   const login = async (username, password, machineIP) => {
     setLoading(true);
     try {
-      const response = await api.post('/login', { username, password, type:"nimda" });
+      const response = await api.post(localStorage.getItem("@AMS:apiUrl") + '/api/auth/login', { username, password, type:"nimda" });
 
       if (response.status === 200 || response.status === 201) {
         const { password, ...userWithoutPassword } = response.data;
         setUser(userWithoutPassword);
         
         localStorage.setItem('@AMS:user', JSON.stringify(userWithoutPassword));
-        localStorage.setItem('@AMS:token', response.data.token);
+        localStorage.setItem('@AMS:token', response.data.result);
         
       
         return { success: true };
@@ -29,10 +28,8 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Credenciais inválidas');
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.message || 'Erro ao fazer login'
-      };
+      throw error;
+
     } finally {
       setLoading(false);
     }
