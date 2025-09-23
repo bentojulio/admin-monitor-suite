@@ -46,7 +46,7 @@ const TabGlobalObservatoryComponent = ({ theme, statsTitle, columnsOptionsBar, b
     useEffect(() => {
         const fetchData = async () => {
            const response = await api.get('/observatory');
-          
+          console.log("Observatory:", response.data)
             if (response.status === 200) {
               
             
@@ -60,6 +60,8 @@ const TabGlobalObservatoryComponent = ({ theme, statsTitle, columnsOptionsBar, b
                   { title: 'Nº de Entidades', value:indicators.nEntities },
                   { title: 'Nº de Sítios Web', value:indicators.nWebsites },
                   { title: 'Nº de Páginas', value: indicators.nPages },
+                  { title: 'Nº médio de Páginas por Sítio', value: indicators.nPages / indicators.nWebsites },
+
                 ]);
                 setDirectories(Object.values(indicators.directories));
                 let websiteNonConforms = 0;

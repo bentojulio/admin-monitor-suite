@@ -85,7 +85,7 @@ const TabGlobalAMS = ({
         const response = await api.get('/totals');
         const indicators = response.data.result;
         setInitialListItems([
-          { title: 'Pontuação média', value: indicators.averageScore },
+          { title: 'Pontuação média', value: indicators.averageScore.toFixed(1) },
           { title: 'Avaliação mais antiga de uma página', value: moment(indicators.oldestEvaluation).format('DD/MM/YYYY') },
           { title: 'Avaliação mais recente de uma página', value: moment(indicators.mostRecentEvaluation).format('DD/MM/YYYY') },
           { title: 'Nº de Diretórios', value: indicators.directories },

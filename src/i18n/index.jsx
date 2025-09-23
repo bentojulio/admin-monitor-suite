@@ -5,6 +5,13 @@ import enJSON from './locale/English.json'
 import ptJSON from './locale/Portuguese.json'
 import moment from 'moment';
 import 'moment/locale/pt';
+
+// Global safeguard: if a Moment instance is invalid, format() returns an empty string
+const originalMomentFormat = moment.fn.format;
+moment.fn.format = function (...args) {
+  if (!this.isValid()) return '';
+  return originalMomentFormat.apply(this, args);
+};
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)

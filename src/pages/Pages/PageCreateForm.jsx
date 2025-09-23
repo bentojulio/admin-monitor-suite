@@ -108,7 +108,7 @@ const PageCreateForm = () => {
      if(response.status === 200 || response.status === 201) {
       setFeedbackMessage("Páginas adicionadas com sucesso");
       setSelectedWebsites([]);
-      navigate("/ams-react/pages");
+      navigate("/dashboard/pages");
      } else {
        setFeedbackMessage("Erro ao adicionar páginas");
      }
