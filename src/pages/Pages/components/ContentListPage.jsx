@@ -60,7 +60,7 @@ export default function ContentListPages ({
             />
           <Button
             darkTheme={theme}
-            text={"Mostrar no observatório"}
+            text={"Mostrar/Esconder no observatório"}
             icon={"AMA-Adicionar-Line"}
             className="btn-primary"
             onClick={handleShowHideObservatory}
