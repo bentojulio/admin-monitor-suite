@@ -13,6 +13,15 @@ const DashboardLayout = () => {
   const { theme, toggleTheme } = useTheme();
   const { i18n } = useTranslation();
   const location = useLocation();
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState(
+    JSON.parse(localStorage.getItem("@AMS:menuCollapsed") || "false")
+  );
+
+  const toggleMenu = () => {
+    const next = !isMenuCollapsed;
+    setIsMenuCollapsed(next);
+    localStorage.setItem("@AMS:menuCollapsed", JSON.stringify(next));
+  };
 
   const propsDashboardMenu = {
     menuItems: [
@@ -104,11 +113,13 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className={`main-content-dashboard ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+    <div className={`main-content-dashboard ${theme === 'dark' ? 'dark-theme' : 'light-theme'} ${isMenuCollapsed ? 'menu-collapsed' : ''}`}>
       <a href="#main-content" className="skip-to-content">Saltar para o conteúdo</a>
       <header className="d-flex justify-content-between gap-5 align-items-center">
         <div className="d-flex align-items-center gap-3">
+
           <img src={Logo} alt="AdminMonitorSuite Logo" className="logo"/>
+     
         </div>
 
         <div className="d-flex gap-3 align-items-center">
@@ -154,6 +165,7 @@ const DashboardLayout = () => {
         </div>
       </header>
       <aside>
+
       {
         localStorage.getItem("@AMS:apiUrl").includes("http://10.55.37.17")  ?
          <h2>AMS - <abbr title="Desenvolvimento">DEV</abbr></h2> :  
@@ -169,8 +181,26 @@ const DashboardLayout = () => {
         />
       </aside>
       <main id="main-content">
+      <Button
+            aria-label={isMenuCollapsed ? "Expandir menu" : "Colapsar menu"}
+            text={isMenuCollapsed ? "Menu" : "Menu"}
+            onClick={toggleMenu}
+            darkTheme={theme}
+            iconLeft  ={<Icon
+              name={"AMA-ListaPonto-Line"}
+              size={16}
+              className="icon-right"
+            />}
+          />
         <Outlet />
       </main>
+      <footer className="app-footer p-4">
+        <div className="footer-inner d-flex flex-column justify-content-between align-items-center">
+          <strong>AdminMonitorSutie v.1.0.1</strong>
+          <span>© {new Date().getFullYear()} Agência para a Reforma Tecnológica do Estado, I.P.</span>
+
+        </div>
+      </footer>
     </div>
   );
 };

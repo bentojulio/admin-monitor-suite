@@ -36,9 +36,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-      localStorage.removeItem('@AMS:user');
-      localStorage.removeItem('@AMS:token');
-      window.location = '/ams-react/login';
+      const currentPath = (typeof window !== 'undefined' && window.location && window.location.pathname) ? window.location.pathname : '';
+      const isOnLoginPage = currentPath.endsWith('/login') || currentPath.includes('/login');
+      if (!isOnLoginPage) {
+        localStorage.removeItem('@AMS:user');
+        localStorage.removeItem('@AMS:token');
+        window.location = '/ams-react/login';
+      }
     }
     return Promise.reject(error);
   }

@@ -102,10 +102,15 @@ fieldset {
 .main-content-dashboard {
   display: grid;
   grid-template-areas:
-    "header header"
+    "menu header"
     "menu content"
-    "menu content";
+    "menu footer";
   grid-template-columns: 20% 80%;
+}
+
+/* Collapsed menu layout */
+.main-content-dashboard.menu-collapsed {
+  grid-template-columns: 0px calc(100% - 0px);
 }
 .dashboard-menu{
   width: 100% !important;
@@ -169,7 +174,6 @@ header {
   grid-area: header;
   background-color: var(--ama-color-brand-primary);
   padding: 20px;
-  position: fixed;
   width: 100%;
   z-index: 2;
   height: 100px;
@@ -178,20 +182,47 @@ header {
 aside {
   grid-area: menu;
   position: fixed;  
-  margin-top: 90px;
   z-index: 1;
   width: 20%;
-  height: 90vh;
+  height: 100vh;
   margin-bottom: 100px;
 }
 
+.main-content-dashboard.menu-collapsed aside {
+  width: 0px;
+  overflow: hidden;
+}
+
+.main-content-dashboard.menu-collapsed aside h2 {
+  display: none;
+}
+
+.main-content-dashboard.menu-collapsed .dashboard-menu{
+  overflow: hidden;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+}
+
 main {
-  margin-top: 90px;
+
   grid-area: content;
   background-color: #F5F5F5;
   padding: 35px;
-  min-height: calc(100vh - 90px);
+  min-height: calc(100vh - 100px - 56px);
   z-index: 1;
+}
+
+footer.app-footer {
+  grid-area: footer;
+  background-color: var(--ama-color-background-white);
+  border-top: 1px solid var(--ama-color-blue-50);
+  padding: 12px 20px;
+}
+
+.dark-theme footer.app-footer {
+  background-color: var(--ama-color-background-dark-darker);
+  border-top-color: var(--ama-color-blue-800);
+  color: var(--ama-color-text-blue-light);
 }
 
 .last_column_no_gauge {
@@ -314,7 +345,5 @@ aside h2 {
   margin: 0;
   padding-top: 30px;
   padding-bottom: 30px;
-
-  margin-top: 10px;
   text-indent: 15px;
 }
