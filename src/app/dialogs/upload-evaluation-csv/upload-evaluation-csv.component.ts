@@ -259,7 +259,7 @@ matcher: ErrorStateMatcher;
   }
 
   private validateEvaluationFile(uri: string, data: string[]): void {
-    if (uri === "") {
+    if (uri === "" || data[1].split(";")[0] !== uri) {
       this.fileErrorMessage = "invalidUri";
       return;
     } 
@@ -276,7 +276,7 @@ matcher: ErrorStateMatcher;
   }
 
   private validateEvaluationFileHeaders(headers: string[]): boolean {
-    if (headers === null || headers.length !== 9) {
+    if (headers === null || headers.length !== 10) {
       return false;
     }
 
@@ -284,46 +284,51 @@ matcher: ErrorStateMatcher;
       const header = val.trim();
       switch (idx) {
         case 0:
-          if (header !== "Pagecode") {
+          if (header !== "URL") {
             return false;
           }
           break;
         case 1:
-          if (header !== "Conformant") {
+          if (header !== "Pagecode") {
             return false;
           }
           break;
         case 2:
-          if (header !== "Tot") {
+          if (header !== "Conformant") {
             return false;
           }
           break;
         case 3:
-          if (header !== "Nodes") {
+          if (header !== "Tot") {
             return false;
           }
           break;
         case 4:
-          if (header !== "Errors") {
+          if (header !== "Nodes") {
             return false;
           }
           break;
         case 5:
-          if (header !== "Tags") {
+          if (header !== "Errors") {
             return false;
           }
           break;
         case 6:
-          if (header !== "Roles") {
+          if (header !== "Tags") {
             return false;
           }
           break;
         case 7:
-          if (header !== "Score") {
+          if (header !== "Roles") {
             return false;
           }
           break;
         case 8:
+          if (header !== "Score") {
+            return false;
+          }
+          break;
+        case 9:
           if (header !== "Date") {
             return false;
           }
