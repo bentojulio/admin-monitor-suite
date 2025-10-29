@@ -59,8 +59,8 @@ const UserList = () => {
       Username: item.Username,
       Type: item.Type === "nimda" ? "AMS": "MyMonitor",
       Websites: item.Websites + "",
-      Last_Login: moment(item.Last_Login).format('DD/MM/YYYY HH:mm:ss'),
-      Register_Date: moment(item.Register_Date).format('DD/MM/YYYY HH:mm:ss'),
+      Last_Login: moment(item.Last_Login).format('DD/MM/YYYY'),
+      Register_Date: moment(item.Register_Date).format('DD/MM/YYYY'),
       edit: "Editar",
     })));
   };

@@ -4,7 +4,7 @@ RewriteEngine On
 # Handle Angular and React requests
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /ams-react/index.html [QSA,L]
+RewriteRule ^(.*)$ /ams/index.html [QSA,L]
 
 # Cache static assets
 <IfModule mod_expires.c>

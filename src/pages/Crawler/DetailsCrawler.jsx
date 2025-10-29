@@ -163,8 +163,7 @@ export default function DetailsCrawler() {
             <caption>Listagem de páginas encontradas</caption>
             <thead className={theme === 'dark' ? 'thead-dark' : 'thead-light'}>
               <tr>
-                <th scope="col" style={{ width: '60%' }}>Páginas</th>
-                <th scope="col" className="text-center" style={{ width: '20%' }}>
+                <th scope="col" style={{ width: '10%' }}>
                   <div className="d-flex align-items-center justify-content-center gap-2">
                   Importar
                   <input
@@ -177,6 +176,7 @@ export default function DetailsCrawler() {
                   (todos)
                   </div>
                   </th>
+                <th scope="col" style={{ width: '90%' }}>Páginas</th>
               </tr>
 
             </thead>
@@ -184,6 +184,16 @@ export default function DetailsCrawler() {
               {paginatedData.length > 0 ? (
                 paginatedData.map((row, index) => (
                   <tr key={index}>
+                                   <td className="text-center">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={row.Import || false}
+                        style={{ padding: '8px', border: '1px solid grey' }}
+
+                        onChange={(e) => handleCheckboxChange(index, 'Import', e.target.checked)}
+                      />
+                    </td>
                     <td>
                       <a 
                         href={row.Uri} 
@@ -194,16 +204,7 @@ export default function DetailsCrawler() {
                         {row.Uri}
                       </a>
                     </td>
-                    <td className="text-center">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={row.Import || false}
-                        style={{ padding: '8px', border: '1px solid grey' }}
-
-                        onChange={(e) => handleCheckboxChange(index, 'Import', e.target.checked)}
-                      />
-                    </td>
+     
                   </tr>
                 ))
               ) : (
