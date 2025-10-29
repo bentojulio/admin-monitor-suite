@@ -56,7 +56,8 @@ const WebsitesForUsers = () => {
   const { name } = useParams();
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
-    { title: "Utilizador: " + name }
+    { title: "Utilizadores" },
+    { title: "Sítios Web do Utilizador: " + name }
   ];
 
   const fetchData = async () => {
@@ -169,7 +170,7 @@ const WebsitesForUsers = () => {
   return (
     <div>
       <Breadcrumb data={breadcrumbs} tagHere={t('BREADCRUMB.tag_here')} />
-        <h1> Utilizador: {name}</h1>
+        <h1> Sítios Web do Utilizador: {name}</h1>
 
       <div className="content bg-white">
       <h2>{t('WEBSITES_PAGE.LIST.subtitle_list')}</h2>

@@ -53,18 +53,24 @@ const PagesForUsers = () => {
   const { name, username } = useParams();
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
-    { title: "Utilizador: " + name }
+    { title: "Utilizadores" },
+    { title: name }
   ];
 
   const fetchData = async () => {
     const response = await api.get(`/tag/null/website/${name}/user/${username}/pages`);
-    setPagesData(response.data.result.map(item => ({
+    const mappedData = response.data.result.map(item => ({
       id: item.PageId,
       Url: item.Uri,
       Score: item.Score,
+      Username: username,
+      Name: name,
+      ShowIn: item.Show_In,
       Evaluation_Date: moment(item.Evaluation_Date).format('DD/MM/YYYY'),
       import: "Importar",
-    })));
+    }));
+    console.log("Fetched pages data:", mappedData);
+    setPagesData(mappedData);
   };
 
   useEffect(() => {
@@ -126,6 +132,42 @@ const PagesForUsers = () => {
     // Lógica de criação de utilizador, se for o caso
   };
 
+  // Handle import page
+  const handleImportPage = React.useCallback(async (page) => {
+    console.log("Importing page:", page);
+    console.log("User:", username, "Website:", name);
+    console.log("ShowIn value:", page.ShowIn);
+    
+    // Check if button should be disabled
+    if (page.ShowIn === "010") {
+      console.log("Button is disabled for this page");
+      setFeedbackMessage("Esta página não pode ser importada (ShowIn = 010).");
+      setShowFeedbackModal(true);
+      return;
+    }
+    
+    try {
+      const response = await api.post('/page/import', {
+        pageId: page.id,
+        user: username,
+        website: name
+      });
+      
+      console.log("Import response:", response);
+      setFeedbackMessage("Página importada com sucesso!");
+      fetchData(); // Refresh the data
+    } catch (error) {
+      console.error("Import error:", error);
+      setFeedbackMessage("Erro ao importar página. Tente novamente.");
+    }
+    setShowFeedbackModal(true);
+  }, [username, name, fetchData]);
+
+  // Check if page can be imported
+  const canImportPage = (page) => {
+    return page.ShowIn !== "010";
+  };
+
   return (
     <div>
       <Breadcrumb data={breadcrumbs} tagHere={t('BREADCRUMB.tag_here')} />
@@ -149,7 +191,7 @@ const PagesForUsers = () => {
           headers={pagesUsersHeaders}
           setDataList={setPagesData}
           dataList={filteredPages}
-          columnsOptions={pagesUsersColumnsOptions(navigate)}
+          columnsOptions={pagesUsersColumnsOptions(navigate, handleImportPage, canImportPage)}
           nextPage={() => null}
           caption={t( 'PAGES_PAGE.LIST.table.title')}
           iconsAltTexts={nameOfIcons}
@@ -179,8 +221,23 @@ const PagesForUsers = () => {
           ]}
           rowKey="id"
         />
+        
+
       </div>
 
+      <Modal
+        isOpen={showFeedbackModal}
+        onRequestClose={() => setShowFeedbackModal(false)}
+        title="Importar Página"
+      >
+        <p>{feedbackMessage}</p>
+        <Button
+          darkTheme={theme}
+          text="OK"
+          className="btn-primary"
+          onClick={() => setShowFeedbackModal(false)}
+        />
+      </Modal>
     </div>
   );
 };

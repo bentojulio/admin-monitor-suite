@@ -31,6 +31,7 @@ import DetailsCrawler from "./pages/Crawler/DetailsCrawler";
 import EvaluationWithErrors from "./pages/EvaluationWithErrors";
 import WebsitesForUsers from "./pages/Users/WebsitesForUsers";
 import PagesForUsers from "./pages/Users/PagesForUsers";
+import DetailsPageUsers from "./pages/Users/DetailsPageUsers";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -52,7 +53,8 @@ const router = createBrowserRouter([
           { path: "create", element: React.createElement(UsersCreateForm) },
           { path: "edit/:id", element: React.createElement(UsersCreateForm)},
           { path: "websites/:name", element: React.createElement(WebsitesForUsers)},
-          { path: "websites/pages/:username/:name", element: React.createElement(PagesForUsers)}
+          { path: "websites/pages/:username/:name", element: React.createElement(PagesForUsers)},
+          { path: "websites/pages/details/:id/:username/:name/:pageUrl", element: React.createElement(DetailsPageUsers)}
        ],
       },
       { path: "entities",
