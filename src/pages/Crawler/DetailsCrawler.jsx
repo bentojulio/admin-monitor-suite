@@ -17,7 +17,7 @@ export default function DetailsCrawler() {
   });
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
-    { title: "Crawler", link: "/crawler" },
+    { children: <Link to="/dashboard/crawler">Crawler</Link> },
     { title: "Importação de páginas para o sítio Web" },
   ];
   useEffect(() => {
@@ -154,59 +154,65 @@ export default function DetailsCrawler() {
             text={'Importar'}
             className="btn-primary"
             onClick={handleImport}
-            disabled={data.length === 0 || data.every(item => item.Import === false && item.Observatory === false)}
+            disabled={data.length === 0 || data.every(item => item.Import === false)}
           />
         </div>
         
         <div className="ama sorting_table_responsive">
-          <table className={`table sorting_table`} style={{ marginTop: '1rem' }}>
+          <table className={`table sorting_table`} style={{ marginTop: '1rem', tableLayout: 'fixed' }}>
             <caption>Listagem de páginas encontradas</caption>
             <thead className={theme === 'dark' ? 'thead-dark' : 'thead-light'}>
               <tr>
-                <th scope="col" style={{ width: '10%' }}>
-                  <div className="d-flex align-items-center justify-content-center gap-2">
-                  Importar
+                <th scope="col" className="checkbox text-center" style={{ width: '50px', padding: '0.5rem' }}>
+                  <label htmlFor="checkbox_all_import">
+                    <span className="visually-hidden">Selecionar registo</span>
+                  </label>
                   <input
+                    aria-description="todos os registos"
                     type="checkbox"
+                    id="checkbox_all_import"
                     className="form-check-input"
                     checked={paginatedData.length > 0 && paginatedData.every(item => item.Import)}
                     onChange={() => handleSelectAll('Import')}
                     style={{ padding: '8px', border: '1px solid grey' }}
                   />
-                  (todos)
-                  </div>
-                  </th>
-                <th scope="col" style={{ width: '90%' }}>Páginas</th>
+                </th>
+                <th scope="col">Páginas</th>
               </tr>
 
             </thead>
             <tbody>
               {paginatedData.length > 0 ? (
-                paginatedData.map((row, index) => (
-                  <tr key={index}>
-                                   <td className="text-center">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={row.Import || false}
-                        style={{ padding: '8px', border: '1px solid grey' }}
-
-                        onChange={(e) => handleCheckboxChange(index, 'Import', e.target.checked)}
-                      />
-                    </td>
-                    <td>
-                      <a 
-                        href={row.Uri} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-decoration-none"
-                      >
-                        {row.Uri}
-                      </a>
-                    </td>
-     
-                  </tr>
-                ))
+                paginatedData.map((row, index) => {
+                  const checkboxId = `checkbox_${startIndex + index}`;
+                  return (
+                    <tr key={index}>
+                      <td className="text-center ama-typography-body checkbox" style={{ padding: '0.5rem' }}>
+                        <input
+                          type="checkbox"
+                          id={checkboxId}
+                          name={`${startIndex + index}`}
+                          className="form-check-input"
+                          checked={row.Import || false}
+                          style={{ padding: '8px', border: '1px solid grey' }}
+                          onChange={(e) => handleCheckboxChange(index, 'Import', e.target.checked)}
+                        />
+                      </td>
+                      <td className="ama-typography-body" style={{ wordBreak: 'break-all' }}>
+                        <label htmlFor={checkboxId}>
+                          <a 
+                            href={row.Uri} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-decoration-none"
+                          >
+                            {row.Uri}
+                          </a>
+                        </label>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan="2" className="text-center py-4">

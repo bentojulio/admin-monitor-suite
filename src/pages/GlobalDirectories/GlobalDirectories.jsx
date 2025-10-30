@@ -38,7 +38,7 @@ const GlobalDirectories = () => {
 
   ])
   const breadcrumbs = [
-    { children: <Link to="/">Início</Link> },
+    { children: <Link to="/dashboard/home">Início</Link> },
     { title: "Dados Globais do Observatório" }
   ];
   const [data, setData] = useState(dataRows)

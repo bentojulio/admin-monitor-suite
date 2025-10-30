@@ -53,7 +53,8 @@ const PagesForUsers = () => {
   const { name, username } = useParams();
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
-    { title: "Utilizadores" },
+    { children: <Link to="/dashboard/users">Utilizadores</Link> },
+    { children: <Link to={`/dashboard/users/websites/${username}`}>Sítios Web do Utilizador {username}</Link> },
     { title: name }
   ];
 

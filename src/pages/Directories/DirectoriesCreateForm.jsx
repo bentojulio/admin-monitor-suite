@@ -55,7 +55,8 @@ const DirectoriesCreateForm = () => {
     }, [id, reset]);
 
     const breadcrumbs = [
-        { children: <Link to="/dashboard/global">Global</Link> },
+        { children: <Link to="/dashboard/home">Início</Link> },
+        { children: <Link to="/dashboard/directories">Diretórios</Link> },
         {
             title: t('DIRECTORIES_PAGE.ADD.title'),
         }

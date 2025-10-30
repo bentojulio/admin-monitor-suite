@@ -343,7 +343,7 @@ const ViewDirectoriesComponent = () => {
   }, [directoryName]);
 
   const breadcrumbs = [
-    { children: <Link to="/dashboard/home">Global</Link> },
+    { children: <Link to="/dashboard/home">Início</Link> },
     { children: <Link to="/dashboard/directories">Diretórios</Link> },
     { title: "Directório" }
   ];

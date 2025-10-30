@@ -75,6 +75,7 @@ const EntitiesCreateForm = () => {
 
     const breadcrumbs = [
         { children: <Link to="/dashboard/home">Início</Link> },
+        { children: <Link to="/dashboard/entities">Entidades</Link> },
         { title: "Criar Entidade" },
     ];
 
