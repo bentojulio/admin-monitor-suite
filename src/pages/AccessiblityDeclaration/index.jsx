@@ -43,7 +43,7 @@ const AccessibilityDeclarationList = () => {
   const [checkboxesSelected, setCheckboxesSelected] = useState([]);
   const [data, setData] = useState(dataRows);
 const breadcrumbs = [
-    { children: <Link to="/">Início</Link> },
+    { children: <Link to="/dashboard/home">Início</Link> },
 
     {
       title: "Declarações de Acessibilidade",

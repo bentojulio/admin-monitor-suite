@@ -6,35 +6,73 @@ import { useTranslation } from 'react-i18next';
 import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
 import { api } from "../../config/api";
 import moment from "moment";
+import { Modal } from "../../components/Modal";
+
 export default function CrawlerList() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const breadcrumbs = [
-    { children: <Link to="/">Início</Link> },
-    { title: "Crawler" },
-  ];
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await api.get('/crawler/all');
-
-      setData(response.data.result.map(crawl => ({
-        id:crawl.CrawlWebsiteId,
-        url:crawl.StartingUrl,
-        startDate: moment(crawl.Creation_Date).format('DD/MM/YYYY'),
-        status:crawl.Done === 1 ? "Concluído" : "Em andamento",
-        results: "N/A",
-        websiteId: crawl.WebsiteId
-      })));
-    }
-    fetchData();
-  }, []);
   const { theme } = useTheme();
   const [data, setData] = useState(dataRows);
   const [checkboxesSelected, setCheckboxesSelected] = useState([]);
   const [search, setSearch] = useState("");
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+
+  const breadcrumbs = [
+    { children: <Link to="/dashboard/home">Início</Link> },
+    { title: "Crawler" },
+  ];
+
+  const fetchData = async () => {
+    try {
+      const response = await api.get('/crawler/all');
+      setData(response.data.result.map(crawl => ({
+        id: crawl.CrawlWebsiteId,
+        url: crawl.StartingUrl,
+        startDate: moment(crawl.Creation_Date).format('DD/MM/YYYY'),
+        status: crawl.Done === 1 ? "Concluído" : "Em andamento",
+        results: "N/A",
+        websiteId: crawl.WebsiteId
+      })));
+    } catch (error) {
+      console.error("Error fetching crawlers:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
+  };
+
+  const handleDeleteCrawlers = async () => {
+    if (checkboxesSelected.length === 0) {
+      setFeedbackMessage("Por favor, selecione pelo menos um crawler para eliminar.");
+      setShowFeedbackModal(true);
+      return;
+    }
+
+    try {
+      const crawlWebsiteIds = checkboxesSelected.map(item => item.id);
+      const response = await api.post('/crawler/deleteBulk', {
+        crawlWebsiteIds: crawlWebsiteIds
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        setFeedbackMessage(`${crawlWebsiteIds.length} crawler(s) eliminado(s) com sucesso!`);
+        setCheckboxesSelected([]);
+        setSearch("");
+        await fetchData();
+      } else {
+        setFeedbackMessage("Erro ao eliminar crawlers. Tente novamente.");
+      }
+    } catch (error) {
+      console.error("Error deleting crawlers:", error);
+      setFeedbackMessage("Erro ao eliminar crawlers. Tente novamente.");
+    }
+    setShowFeedbackModal(true);
   };
 
   const filteredData = useMemo(() => {
@@ -68,7 +106,8 @@ export default function CrawlerList() {
             darkTheme={theme}
             text={t('CRAWLER_PAGE.LIST.table.delete_crawlers')}
             className="btn-primary"
-            onClick={() => console.log(t('CRAWLER_PAGE.LIST.table.create_button'))}
+            onClick={handleDeleteCrawlers}
+            disabled={checkboxesSelected.length === 0}
           />
         </div>
         
@@ -86,6 +125,20 @@ export default function CrawlerList() {
           setCheckboxesSelected={setCheckboxesSelected}
         />
       </div>
+
+      <Modal
+        isOpen={showFeedbackModal}
+        onRequestClose={() => setShowFeedbackModal(false)}
+        title="Apagar Crawlers"
+      >
+        <p>{feedbackMessage}</p>
+        <Button
+          darkTheme={theme}
+          text="OK"
+          className="btn-primary"
+          onClick={() => setShowFeedbackModal(false)}
+        />
+      </Modal>
     </div>
   );
 } 

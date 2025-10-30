@@ -47,6 +47,7 @@ const DetailsPageUsers = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
   const [statsTitle, setWebsiteStatsTitle] = useState([
     { subtitle: 'Sítios Web', subtitle2: "" },
     { subtitle: 'Sítios Web não conformes', subtitle2: "" },
@@ -68,9 +69,9 @@ const DetailsPageUsers = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [breadcrumbs, setBreadcrumbs] = useState([
     { children: <Link to="/dashboard/home">Início</Link> },
-    { title: "Utilizadores" },
-    { title: "Sítios Web do Utilizador " +  username},
-    { title: "MM" },
+    { title: "Utilizadores", children: <Link to="/dashboard/users">Utilizadores</Link> },
+    { title: "Sítios Web do Utilizador " +  username, children: <Link to={`/dashboard/users/websites/${username}`}>Sítios Web do Utilizador {username}</Link> },
+    { title: name, children: <Link to={`/dashboard/users/websites/pages/${username}/${encodeURIComponent(name)}`}>{name}</Link> },
     {title: "Relatório de acessibilidade da página"}
   ]);
   const [data, setData] = useState([
@@ -127,7 +128,7 @@ const DetailsPageUsers = () => {
 
     const fetchData = async () => {
       try {
-      const response = await api.get(`/evaluation/${encodeURIComponent(pageUrl)}/${id}`); 
+      const response = await api.get(`/evaluation/user/monitor/${encodeURIComponent(pageUrl)}`); 
       const result = response.data.result.data;
       setListItems([
         { title: 'Pontuação média', value: result.score },

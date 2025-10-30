@@ -20,6 +20,7 @@ const UsersCreateForm = () => {
     // States for websites association
     const [websiteOptions, setWebsiteOptions] = useState([]);
     const [websites, setWebsites] = useState([]);
+    const [defaultWebsites, setDefaultWebsites] = useState([]); // Original websites the user had
     const [websiteSearch, setWebsiteSearch] = useState("");
 
     const watchedPassword = watch("password");
@@ -44,7 +45,8 @@ const UsersCreateForm = () => {
 
     const breadcrumbs = [
         { children: <Link to="/dashboard/home">Início</Link> },
-        { title: id ? t('USERS_PAGE.ADD.edit_title') : t('USERS_PAGE.ADD.title') },
+        { children: <Link to="/dashboard/users">Utilizadores</Link> },
+        { title: id ? (watchedUsername ? `${t('USERS_PAGE.ADD.edit_title')} ${watchedUsername}` : t('USERS_PAGE.ADD.edit_title')) : t('USERS_PAGE.ADD.title') },
     ];
 
     // Function to fetch websites
@@ -56,6 +58,7 @@ const UsersCreateForm = () => {
                 value: website.WebsiteId,
                 label: website.Name
             }));
+            
             setWebsiteOptions(formattedWebsites);
         } catch (error) {
             console.error("Error fetching websites:", error);
@@ -87,13 +90,16 @@ const UsersCreateForm = () => {
                     }).filter(id => id !== null);
                     
                     setWebsites(websiteIds);
+                    setDefaultWebsites(websiteIds); // Store original websites
                     setValue("websites", websiteIds);
                 } else {
                     setWebsites([]);
+                    setDefaultWebsites([]);
                 }
             } catch (error) {
                 console.error("Error fetching user data:", error);
                 setWebsites([]);
+                setDefaultWebsites([]);
             }
         };
         if (id) {
@@ -167,10 +173,11 @@ const UsersCreateForm = () => {
                     delete payload.confirmPassword;
                 }
                 delete payload.tags;
-                payload.websites = JSON.stringify(role === '1' ? [] : (websites || []));
+                payload.websites = JSON.stringify(role === '1' ? [] : (websites || [])); // Current selection (original + new)
                 payload.app = role === '1' ? "nimda" : "monitor";
-                payload.defaultWebsites = JSON.stringify(role === '1' ? [] : (websites || []));
-                payload.userId = id;
+                payload.defaultWebsites = JSON.stringify(role === '1' ? [] : (defaultWebsites || [])); // Only original websites
+                payload.userId = Number(id);
+                console.log(payload);
                 response = await api.post('/user/update', payload);
             }else{
                 response = await api.post('/user/create', payload);
@@ -199,7 +206,7 @@ const UsersCreateForm = () => {
     return (
         <div>
             <Breadcrumb data={breadcrumbs} />
-            <h1>{id ? t('USERS_PAGE.ADD.edit_title') : t('USERS_PAGE.ADD.title')}</h1>
+            <h1>{id ? (watchedUsername ? `${t('USERS_PAGE.ADD.edit_title')} ${watchedUsername}` : t('USERS_PAGE.ADD.edit_title')) : t('USERS_PAGE.ADD.title')}</h1>
             <form className="bg-white" onSubmit={handleSubmit(onSubmit)}>
                 <p>{t('USERS_PAGE.ADD.description_user')}</p>
                 <p>{t('USERS_PAGE.ADD.description_user_ams')}</p>

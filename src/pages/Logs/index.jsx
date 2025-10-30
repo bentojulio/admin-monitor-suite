@@ -10,7 +10,7 @@ export default function LogsList() {
   const { t } = useTranslation();
 
     const breadcrumbs = [
-        { children: <Link to="/">Início</Link> },
+        { children: <Link to="/dashboard/home">Início</Link> },
         {
             title: "Logs",
         }
