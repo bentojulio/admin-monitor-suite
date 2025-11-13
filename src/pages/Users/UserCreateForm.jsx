@@ -43,6 +43,7 @@ const UsersCreateForm = () => {
         required: <div dangerouslySetInnerHTML={{__html: t('MISC.required_field')}} />,
     });
 
+    // Dynamic breadcrumbs - Users flow is linear, no dynamic context needed
     const breadcrumbs = [
         { children: <Link to="/dashboard/home">Início</Link> },
         { children: <Link to="/dashboard/users">Utilizadores</Link> },

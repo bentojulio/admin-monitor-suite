@@ -17,7 +17,7 @@ export default function DetailsCrawler() {
   });
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
-    { children: <Link to="/dashboard/crawler">Crawler</Link> },
+    { children: <Link to="/dashboard/crawler">Crawlers</Link> },
     { title: "Importação de páginas para o sítio Web" },
   ];
   useEffect(() => {
