@@ -13,31 +13,29 @@ export const directoriesHeaders = [
 ];
 
 export const columnsOptions = (navigate)=>({
-  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, 
-   },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
   Username: {
     type: "Link",
     center: true,
     bold: false,
     decimalPlace: false,
-    isCheckboxLabel: true,
     href: (row) => (row.Type === "MyMonitor" ? `.${import.meta.env.VITE_ROUTE_URL}users/websites/${row.Username}` : "#"),
     children: (row, value) => {
       const linkClass = "ama-typography-body bold";
       if (row.Type === "MyMonitor") {
         const href = `.${import.meta.env.VITE_ROUTE_URL}users/websites/${row.Username}`;
         return (
-          <a href={href} className={linkClass} id={`link_${row.id}_Username`}>
+          <a href={href} className={linkClass}>
             {value}
           </a>
         );
       }
       return (
-        <label htmlFor={'checkbox_' + row.id} className={linkClass}>
+        <span className={linkClass}>
           {value}
-        </label>
+        </span>
       );
-    }
+    },
   },
   Type: { type: "Text", center: false, bold: false, decimalPlace: false },
   Websites: {
@@ -79,8 +77,8 @@ export const nameOfIcons = [
   "Selo Ouro",
   "Declaração não conforme",
   "Declaração parcialmente conforme",
-  "Declaração plenamente conforme"
-]
+  "Declaração plenamente conforme",
+];
 
 export const paginationButtonsTexts = [
   i18n.t('FIRST_PAGE_LABEL'),
@@ -102,15 +100,15 @@ export const options = [
       <div>
         Check if the alternative text equivalent found in the images provides
         equal information or function as the one performed by the image on the
-        page. H37: Using alt attributes on img elements This WCAG 2.1
-        technique is related to: Success criteria 1.1.1 (Level A) Notions
-        about the SC 1.1.1
+        page. H37: Using alt attributes on img elements This WCAG 2.1 technique
+        is related to: Success criteria 1.1.1 (Level A) Notions about the SC
+        1.1.1
       </div>
     ),
     lvl: "AA",
     iconName: "AMA-Middle-Line",
     ele: "test",
-    tdClassName: "warning-cell"
+    tdClassName: "warning-cell",
   },
 ];
 
@@ -129,7 +127,6 @@ export const websiteUsersHeaders = [
 export const websiteUsersColumnsOptions = (navigate, handleImportWebsite)=>({
   Username: { type: "Skip", center: false, bold: false, decimalPlace: false },
   id: { type: "Skip", center: false, bold: false, decimalPlace: false },
-  StartingUrl: { type: "Skip", center: false, bold: false, decimalPlace: false },
   Name: { type: "Link", center: false, bold: false, decimalPlace: false,
    href: (row)=>`.${import.meta.env.VITE_ROUTE_URL}pages/${row.Username}/${row.Name}` },
   Creation_Date: { type: "Text", center: true, bold: false, decimalPlace: false},

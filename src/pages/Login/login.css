@@ -25,9 +25,10 @@
 }
 
 .login-title {
-  margin: 0 0 15px 0;
-  padding: 0;
-  line-height: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ama-color-brand-primary);
+  margin-bottom: 15px;
 }
 
 .main-content {

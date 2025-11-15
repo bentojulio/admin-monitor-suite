@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { api } from "../../config/api";
 import { Modal } from "../../components/Modal";
 import CrawlingModal from "../../components/CrawlingModal";
-import { setRootNavigationContext } from "../../utils/navigation";
 
 const CategoriesList = () => {
   const { theme } = useTheme();
@@ -28,11 +27,6 @@ const CategoriesList = () => {
     { children: <Link to="/dashboard/home">Início</Link> },
     { title: "Categorias" }
   ];
-  
-  useEffect(() => {
-    // Clear root context when viewing category list
-    setRootNavigationContext(null);
-  }, []);
   const fetchData = async () => {
     const response = await api.get('/tag/all');
     setAllCategories(response.data.result.map(item => ({
@@ -239,11 +233,9 @@ const CategoriesList = () => {
           ]}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
           pagination={true}
           totalItems={totalItems}
           currentPage={currentPage}
-          serverSidePagination={true}
           itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
           onItemsPerPageChange={handleItemsPerPageChange}

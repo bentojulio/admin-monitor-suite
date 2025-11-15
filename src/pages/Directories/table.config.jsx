@@ -44,7 +44,6 @@ export const columnsOptions = (navigate) => ({
     center: false,
     bold: false,
     decimalPlace: false,
-    isCheckboxLabel: true,
     href: (row) => {
       return `${apiUrl}dashboard/directories/view/${row.Name}`;
     },

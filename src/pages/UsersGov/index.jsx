@@ -97,7 +97,7 @@ const UserGovList = () => {
 
   const columnsOptions = {
     id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
-    name: { type: "Text", center: true, bold: false, decimalPlace: false, isCheckboxLabel: true },
+    name: { type: "Text", center: true, bold: false, decimalPlace: false },
     ccNumber: { type: "Text", center: true, bold: false, decimalPlace: false },
     registerDate: { type: "Text", center: true, bold: false, decimalPlace: false },
     lastLogin: { type: "Text", center: true, bold: false, decimalPlace: false },
@@ -180,7 +180,6 @@ const UserGovList = () => {
           iconsAltTexts={nameOfIcons}
           project=""
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
           pagination={true}
           totalItems={totalItems}
           currentPage={currentPage}

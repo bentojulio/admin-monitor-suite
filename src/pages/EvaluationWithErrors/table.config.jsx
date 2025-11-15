@@ -17,7 +17,6 @@ export const columnsOptions = {
     type: "Text",
     bold: false,
     decimalPlace: false,
-    isCheckboxLabel: true,
   },
   Url: { type: "Link", bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/pages/view/" + encodeURIComponent(row.Url) },
   CreatedAt: { type: "Text",  bold: false, decimalPlace: true },

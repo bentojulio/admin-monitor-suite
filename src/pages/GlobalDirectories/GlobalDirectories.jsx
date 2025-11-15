@@ -39,7 +39,7 @@ const GlobalDirectories = () => {
   ])
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
-    { title: "Global" }
+    { title: "Dados Globais do Observatório" }
   ];
   const [data, setData] = useState(dataRows)
   const [checkboxesSelected, setCheckboxesSelected] = useState([])

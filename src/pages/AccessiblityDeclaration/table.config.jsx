@@ -42,7 +42,7 @@ export const directoriesHeaders = [
 
 export const columnsOptions = {
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
-  shortName: { type: "Text", center: false, bold: false, decimalPlace: false, isCheckboxLabel: true },
+  shortName: { type: "Text", center: false, bold: false, decimalPlace: false },
   fullName: { type: "Text", center: false, bold: false, decimalPlace: false },
   createdAt: { type: "Text", center: true, bold: false, decimalPlace: false },
   websiteCount: {

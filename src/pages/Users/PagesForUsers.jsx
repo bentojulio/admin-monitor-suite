@@ -216,7 +216,6 @@ const PagesForUsers = () => {
           iconsAltTexts={nameOfIcons}
           project=""
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
           pagination={true}
           totalItems={totalItems}
           currentPage={currentPage}

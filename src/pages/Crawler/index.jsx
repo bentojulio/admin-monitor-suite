@@ -20,7 +20,7 @@ export default function CrawlerList() {
 
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
-    { title: "Crawlers" },
+    { title: "Crawler" },
   ];
 
   const fetchData = async () => {
@@ -123,7 +123,6 @@ export default function CrawlerList() {
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 

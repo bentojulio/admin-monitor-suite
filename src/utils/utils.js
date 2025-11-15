@@ -1308,14 +1308,14 @@ export async function downloadCSV(websites, fileBaseName = "websites") {
       "averagePoints",
     ];
 
-    const needsQuote = /[\n\r";]/;
+    const needsQuote = /[\n\r",]/;
     const esc = (v) => {
       const s = (v ?? "").toString().replace(/\r?\n/g, " ");
       return needsQuote.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
     };
 
     const CHUNK_SIZE = 30; // 5 req por segundo
-    let data = headers.join(";") + "\n";
+    let data = headers.join(",") + "\n";
 
     for (let i = 0; i < uniq.length; i += CHUNK_SIZE) {
       const startedAt = Date.now();
@@ -1352,9 +1352,7 @@ export async function downloadCSV(websites, fileBaseName = "websites") {
             .join(";") || websiteData.tags || "";
 
         const numberOfPages = websiteData?.Pages ?? websiteData?.numberOfPages ?? "";
-        const avgRaw = websiteData?.AverageScore ?? websiteData?.averagePoints ?? 0;
-        // Convert NaN to 0 for CSV export
-        const avg = isNaN(avgRaw) || !isFinite(avgRaw) ? 0 : avgRaw;
+        const avg = websiteData?.AverageScore ?? websiteData?.averagePoints ?? "";
 
         const line = [
           esc(websiteData?.WebsiteId),
@@ -1369,7 +1367,7 @@ export async function downloadCSV(websites, fileBaseName = "websites") {
           esc(tags),
           esc(numberOfPages),
           esc(avg),
-        ].join(";");
+        ].join(",");
 
         data += line + "\n";
       }
@@ -1382,9 +1380,7 @@ export async function downloadCSV(websites, fileBaseName = "websites") {
       }
     }
 
-    // Add BOM (Byte Order Mark) for UTF-8 to ensure Excel recognizes encoding correctly
-    const BOM = "\uFEFF";
-    const blob = new Blob([BOM + data], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob([data], { type: "text/csv;charset=utf-8" });
     saveAs(blob, `${fileBaseName}.csv`);
   } catch (error) {
     console.error("Error downloading CSV:", error);
@@ -1417,7 +1413,7 @@ export async function downloadWebsiteCSV(website, fileBaseName = "evaluation", t
     ];
 
     // --- local helpers (no external helpers created) ---
-    const needsQuote = /[\n\r";]/;
+    const needsQuote = /[\n\r",]/;
     const esc = (v) => {
       const s = (v ?? "").toString().replace(/\r?\n/g, " ");
       return needsQuote.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
@@ -1439,11 +1435,9 @@ export async function downloadWebsiteCSV(website, fileBaseName = "evaluation", t
     };
     const formatPontuacao = (val) => {
       const pick = val ?? "";
-      if (pick === "") return "0";
+      if (pick === "") return "";
       const n = typeof pick === "number" ? pick : Number(String(pick).replace(",", "."));
-      // Convert NaN to 0 for CSV export
-      if (!Number.isFinite(n) || isNaN(n)) return "0";
-      return String(n.toFixed(1)).replace(".", ",");
+      return Number.isFinite(n) ? String(n.toFixed(1)).replace(".", ",") : esc(pick);
     };
     const decodeTot = (b64) => {
       if (!b64 || typeof b64 !== "string") return null;
@@ -1465,7 +1459,7 @@ export async function downloadWebsiteCSV(website, fileBaseName = "evaluation", t
       return { value: m[1], count: m[2] };
     };
 
-    let csv = headers.join(";") + "\n";
+    let csv = headers.join(",") + "\n";
 
     for (const page of pages) {
       const totDecoded = decodeTot(page?.Tot);
@@ -1476,9 +1470,7 @@ export async function downloadWebsiteCSV(website, fileBaseName = "evaluation", t
       // Choose URI, date, and score
       const uri = page?.Uri ?? totDecoded?.info?.url ?? "";
       const date = page?.Evaluation_Date ?? totDecoded?.info?.date ?? "";
-      const scoreRaw = page?.Score ?? totDecoded?.info?.score ?? 0;
-      // Convert NaN to 0 for CSV export
-      const score = isNaN(scoreRaw) || !isFinite(scoreRaw) ? 0 : scoreRaw;
+      const score = page?.Score ?? totDecoded?.info?.score ?? "";
 
       // For each test key inside Tot.results, emit a CSV row
       for (const [testId, rawVal] of Object.entries(results)) {
@@ -1501,15 +1493,13 @@ export async function downloadWebsiteCSV(website, fileBaseName = "evaluation", t
           esc(count),               // Número de ocorrências
           esc(value),               // Valor
           formatPontuacao(score),   // Pontuação (decimal com vírgula)
-        ].join(";");
+        ].join(",");
 
         csv += row + "\n";
       }
     }
 
-    // Add BOM (Byte Order Mark) for UTF-8 to ensure Excel recognizes encoding correctly
-    const BOM = "\uFEFF";
-    const blob = new Blob([BOM + csv], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     saveAs(blob, `${fileBaseName}.csv`);
   } else {
     return null;
@@ -1536,11 +1526,7 @@ export function exportDirectoryEvaluationCSV(rows, directory, opts = {}) {
     const s = (v ?? "").toString().replace(/\r?\n/g, " ");
     return needsQuote.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
-  const num = (v) => {
-    const n = Number(v);
-    // Convert NaN to 0 for CSV export
-    return Number.isFinite(n) ? String(v) : "0";
-  };
+  const num = (v) => (Number.isFinite(Number(v)) ? String(v) : "");
 
   let data = headers.join(delimiter) + "\n";
 
@@ -1556,9 +1542,7 @@ export function exportDirectoryEvaluationCSV(rows, directory, opts = {}) {
   }
 
   // final exatamente como requereste
-  // Add BOM (Byte Order Mark) for UTF-8 to ensure Excel recognizes encoding correctly
-  const BOM = "\uFEFF";
-  const blob = new Blob([BOM + data], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob([data], { type: "text/csv;charset=utf-8" });
   $saveAs(blob, `${directory}_evaluation.csv`);
 }
 
@@ -1641,9 +1625,7 @@ export async function downloadCSVBackup(websites, allPages, directory, t, deps =
   }
 
   console.log(`\nGenerating CSV file with ${data.split('\n').length} lines`);
-  // Add BOM (Byte Order Mark) for UTF-8 to ensure Excel recognizes encoding correctly
-  const BOM = "\uFEFF";
-  const blob = new Blob([BOM + data], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob([data], { type: "text/csv;charset=utf-8" });
   $saveAs(blob, `${directory}_evaluation.csv`);
 
   console.log(`Successfully downloaded CSV for ${websites.length} websites in directory: ${directory}`);

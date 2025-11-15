@@ -42,7 +42,7 @@ export const directoriesHeaders = [
 
 export const columnsOptions = (navigate)=>({
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
-  Short_Name: { type: "Link", isCheckboxLabel: true, center: false, bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/entities/view/" + row.Long_Name },
+  Short_Name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/entities/view/" + row.Long_Name },
   Long_Name: { type: "Text", center: false, bold: false, decimalPlace: false },
   Creation_at: { type: "Text", center: true, bold: false, decimalPlace: false },
   Websites: {
@@ -62,8 +62,8 @@ export const nameOfIcons = [
   "Selo Ouro",
   "Declaração não conforme",
   "Declaração parcialmente conforme",
-  "Declaração plenamente conforme"
-]
+  "Declaração plenamente conforme",
+];
 
 export const paginationButtonsTexts = [
   i18n.t('FIRST_PAGE_LABEL'),
@@ -85,25 +85,7 @@ export const dataRows = [
     Websites: 5,
     edit: "Editar",
   },
-  {
-    "id": 23,
-    "email": "Instituto da Segurança Social, I.P. - Portal Seg Social com o <title>",
-    "username": "Instituto da Segurança Social, I.P.",
-    "type": "MyMonitor",
-  },
-  {
-    "id": 31,
-    "email": "Portal do SNS 24",
-    "username": "Serviços Partilhados do Ministério da Saúde, E.P.E.",
-    "type": "AcessMonitor",
-  },
-  {
-    "id": 25,
-    "email": "Comissão Nacional de Eleições",
-    "username": "Comissão Nacional de Eleições",
-    "type": "AcessMonitor",
-  }
-]
+];
 
 export const options = [
   {
@@ -114,14 +96,14 @@ export const options = [
       <div>
         Check if the alternative text equivalent found in the images provides
         equal information or function as the one performed by the image on the
-        page. H37: Using alt attributes on img elements This WCAG 2.1
-        technique is related to: Success criteria 1.1.1 (Level A) Notions
-        about the SC 1.1.1
+        page. H37: Using alt attributes on img elements This WCAG 2.1 technique
+        is related to: Success criteria 1.1.1 (Level A) Notions about the SC
+        1.1.1
       </div>
     ),
     lvl: "AA",
     iconName: "AMA-Middle-Line",
     ele: "test",
-    tdClassName: "warning-cell"
+    tdClassName: "warning-cell",
   },
 ];

@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 import { api } from '../../config/api';
 import { Modal } from '../../components/Modal';
-import { extractNavigationContext } from '../../utils/navigation';
 
 const DirectoriesCreateForm = () => {
     const { register, handleSubmit, formState: { errors }, setValue, watch, trigger, reset } = useForm({
@@ -55,30 +54,13 @@ const DirectoriesCreateForm = () => {
         fetchDirectory();
     }, [id, reset]);
 
-    // Dynamic breadcrumbs based on navigation context
-    const previousPath = localStorage.getItem('previousPath') || '';
-    const navContext = extractNavigationContext(previousPath);
-    
-    let breadcrumbs = [
+    const breadcrumbs = [
         { children: <Link to="/dashboard/home">Início</Link> },
         { children: <Link to="/dashboard/directories">Diretórios</Link> },
         {
-            title: id ? t('DIRECTORIES_PAGE.EDIT.title') : t('DIRECTORIES_PAGE.ADD.title'),
+            title: t('DIRECTORIES_PAGE.ADD.title'),
         }
     ];
-
-    // If editing from a specific directory view
-    if (id && navContext && navContext.type === 'directory') {
-        const { directoryName } = navContext.data;
-        breadcrumbs = [
-            { children: <Link to="/dashboard/home">Início</Link> },
-            { children: <Link to="/dashboard/directories">Diretórios</Link> },
-            { children: <Link to={`/dashboard/directories/view/${encodeURIComponent(directoryName)}`}>{directoryName}</Link> },
-            {
-                title: t('DIRECTORIES_PAGE.EDIT.title'),
-            }
-        ];
-    }
 
     // Validation function for entities
     const validateEntities = () => {

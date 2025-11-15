@@ -43,6 +43,7 @@ const WebsitesForUsers = () => {
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [showImportModal, setShowImportModal] = useState(false);
   const [selectedWebsite, setSelectedWebsite] = useState(null);
+  const [newWebsiteName, setNewWebsiteName] = useState("");
 
   useEffect(() => {
     const currentPath = location.pathname;
@@ -65,7 +66,6 @@ const WebsitesForUsers = () => {
       Username: name,
       id: item.WebsiteId,
       Name: item.Name,
-      StartingUrl: item.StartingUrl,
       Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
       import: "Importar",
     })));
@@ -133,30 +133,37 @@ const WebsitesForUsers = () => {
   // Handle import website
   const handleImportWebsite = (website) => {
     setSelectedWebsite(website);
+    setNewWebsiteName(website.Name);
     setShowImportModal(true);
   };
 
   const handleConfirmImport = async () => {
+    if (!newWebsiteName.trim()) {
+      setFeedbackMessage("Por favor, insira um nome para o sítio web.");
+      setShowFeedbackModal(true);
+      return;
+    }
+
     try {
       const response = await api.post('/website/import', {
         websiteId: selectedWebsite.id,
-        websiteName: selectedWebsite.Name,
-        websiteUrl: selectedWebsite.StartingUrl
+        websiteName: newWebsiteName
       });
       
-      setFeedbackMessage("Sítio web e páginas importados com sucesso!");
+      setFeedbackMessage("Sítio web importado com sucesso!");
       setShowImportModal(false);
+      setNewWebsiteName("");
       setSelectedWebsite(null);
       fetchData(); // Refresh the data
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "Erro ao importar sítio web. Tente novamente.";
-      setFeedbackMessage(errorMsg);
+      setFeedbackMessage("Erro ao importar sítio web. Tente novamente.");
     }
     setShowFeedbackModal(true);
   };
 
   const handleCancelImport = () => {
     setShowImportModal(false);
+    setNewWebsiteName("");
     setSelectedWebsite(null);
   };
 
@@ -189,7 +196,6 @@ const WebsitesForUsers = () => {
           iconsAltTexts={nameOfIcons}
           project=""
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
           pagination={true}
           totalItems={totalItems}
           currentPage={currentPage}
@@ -233,19 +239,28 @@ const WebsitesForUsers = () => {
       <Modal
         isOpen={showImportModal}
         onRequestClose={handleCancelImport}
-        title="Importar sítio Web"
+        title="Importar Sítio Web"
       >
         <div>
-          <p><strong>Sítio web:</strong> {selectedWebsite?.Name}</p>
-          <p><strong>URL:</strong> {selectedWebsite?.StartingUrl}</p>
+          <p><strong>Importar o sítio web {selectedWebsite?.Name}</strong></p>
+          <p><strong>Atenção!</strong></p>
+          <p>Esta operação irá importar o sítio web e o seu domínio () associado, bem como todas as suas páginas.</p>
+          <p>Se pretender importar este domínio para outro sítio web existente, crie primeiro esse domínio no respetivo sítio web.</p>
+          <p><strong>Esta ação não pode ser revertida!</strong></p>
+          <p><strong>Já existe um sítio web com este nome!</strong></p>
+          <p>Por favor, insira um novo nome para o sítio web a importar:</p>
           
-          <p style={{ marginTop: '16px' }}>
-            O sítio Web "{selectedWebsite?.Name}" ({selectedWebsite?.StartingUrl}) já existe. 
-            <br/> Vamos proceder à importação da amostra do MyMonitor no AMS.<br/> O processo inclui a 
-            importação de todas as páginas e respetivas avaliações, sempre que estas sejam mais 
-            recentes às existentes no AMS. As páginas que existam no AMS e que não constem da 
-            amostra agora a importar não sofreram alterações.</p>
-          <div className="d-flex gap-2 justify-content-end" style={{ marginTop: '24px' }}>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              value={newWebsiteName}
+              onChange={(e) => setNewWebsiteName(e.target.value)}
+              placeholder="Nome do sítio web"
+            />
+          </div>
+          
+          <div className="d-flex gap-2 justify-content-end">
             <Button
               darkTheme={theme}
               text="Cancelar"

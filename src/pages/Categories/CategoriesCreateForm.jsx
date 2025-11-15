@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 import { api } from '../../config/api';
 import { Modal } from '../../components/Modal';
-import { extractNavigationContext } from '../../utils/navigation';
 import debounce from 'lodash/debounce';
 
 const CategoriesCreateForm = () => {
@@ -36,26 +35,11 @@ const CategoriesCreateForm = () => {
         { value: "4", label: "Sítio Web 4" },
     ];
 
-    // Dynamic breadcrumbs based on navigation context
-    const previousPath = localStorage.getItem('previousPath') || '';
-    const navContext = extractNavigationContext(previousPath);
-    
-    let breadcrumbs = [
+    const breadcrumbs = [
         { children: <Link to="/dashboard/home">Início</Link> },
         { children: <Link to="/dashboard/categories">Categorias</Link> },
-        { title: id ? t('CATEGORIES_PAGE.EDIT.title') : t('CATEGORIES_PAGE.ADD.title') },
+        { title: t('CATEGORIES_PAGE.ADD.title') },
     ];
-
-    // If editing from a specific category view
-    if (id && navContext && navContext.type === 'category') {
-        const { categoryName } = navContext.data;
-        breadcrumbs = [
-            { children: <Link to="/dashboard/home">Início</Link> },
-            { children: <Link to="/dashboard/categories">Categorias</Link> },
-            { children: <Link to={`/dashboard/categories/view/${encodeURIComponent(categoryName)}`}>{categoryName}</Link> },
-            { title: t('CATEGORIES_PAGE.EDIT.title') },
-        ];
-    }
 
 
     useEffect(() => {

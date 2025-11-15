@@ -3,15 +3,15 @@ import {
   Button,
   InputSearch,
   SortingTable,
-  Breadcrumb
+  Breadcrumb,
 } from "ama-design-system";
 import "./style.users.css";
 import {
   directoriesHeaders,
   columnsOptions,
   nameOfIcons,
-  paginationButtonsTexts
-} from "./table.config.jsx";
+  paginationButtonsTexts,
+} from "./table.config";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
@@ -172,11 +172,9 @@ const UserList = () => {
           iconsAltTexts={nameOfIcons}
           project=""
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
           pagination={true}
           totalItems={totalItems}
           currentPage={currentPage}
-          serverSidePagination={true}
           itemsPerPage={itemsPerPage}
           onPageChange={handlePageChange}
           onItemsPerPageChange={handleItemsPerPageChange}

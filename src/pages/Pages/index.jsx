@@ -9,31 +9,9 @@ import { Breadcrumb, Button } from "ama-design-system";
 import { useTranslation } from "react-i18next";
 import { api } from "../../config/api";
 import { isRequestSuccessful } from "../../utils/apiHelpers.js";
+import moment from "moment";
 import { Modal } from "../../components/Modal";
 import { useTheme } from '../../context/ThemeContext';
-
-// Lightweight date formatter to replace moment.js
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
-
-// Function to count total elements from structure like {"document":1,"generic":1,"heading":1,"separator":1}
-const calculateTotalElements = (elementCount) => {
-  if (!elementCount || typeof elementCount !== 'object') {
-    return 0;
-  }
-  
-  // Sum all values in the object
-  return Object.values(elementCount).reduce((total, count) => {
-    const num = Number(count);
-    return total + (isNaN(num) ? 0 : num);
-  }, 0);
-  
-};
 
 const PageList = () => {
   const { t } = useTranslation();
@@ -58,60 +36,43 @@ const PageList = () => {
     setCurrentPage(1); // Reset to first page when searching
   };
 
-  // Fetch total count and current page data with parallel API calls
+  // Fetch total count and current page data
   useEffect(() => {
     const fetchData = async () => {
-      setCheckboxesSelected([]);
-      
-      try {
-        const offset = currentPage - 1;
-        let url = `/page/all/${itemsPerPage}/${offset}/sort=desc/direction=/${search !== "" ? `/search=${search}`:'search='}`;
-        const [totalItemsResponse, dataResponse] = await Promise.all([
-          api.get(`/page/all/count/search=${search}`),
-          api.get(url)
-        ]);
-        
-        setTotalItems(Number(totalItemsResponse.data.result));
-        
-        const transformedData = dataResponse.data.result.map(item => ({
-          id: item.PageId,
-          Uri: item.Uri,
-          Score: Number(item.Score),
-          Evaluation_Date: formatDate(item.Evaluation_Date), // Using lightweight formatter
-          Element_Count: calculateTotalElements(item.Element_Count),
-          A: item.A,
-          AA: item.AA,
-          AAA: item.AAA,
-          e: "?",
-          OPAW: item.Show_In.split("")[2] === "1" ? "Sim" : "Não",
-        }));
-        
-        setData(transformedData);
-      } catch (error) {
-        setFeedbackMessage("Erro ao carregar páginas!");
-        setShowFeedbackModal(true);
-      }
+      const responseTotal = await api.get(`/page/all/count/search=${search}`);
+      setTotalItems(Number(responseTotal.data.result));
+      const offset = currentPage - 1;
+      const response = await api.get(`/page/all/${itemsPerPage}/${offset}/sort=/direction=/search=${search}`); 
+      setData(response.data.result.map(item => ({
+        id: item.PageId,
+        Uri: item.Uri,
+        Score: Number(item.Score),
+        Evaluation_Date: moment(item.Evaluation_Date).format('DD/MM/YYYY'),
+        Element_Count: 12,//item.Element_Count,
+        A: item.A,
+        AA: item.AA,
+        AAA: item.AAA,
+        e: "N/A",
+        OPAW: "OPAW",
+      })));
     };
     fetchData();
   }, [currentPage, itemsPerPage, search]);
 
   // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page) => setCurrentPage(page);
 
   // Handle items per page change
   const handleItemsPerPageChange = (n) => {
     setItemsPerPage(n);
     setCurrentPage(1); // Reset to first page
   };
-  
   const handleDeletePages = async () => {
     const pagesIds = checkboxesSelected.map(item => item.id);
     const response = await api.post("/page/delete", {
       pages: pagesIds,
     })
-    if (response.status === 200 || response.status === 201) {
+    if (isRequestSuccessful(response)) {
       const deletedIds = new Set(checkboxesSelected.map(item => item.id));
       setFeedbackMessage("Páginas excluídas com sucesso!");
       setShowFeedbackModal(true);
@@ -122,7 +83,8 @@ const PageList = () => {
       setFeedbackMessage("Erro ao excluir páginas!");
       setShowFeedbackModal(true);
     }
-  };
+
+  } 
 
   const handleShowHideObservatory = async () => {
     await Promise.all(checkboxesSelected.map(async item => {
@@ -133,7 +95,7 @@ const PageList = () => {
     }));
     setFeedbackMessage('As páginas foram adicionadas ao observatório com sucesso!');
     setShowFeedbackModal(true);
-  };
+   }
   return (
     <div>
       <Breadcrumb data={breadcrumbs} />
@@ -151,7 +113,6 @@ const PageList = () => {
           totalItems={totalItems}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
-          setItemsPerPage={setItemsPerPage}
           onPageChange={handlePageChange}
           onItemsPerPageChange={handleItemsPerPageChange}
           search={search}
@@ -175,7 +136,7 @@ const PageList = () => {
       </Modal>
 
     </div>
-)
-}
+  );
+};
 
 export default PageList;

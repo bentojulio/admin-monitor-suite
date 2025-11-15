@@ -31,8 +31,7 @@ const PageCreateForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [breadcrumbs, setBreadcrumbs] = React.useState([
-    { children: <Link to="/dashboard/home">Início</Link> },
-    { children: <Link to="/dashboard/pages">Páginas</Link> },
+    { children: <Link to="/">Início</Link> },
     {
       title: "Criar Página",
     },
@@ -284,14 +283,8 @@ const PageCreateForm = () => {
             2. De que forma deseja adicionar as novas páginas?
           </h2>
           <p>Selecione apenas um dos processos abaixo:</p>
-          <div className="mt-5">
-
-      
-      {TabsWithComponenets}
-         
-          </div>
+          <div className="mt-5">{TabsWithComponenets}</div>
         </div>
-
       </form>
              <Modal
          title="Adicionar páginas"

@@ -96,7 +96,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 
@@ -126,7 +125,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 
@@ -156,7 +154,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 
@@ -186,7 +183,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 
@@ -216,7 +212,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 
@@ -246,7 +241,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 
@@ -276,7 +270,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 
@@ -306,7 +299,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 
@@ -336,7 +328,6 @@ const breadcrumbs = [
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
         />
       </div>
 

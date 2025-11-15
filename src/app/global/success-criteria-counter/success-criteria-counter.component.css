@@ -1,7 +1,0 @@
-.bold {
-  font-weight: bold;
-}
-
-.bold + span {
-  margin-left: 1em;
-}

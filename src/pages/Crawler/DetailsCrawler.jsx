@@ -17,7 +17,7 @@ export default function DetailsCrawler() {
   });
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
-    { children: <Link to="/dashboard/crawler">Crawlers</Link> },
+    { children: <Link to="/dashboard/crawler">Crawler</Link> },
     { title: "Importação de páginas para o sítio Web" },
   ];
   useEffect(() => {
@@ -187,20 +187,22 @@ export default function DetailsCrawler() {
                 <th
                   scope="col"
                   className="checkbox text-center"
-                  style={{ width: "50px" }}
+                  style={{ width: "50px", padding: "0.5rem" }}
                 >
+                  <label htmlFor="checkbox_all_import">
+                    <span className="visually-hidden">Selecionar registo</span>
+                  </label>
                   <input
+                    aria-description="todos os registos"
                     type="checkbox"
                     id="checkbox_all_import"
-                    aria-label="Selecionar todos os registos"
-                    aria-description="Selecionar todos os registos da página atual"
                     className="form-check-input"
-                    value="all"
                     checked={
                       paginatedData.length > 0 &&
                       paginatedData.every((item) => item.Import)
                     }
                     onChange={() => handleSelectAll("Import")}
+                    style={{ padding: "8px", border: "1px solid grey" }}
                   />
                 </th>
                 <th scope="col">Páginas</th>
@@ -212,14 +214,17 @@ export default function DetailsCrawler() {
                   const checkboxId = `checkbox_${startIndex + index}`;
                   return (
                     <tr key={index}>
-                      <th scope="row" className="text-center">
+                      <td
+                        className="text-center ama-typography-body checkbox"
+                        style={{ padding: "0.5rem" }}
+                      >
                         <input
                           type="checkbox"
                           id={checkboxId}
                           name={`${startIndex + index}`}
                           className="form-check-input"
                           checked={row.Import || false}
-                          aria-labelledby={`link_${index}`}
+                          style={{ padding: "8px", border: "1px solid grey" }}
                           onChange={(e) =>
                             handleCheckboxChange(
                               index,
@@ -228,15 +233,21 @@ export default function DetailsCrawler() {
                             )
                           }
                         />
-                      </th>
+                      </td>
                       <td
                         className="ama-typography-body"
                         style={{ wordBreak: "break-all" }}
                       >
-                          <label htmlFor={checkboxId}>  
+                        <label htmlFor={checkboxId}>
+                          <a
+                            href={row.Uri}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-decoration-none"
+                          >
                             {row.Uri}
-                          </label>
-                          
+                          </a>
+                        </label>
                       </td>
                     </tr>
                   );

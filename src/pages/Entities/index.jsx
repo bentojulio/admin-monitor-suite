@@ -8,7 +8,6 @@ import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationBu
 import { useTranslation } from "react-i18next";
 import { api } from "../../config/api";
 import moment from "moment";
-import { setRootNavigationContext } from "../../utils/navigation";
 
 const EntitiesList = () => {
   const location = useLocation();
@@ -40,9 +39,6 @@ const EntitiesList = () => {
       { children: <Link to="/dashboard/home">Início</Link> },
       { title: "Entidades" }
     ]);
-    
-    // Clear root context when viewing entity list
-    setRootNavigationContext(null);
   }, []);
 
   const handleSearchChange = (value) => {
@@ -206,7 +202,6 @@ const EntitiesList = () => {
             " itens "  // items
           ]}
           pagination={true}
-          serverSidePagination={true}
           totalItems={totalItems}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
@@ -216,7 +211,6 @@ const EntitiesList = () => {
           iconsAltTexts={nameOfIcons}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
           rowKey="id"
         />
         <Modal

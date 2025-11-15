@@ -15,18 +15,9 @@ export const directoriesHeaders = [
 // Column rendering options
 export const columnsOptions = (navigate) => {
   return {
-  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, 
-    onClick: (row) => {
-      setCheckboxesSelected([...checkboxesSelected, row.id]);
-    },
-  },
-  url: { 
-    type: "Text", 
-    center: true, 
-    bold: false, 
-    decimalPlace: false, 
-    isCheckboxLabel: true, 
-  },
+  websiteId: { type: "Hidden", center: true, bold: false, decimalPlace: false },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  url: { type: "Text", center: true, bold: false, decimalPlace: false },
   startDate: { type: "Text", center: true, bold: false, decimalPlace: false },
   status: { type: "Text", center: true, bold: false, decimalPlace: false },
   results: {
@@ -56,14 +47,14 @@ export const dataRows = [
 
 export const directoriesHeadersCrawlDetails = [
   [
-    { type: "Checkbox", nRow: 2, justifyCenter: true, name: "Importar", property: "Import" },
-    { type: "SortingText", nRow: 2, name: "Páginas", property: "Uri" },
+    { type: "SortingText", nRow: 2, name: "", property: "Uri" },
+    { type: "SortingText", nRow: 2, justifyCenter: true, name: "Importar", property: "Import" },
   ]
 ];
 
 export const columnsOptionsCrawlDetails = {
   Import: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
-  Uri: { type: "Link", center: false, isCheckboxLabel: true, href: (row) => {
+  Uri: { type: "Link", center: false, href: (row) => {
     return `${row.Uri}`
   }, bold: false, decimalPlace: false },
 };

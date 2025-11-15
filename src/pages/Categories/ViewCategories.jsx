@@ -22,7 +22,6 @@ import { downloadCSV, getSimplifiedPracticesData } from "../../utils/utils.js";
 import tests from "../../utils/tests.js";
 import { Modal } from "../../components/Modal";
 import CrawlingModal from "../../components/CrawlingModal";
-import { setRootNavigationContext } from "../../utils/navigation";
 
 const ViewCategoriesComponent = () => {
   const { t } = useTranslation();
@@ -38,6 +37,9 @@ const ViewCategoriesComponent = () => {
   const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
   const [search, setSearch] = useState("");
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(50);
 
   // Charts & indicators
   const [radarWebsites, setRadarWebsites] = useState([]);
@@ -60,25 +62,13 @@ const ViewCategoriesComponent = () => {
   const [showCrawlingModal, setShowCrawlingModal] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [counter, setCounter] = useState(0);
-  const [isLoadingWebsites, setIsLoadingWebsites] = useState(true);
-  const [isProcessingStats, setIsProcessingStats] = useState(true);
-  const [websitesError, setWebsitesError] = useState(null);
-  const [hasInitialLoad, setHasInitialLoad] = useState(false);
   // -------- Breadcrumbs / Path memory ----------
   useEffect(() => {
     setBreadcrumbs([
-      { children: <Link to="/dashboard/home">Início</Link> },
+      { children: <Link to="/dashboard/global">Global</Link> },
       { children: <Link to="/dashboard/categories">Categorias</Link> },
       { title: categoryName }
     ]);
-    
-    // Set root context when viewing a category
-    if (categoryName) {
-      setRootNavigationContext({
-        type: 'category',
-        data: { categoryName }
-      });
-    }
   }, [categoryName]);
 
   useEffect(() => {
@@ -89,12 +79,6 @@ const ViewCategoriesComponent = () => {
     }
     localStorage.setItem('currentPath', currentPath);
   }, [location.pathname]);
-
-  // -------- Fetch websites only (fast) ----------
-  const fetchWebsitesOnly = async () => {
-    const response = await api.get(`/tag/${categoryName}/user/admin/websites`);
-    return response.data.result || [];
-  };
 
   // -------- Fetch (reutilizável após ações) ----------
   const fetchDataWebsites = async () => {
@@ -332,80 +316,43 @@ const ViewCategoriesComponent = () => {
     setSuccessCriteriaErrors(sortFormat(practicesBySuccessCriteria.errors));
   };
 
-  // Initial fetch - two phases
+  // Initial fetch
   useEffect(() => {
-    let isCancelled = false;
-
-    const loadData = async () => {
-      try {
-        // Reset flags for new category
-        setHasInitialLoad(false);
-        
-        // Phase 1: Load websites quickly
-        setIsLoadingWebsites(true);
-        setWebsitesError(null);
-        const websites = await fetchWebsitesOnly();
-        
-        if (isCancelled) return;
-
-        const websitesRows = websites.map(item => ({
-          id: item.WebsiteId,
-          Name: item.Name,
-          StartingUrl: item.StartingUrl,
-          Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
-          Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
-          Declaration:
-            item.Declaration === null ? "Não avaliado" :
-            item.Declaration === 1 ? "Selo de Ouro" :
-            item.Declaration === 2 ? "Selo de Prata" :
-            item.Declaration === 3 ? "Selo de Bronze" :
-            "Declaração não conforme",
-          edit: "Editar",
-        }));
-
-        setData(websitesRows);
-        setOriginalData(websitesRows);
-        setIsLoadingWebsites(false);
-        setHasInitialLoad(true); // Mark initial load complete
-
-        // Phase 2: Load pages and compute metrics
-        setIsProcessingStats(true);
-        await fetchDataWebsites();
-        setIsProcessingStats(false);
-      } catch (error) {
-        console.error("Error loading category data:", error);
-        setWebsitesError('Erro ao carregar dados da categoria');
-        setIsLoadingWebsites(false);
-        setIsProcessingStats(false);
-        setHasInitialLoad(true); // Mark as complete even on error
-      }
-    };
-
-    loadData();
-
-    return () => {
-      isCancelled = true;
-    };
+    fetchDataWebsites();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName]);
 
-  // Client-side search filtering for category websites
+  // -------- Server-side pagination & search ----------
   useEffect(() => {
-    // Only run after initial load is complete
-    if (!hasInitialLoad) return;
-    
-    if (search.trim() === '') {
-      // No search, show all websites
-      setData(originalData);
-    } else {
-      // Filter websites by search term (client-side)
-      const filtered = originalData.filter(item => 
-        item.Name?.toLowerCase().includes(search.toLowerCase()) ||
-        item.StartingUrl?.toLowerCase().includes(search.toLowerCase())
-      );
-      setData(filtered);
-    }
-  }, [search, hasInitialLoad, originalData]);
+    const fetchPaginated = async () => {
+      try {
+        const countRes = await api.get(`/tag/${encodeURIComponent(categoryName)}/user/admin/websites/count/search=${encodeURIComponent(search || '')}`);
+        setTotalItems(Number(countRes.data.result || 0));
+        const offset = currentPage - 1;
+        const listRes = await api.get(`/tag/${encodeURIComponent(categoryName)}/user/admin/websites/all/${itemsPerPage}/${offset}/sort=/direction=/search=${encodeURIComponent(search || '')}`);
+        const rows = (listRes.data.result || []).map(w => ({
+          id: w.WebsiteId,
+          Name: w.Name,
+          StartingUrl: w.StartingUrl,
+          Pages: w.Pages + "(" + w.Evaluated_Pages + ")",
+          Creation_Date: moment(w.Creation_Date).format('DD/MM/YYYY'),
+          Declaration:
+            w.Declaration === null ? "Não avaliado" :
+            w.Declaration === 1 ? "Selo de Ouro" :
+            w.Declaration === 2 ? "Selo de Prata" :
+            w.Declaration === 3 ? "Selo de Bronze" :
+            "Declaração não conforme",
+          edit: "Editar",
+        }));
+        setData(rows);
+        setOriginalData(rows);
+      } catch (e) {}
+    };
+    fetchPaginated();
+  }, [categoryName, currentPage, itemsPerPage, search]);
+
+  const handlePageChange = (page) => setCurrentPage(page);
+  const handleItemsPerPageChange = (n) => { setItemsPerPage(n); setCurrentPage(1); };
 
   // -------- Actions expected by ContentListWebSites ----------
   const handleOpenReevaluateModal = () => {
@@ -552,7 +499,6 @@ const ViewCategoriesComponent = () => {
       <div>
         <h1>Dados Globais da Categoria</h1>
 
-
         <div className="mt-5">
           <ContentListWebSites
             title={`Lista de sítios web da categoria "${categoryName}"`}
@@ -567,7 +513,7 @@ const ViewCategoriesComponent = () => {
             onDeletePagesWebsites={handleDeletePagesWebsites}
             onReevaluateWebsites={handleOpenReevaluateModal}
             onCrawlWebsites={handleOpenCrawlingModal}
-            serverSidePagination={false}
+            setItemsPerPage={setItemsPerPage}
             navigate={navigate}
           />
         </div>
@@ -590,117 +536,100 @@ const ViewCategoriesComponent = () => {
 
         <div className="mt-5 bg-white">
           <h2 className="mb-4">Indicadores globais da Categoria</h2>
-          {isProcessingStats ? (
-            <p className="text-muted">A calcular indicadores...</p>
-          ) : (
-            <Indicators listItems={listItems}/>
-          )}
+          <Indicators listItems={listItems}/>
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Conformidade global da Categoria</h2>
-          {isProcessingStats ? (
-            <p className="text-muted">A calcular conformidade...</p>
-          ) : (
-            <Indicators listItems={listItemsGlobal}/>
-          )}
+          <Indicators listItems={listItemsGlobal}/>
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Distribuição das pontuações AccessMonitor no universo da Categoria</h2>
-          {isProcessingStats ? (
-            <p className="text-muted">A preparar distribuição...</p>
-          ) : (
-            <BarLineGraphTabs
-              columnsOptions={columnsOptionsBar}
-              barData={barDataDynamic}
-              barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
-              dataHeaders={dataHeadersBar}
-              dataList={dataListBar}
-              darkTheme={theme}
-            />
-          )}
+          <BarLineGraphTabs
+            columnsOptions={columnsOptionsBar}
+            barData={barDataDynamic}
+            barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
+            dataHeaders={dataHeadersBar}
+            dataList={dataListBar}
+            darkTheme={theme}
+          />
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Mancha Gráfica da Acessibilidade</h2>
-          {isProcessingStats ? (
-            <p className="text-muted">A preparar gráfico radar...</p>
-          ) : (
-            <RadarGraph websites={radarWebsites} labelDataSet="Pontuação por sítio Web" darkTheme={theme} showTabs={true} />
-          )}
+          <RadarGraph websites={radarWebsites} labelDataSet="Pontuação por sítio Web" darkTheme={theme} showTabs={true} />
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Distribuição detalhada das melhores práticas</h2>
-          {isProcessingStats ? (
-            <p className="text-muted">A calcular práticas...</p>
-          ) : (
-            <SortingTable
-              hasSort={false}
-              headers={detailsTableHeaders || []}
-              dataList={dataListDetails.filter(item => !item.occurrences.toString().includes("lang"))}
-              columnsOptions={columnsOptionsDetails || {}}
-              darkTheme={theme}
-              pagination={true}
-              links={false}
-              ariaLabels={ariaLabels || {}}
-              caption="Distribuição detalhada das melhores práticas"
-              setDataList={() => {}}
-              nextPage={() => {}}
-              itemsPaginationTexts={[]}
-              nItemsPerPageTexts={[
-                "Ver",           // see
-                "por página",    // per_page
-                "Selector de itens por página", // selectorAria
-                "Navegação do seletor de itens por página" // selectorNav
-              ]}
-              iconsAltTexts={[]}
-              paginationButtonsTexts={[
-                "Primeira página",
-                "Página anterior",
-                "Página seguinte",
-                "Última página"
-              ]}
-              project=""
-              paginationOptions={[50, 100, 200, 500]}
-              setCheckboxesSelected={() => {}}
-            />
-          )}
+          <SortingTable
+            hasSort={false}
+            headers={detailsTableHeaders || []}
+            dataList={dataListDetails.filter(item => !item.occurrences.toString().includes("lang"))}
+            columnsOptions={columnsOptionsDetails || {}}
+            darkTheme={theme}
+            pagination={true}
+            links={false}
+            ariaLabels={ariaLabels || {}}
+            caption="Distribuição detalhada das melhores práticas"
+            setDataList={() => {}}
+            nextPage={() => {}}
+            itemsPaginationTexts={[]}
+            nItemsPerPageTexts={[
+              "Ver",           // see
+              "por página",    // per_page
+              "Selector de itens por página", // selectorAria
+              "Navegação do seletor de itens por página" // selectorNav
+            ]}
+            iconsAltTexts={[]}
+            paginationButtonsTexts={[
+              "Primeira página",
+              "Página anterior",
+              "Página seguinte",
+              "Última página"
+            ]}
+            project=""
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+            paginationOptions={[
+                50,
+                60,
+                70,
+                80,
+                90,
+                100,            
+     
+            ]}
+            setCheckboxesSelected={() => {}}
+          />
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Distribuição detalhada das piores práticas</h2>
-          {isProcessingStats ? (
-            <p className="text-muted">A calcular más práticas...</p>
-          ) : (
-            <SortingTable
-              hasSort={false}
-              headers={detailsTableHeaders || []}
-              dataList={dataListDetailsBad.filter(item => !item.occurrences.toString().includes("lang"))}
-              columnsOptions={columnsOptionsDetails || {}}
-              darkTheme={theme}
-              pagination={false}
-              links={false}
-              ariaLabels={ariaLabels || {}}
-              caption="Distribuição detalhada das piores práticas"
-              setDataList={() => {}}
-              nextPage={() => {}}
-              itemsPaginationTexts={[]}
-              nItemsPerPageTexts={[]}
-              iconsAltTexts={[]}
-              paginationButtonsTexts={[]}
-              project=""
-              setCheckboxesSelected={() => {}}
-            />
-          )}
+          <SortingTable
+            hasSort={false}
+            headers={detailsTableHeaders || []}
+            dataList={dataListDetailsBad.filter(item => !item.occurrences.toString().includes("lang"))}
+            columnsOptions={columnsOptionsDetails || {}}
+            darkTheme={theme}
+            pagination={false}
+            links={false}
+            ariaLabels={ariaLabels || {}}
+            caption="Distribuição detalhada das piores práticas"
+            setDataList={() => {}}
+            nextPage={() => {}}
+            itemsPaginationTexts={[]}
+            nItemsPerPageTexts={[]}
+            iconsAltTexts={[]}
+            paginationButtonsTexts={[]}
+            project=""
+            setCheckboxesSelected={() => {}}
+          />
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Práticas por Critério de Sucesso WCAG 2.1</h2>
-          {isProcessingStats ? (
-            <p className="text-muted">A processar critérios de sucesso...</p>
-          ) : (
           <div>
             <h3 style={{ fontWeight: 700, marginTop: 32 }}>Boas práticas</h3>
             {Object.keys(successCriteriaSuccess).length > 0 ? (
@@ -750,7 +679,6 @@ const ViewCategoriesComponent = () => {
               </div>
             )}
           </div>
-          )}
         </div>
       </div>
 

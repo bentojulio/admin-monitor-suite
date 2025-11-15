@@ -24,7 +24,6 @@ export const directoriesHeaders = [
       nRow: 2,
       name: i18n.t("WEBSITES_PAGE.LIST.table.url_label"),
       property: "StartingUrl",
-      justifyCenter: false,
     },
     {
       type: "SortingText",
@@ -39,8 +38,9 @@ export const directoriesHeaders = [
       name: i18n.t("WEBSITES_PAGE.LIST.table.creation_label"),
       property: "Creation_Date",
       justifyCenter: true,
-    }
-    ,    {
+    },
+    // { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.stamp_label'), property: "Declaration" },
+    {
       type: "SortingText",
       nRow: 2,
       name: i18n.t("WEBSITES_PAGE.LIST.table.edit_label"),
@@ -63,7 +63,6 @@ export const columnsOptions = (navigate) => ({
     type: "Link",
     center: false,
     bold: false,
-    isCheckboxLabel: true,
     decimalPlace: false,
     href: (row) => {
       return `${apiUrl}dashboard/websites/view/${row.id}/${row.Name}`;
@@ -82,6 +81,12 @@ export const columnsOptions = (navigate) => ({
     bold: false,
     decimalPlace: false,
   }, // alinhado ao centro
+  Declaration: {
+    type: "Text",
+    center: false,
+    bold: false,
+    decimalPlace: false,
+  },
   edit: {
     type: "Button",
     text: i18n.t("WEBSITES_PAGE.LIST.table.edit_label"),
@@ -96,15 +101,17 @@ export const columnsOptions = (navigate) => ({
   },
 });
 
+// ícones possíveis (não usados diretamente aqui, mas podem ser úteis no futuro)
 export const nameOfIcons = [
   "Selo Bronze",
   "Selo Prata",
   "Selo Ouro",
   "Declaração não conforme",
   "Declaração parcialmente conforme",
-  "Declaração plenamente conforme"
-]
+  "Declaração plenamente conforme",
+];
 
+// textos de paginação
 export const paginationButtonsTexts = [
   i18n.t("FIRST_PAGE_LABEL"),
   i18n.t("PREVIOUS_PAGE_LABEL"),
@@ -119,6 +126,7 @@ export const itemsPaginationText = [
   i18n.t("RANGE_PAGE_LABEL_2"),
 ];
 
+// dados da tabela (apenas uma linha como exemplo)
 export const dataRows = [
   {
     id: 1,
@@ -131,6 +139,7 @@ export const dataRows = [
   },
 ];
 
+// opções adicionais se aplicável
 export const options = [
   {
     id: "1",
@@ -140,15 +149,15 @@ export const options = [
       <div>
         Check if the alternative text equivalent found in the images provides
         equal information or function as the one performed by the image on the
-        page. H37: Using alt attributes on img elements This WCAG 2.1
-        technique is related to: Success criteria 1.1.1 (Level A) Notions
-        about the SC 1.1.1
+        page. H37: Using alt attributes on img elements This WCAG 2.1 technique
+        is related to: Success criteria 1.1.1 (Level A) Notions about the SC
+        1.1.1
       </div>
     ),
     lvl: "AA",
     iconName: "AMA-Middle-Line",
     ele: "test",
-    tdClassName: "warning-cell"
+    tdClassName: "warning-cell",
   },
 ];
 export const optionsHorizontalBar = {

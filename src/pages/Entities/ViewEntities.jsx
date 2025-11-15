@@ -27,7 +27,6 @@ import { downloadCSV, getSimplifiedPracticesData } from "../../utils/utils.js";
 import tests from "../../utils/tests.js";
 import CrawlingModal from "../../components/CrawlingModal";
 import { Modal } from "../../components/Modal";
-import { setRootNavigationContext } from "../../utils/navigation";
 
 const ViewEntitiesComponent = () => {
   const location = useLocation();
@@ -56,27 +55,18 @@ const ViewEntitiesComponent = () => {
   const [showCrawlingModal, setShowCrawlingModal] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [search, setSearch] = useState("");
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(50);
   const [originalData, setOriginalData] = useState([]); 
   const [dataForCSV, setDataForCSV] = useState([]);
   const [counter, setCounter] = useState(0);
-  const [isLoadingWebsites, setIsLoadingWebsites] = useState(true);
-  const [isProcessingStats, setIsProcessingStats] = useState(true);
-  const [websitesError, setWebsitesError] = useState(null);
-  const [hasInitialLoad, setHasInitialLoad] = useState(false);
   useEffect(() => {
     setBreadcrumbs([
-      { children: <Link to="/dashboard/home">Início</Link> },
+      { children: <Link to="/dashboard/global">Global</Link> },
       { children: <Link to="/dashboard/entities">Entidades</Link> },
       { title: entityName }
     ]);
-    
-    // Set root context when viewing an entity
-    if (entityName) {
-      setRootNavigationContext({
-        type: 'entity',
-        data: { entityName }
-      });
-    }
   }, [entityName]);
 
   useEffect(() => {
@@ -89,43 +79,13 @@ const ViewEntitiesComponent = () => {
   }, [location.pathname]);
 
   useEffect(() => {
-    let isCancelled = false;
-
     const fetchData = async () => {
-      try {
-        // Reset flags for new entity
-        setHasInitialLoad(false);
-        
-        // Phase 1: Load websites quickly
-        setIsLoadingWebsites(true);
-        setWebsitesError(null);
-        const response = await api.get(`/entity/websites/${entityName}`);
-        const websites = response.data.result || [];
 
-        if (isCancelled) return;
+      const response = await api.get(`/entity/websites/${entityName}`);
+      const responsePages = await api.get(`/entity/websites/pages/${entityName}`);
 
-        const websitesRows = websites.map(item => ({
-          id: item.WebsiteId,
-          Name: item.Name,
-          StartingUrl: item.StartingUrl,
-          Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
-          Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
-          Declaration: item.Declaration === null ? "Não avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaração não conforme",
-          edit: "Editar",
-        }));
-
-        setData(websitesRows);
-        setOriginalData(websitesRows);
-        setDataForCSV(websites.map(item => ({WebsiteId: item.WebsiteId, Name: item.Name})));
-        setIsLoadingWebsites(false);
-        setHasInitialLoad(true); // Mark initial load complete
-
-        // Phase 2: Load pages and compute metrics
-        setIsProcessingStats(true);
-        const responsePages = await api.get(`/entity/websites/pages/${entityName}`);
-        const pages = responsePages.data.result || [];
-
-        if (isCancelled) return;
+      const pages = responsePages.data.result || [];
+      const websites = response.data.result || [];
       const simplifiedPracticesData = getSimplifiedPracticesData(pages)
       setDataListDetails(simplifiedPracticesData.success.map(item => ({
         practice: t(`ELEMS.${item.practice}`),
@@ -325,23 +285,28 @@ const ViewEntitiesComponent = () => {
           ]
         },
       ]);
-      // Don't overwrite table data - already set in Phase 1
-      setIsProcessingStats(false);
-      } catch (error) {
-        console.error("Error loading entity data:", error);
-        setWebsitesError('Erro ao carregar dados da entidade');
-        setIsLoadingWebsites(false);
-        setIsProcessingStats(false);
-        setHasInitialLoad(true); // Mark as complete even on error
-      }
+      setData(websites.map(item => ({
+        id: item.WebsiteId,
+        Name: item.Name,
+        StartingUrl: item.StartingUrl,
+        Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
+        Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
+        Declaration: item.Declaration === null ? "Não avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaração não conforme",
+        edit: "Editar",
+      })));
+      setOriginalData(websites.map(item => ({
+        id: item.WebsiteId,
+        Name: item.Name,
+        StartingUrl: item.StartingUrl,
+        Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
+        Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
+        Declaration: item.Declaration === null ? "Não avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaração não conforme",
+        edit: "Editar",
+      })));
+      setDataForCSV(websites.map(item => ({WebsiteId: item.WebsiteId, Name: item.Name})));
     };
-    
     fetchData();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [entityName, t]);
+  }, [entityName]);
   const fetchDataWebsite = async () => {
     const response = await api.get(`/directory/${directoryName}/websites`);
     const websites = response.data.result || [];
@@ -355,6 +320,19 @@ const ViewEntitiesComponent = () => {
       edit: "Editar",
     })));
   }
+  useEffect(() => {
+    if (search.length < 2) {
+      setData(originalData);
+      return;
+    }
+    const foundResults = data.filter(item => {
+      return Object.values(item).some(value =>
+        typeof value === 'string' && value.toLowerCase().includes(search.toLowerCase())
+      );
+    });
+
+    setData(foundResults)
+  }, [search, data]);
   const handleCrawlingWebsites = async ({ maxDepth, maxPages, waitJS, selectedItems }) => {
     if (selectedItems.length === 0) {
       setFeedbackMessage("Por favor, selecione pelo menos um sítio web para fazer crawling.");
@@ -405,6 +383,7 @@ const ViewEntitiesComponent = () => {
         setCheckboxesSelected([]);
         setData(originalData.filter(item => !websiteIds.includes(item.id)));
         setOriginalData(originalData.filter(item => !websiteIds.includes(item.id)));
+        setTotalItems(originalData.length);
       }
     } catch (error) {
       setFeedbackMessage("Erro ao eliminar sítios web. Tente novamente.");
@@ -412,23 +391,40 @@ const ViewEntitiesComponent = () => {
     setShowFeedbackModal(true);
   };
 
-  // Client-side search filtering for entity websites
+  // -------- Server-side pagination & search for websites list ----------
   useEffect(() => {
-    // Only run after initial load is complete
-    if (!hasInitialLoad) return;
-    
-    if (search.trim() === '') {
-      // No search, show all websites
-      setData(originalData);
-    } else {
-      // Filter websites by search term (client-side)
-      const filtered = originalData.filter(item => 
-        item.Name?.toLowerCase().includes(search.toLowerCase()) ||
-        item.StartingUrl?.toLowerCase().includes(search.toLowerCase())
-      );
-      setData(filtered);
-    }
-  }, [search, hasInitialLoad, originalData]);
+    const fetchPaginated = async () => {
+      try {
+   
+
+        // page data
+        const offset = currentPage - 1;
+        const listRes = await api.get(`/${encodeURIComponent(entityName)}/user/admin/websites/all/${itemsPerPage}/${offset}/sort=/direction=/search=${encodeURIComponent(search || '')}`);
+        const rows = (listRes.data.result || []).map(item => ({
+          id: item.WebsiteId,
+          Name: item.Name,
+          StartingUrl: item.StartingUrl,
+          Pages: `${item.Pages}(${item.Evaluated_Pages})`,
+          Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
+          Declaration:
+            item.Declaration === null ? "Não avaliado" :
+            item.Declaration === 1 ? "Selo de Ouro" :
+            item.Declaration === 2 ? "Selo de Prata" :
+            item.Declaration === 3 ? "Selo de Bronze" :
+            "Declaração não conforme",
+          edit: "Editar",
+        }));
+        setData(rows);
+        setOriginalData(rows);
+      } catch (e) {
+        // ignore if endpoint not available
+      }
+    };
+    fetchPaginated();
+  }, [entityName, currentPage, itemsPerPage, search]);
+
+  const handlePageChange = (page) => setCurrentPage(page);
+  const handleItemsPerPageChange = (n) => { setItemsPerPage(n); setCurrentPage(1); };
 
   // Handle delete pages
   const handleDeletePagesWebsites = async () => {
@@ -496,8 +492,6 @@ const ViewEntitiesComponent = () => {
     <div>
       <Breadcrumb data={breadcrumbs || []} />
       <h1>{t('ENTITIES_PAGE.LIST.title', { entityName })}</h1>
-
-
       <ContentListWebSites
         title={t('WEBSITES_PAGE.LIST.subtitle_list', { entityName })}
         checkboxesSelected={checkboxesSelected}
@@ -509,7 +503,8 @@ const ViewEntitiesComponent = () => {
         onDeletePagesWebsites={handleDeletePagesWebsites}
         onReevaluateWebsites={handleReevaluateWebsites}
         onCrawlWebsites={handleOpenCrawlingModal}
-        serverSidePagination={false}
+        setItemsPerPage={setItemsPerPage}
+        
       />
       <div className="bg-white mt-5">
         <div>
@@ -528,100 +523,73 @@ const ViewEntitiesComponent = () => {
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">{t('ENTITIES_PAGE.LIST.global_indicators')}</h2>
-        {isProcessingStats ? (
-          <p className="text-muted">A calcular indicadores...</p>
-        ) : (
-          <Indicators listItems={listItems} />
-        )}
+        <Indicators listItems={listItems} />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Conformidade global da Entidade</h2>
-        {isProcessingStats ? (
-          <p className="text-muted">A calcular conformidade...</p>
-        ) : (
-          <Indicators listItems={listItemsGlobal} />
-        )}
+        <Indicators listItems={listItemsGlobal} />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição das pontuações AccessMonitor no universo da Entidade</h2>
-        {isProcessingStats ? (
-          <p className="text-muted">A preparar distribuição...</p>
-        ) : (
-          <BarLineGraphTabs
-            columnsOptions={columnsOptionsBar}
-            barData={barDataDynamic}
-            barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
-            dataHeaders={dataHeadersBar}
-            dataList={dataListBar}
-            darkTheme={theme}
-          />
-        )}
+        <BarLineGraphTabs
+          columnsOptions={columnsOptionsBar}
+          barData={barDataDynamic}
+          barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
+          dataHeaders={dataHeadersBar}
+          dataList={dataListBar}
+          darkTheme={theme}
+        />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Mancha Gráfica da Acessibilidade</h2>
-        {isProcessingStats ? (
-          <p className="text-muted">A preparar gráfico radar...</p>
-        ) : (
-          <RadarGraph darkTheme={theme} labelDataSet="Pontuação por sítio Web" websites={radarWebsites} showTabs={true} />
-        )}
+        <RadarGraph darkTheme={theme} labelDataSet="Pontuação por sítio Web" websites={radarWebsites} showTabs={true} />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição detalhada das melhores práticas</h2>
-        {isProcessingStats ? (
-          <p className="text-muted">A calcular práticas...</p>
-        ) : (
-          <SortingTable
-            hasSort={false}
-            headers={detailsTableHeaders || []}
-            dataList={dataListDetails || []}
-            columnsOptions={columnsOptionsDetails || {}}
-            darkTheme={theme}
-            pagination={false}
-            ariaLabels={ariaLabels || {}}
-            links={false}
-            caption="Distribuição detalhada das melhores práticas"
-            setDataList={() => { }}
-            nextPage={() => { }}
-            itemsPaginationTexts={[]}
-            nItemsPerPageTexts={[]}
-            iconsAltTexts={[]}
-            paginationButtonsTexts={[]}
-            project=""
-            setCheckboxesSelected={() => { }}
-          />
-        )}
+        <SortingTable
+          hasSort={false}
+          headers={detailsTableHeaders || []}
+          dataList={dataListDetails || []}
+          columnsOptions={columnsOptionsDetails || {}}
+          darkTheme={theme}
+          pagination={false}
+          ariaLabels={ariaLabels || {}}
+          links={false}
+          caption="Distribuição detalhada das melhores práticas"
+          setDataList={() => { }}
+          nextPage={() => { }}
+          itemsPaginationTexts={[]}
+          nItemsPerPageTexts={[]}
+          iconsAltTexts={[]}
+          paginationButtonsTexts={[]}
+          project=""
+          setCheckboxesSelected={() => { }}
+        />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição detalhada das piores práticas</h2>
-        {isProcessingStats ? (
-          <p className="text-muted">A calcular más práticas...</p>
-        ) : (
-          <SortingTable
-            hasSort={false}
-            headers={detailsTableHeaders || []}
-            dataList={dataListDetailsBad || []}
-            columnsOptions={columnsOptionsDetails || {}}
-            darkTheme={theme}
-            pagination={false}
-            links={false}
-            ariaLabels={ariaLabels || {}}
-            caption="Distribuição detalhada das piores práticas"
-            setDataList={() => { }}
-            nextPage={() => { }}
-            itemsPaginationTexts={[]}
-            nItemsPerPageTexts={[]}
-            iconsAltTexts={[]}
-            paginationButtonsTexts={[]}
-            project=""
-            setCheckboxesSelected={() => { }}
-          />
-        )}
+        <SortingTable
+          hasSort={false}
+          headers={detailsTableHeaders || []}
+          dataList={dataListDetailsBad || []}
+          columnsOptions={columnsOptionsDetails || {}}
+          darkTheme={theme}
+          pagination={false}
+          links={false}
+          ariaLabels={ariaLabels || {}}
+          caption="Distribuição detalhada das piores práticas"
+          setDataList={() => { }}
+          nextPage={() => { }}
+          itemsPaginationTexts={[]}
+          nItemsPerPageTexts={[]}
+          iconsAltTexts={[]}
+          paginationButtonsTexts={[]}
+          project=""
+          setCheckboxesSelected={() => { }}
+        />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Práticas por Critério de Sucesso WCAG 2.1</h2>
-        {isProcessingStats ? (
-          <p className="text-muted">A processar critérios de sucesso...</p>
-        ) : (
         <div>
           <h3 style={{ fontWeight: 700, marginTop: 32 }}>Boas práticas</h3>
           {Object.keys(successCriteriaSuccess).length > 0 ? (
@@ -671,7 +639,6 @@ const ViewEntitiesComponent = () => {
             </div>
           )}
         </div>
-        )}
       </div>
       <Modal
         isOpen={showModal}
