@@ -1,0 +1,40 @@
+.main-content-home{
+    display: flex;
+    flex-direction: column;
+
+}
+.cards-dashboard{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 30px;
+   
+    background: white;
+}
+
+.cards-sync {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  
+    background-color: white;
+}
+
+.cards-sync button{
+    width: 300px;
+}
+h2 {
+    font-size: 1.8rem !important;
+    font-weight: bold;
+}
+.logo {
+    width: 320px;
+    height: auto;
+    padding:10px;
+}
+
+.dark-theme .cards-sync {
+    background-color: var(--ama-color-background-dark-darker);
+}

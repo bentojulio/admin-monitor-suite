@@ -1,49 +1,27 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Logs
 
-# compiled output
-/dist
-/dist-server
-/tmp
-/out-tsc
-
-# dependencies
-/node_modules
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 package-lock.json
+.env
+node_modules
+dist
+dist-ssr
+*.local
 
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-CLAUDE.md
-.claude/*
-
-# IDE - VSCode
+# Editor directories and files
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
 !.vscode/extensions.json
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-
-# e2e
-/e2e/*.js
-/e2e/*.map
-
-# System Files
+.idea
 .DS_Store
-Thumbs.db
-
-admin.js
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env.preprod
+.env.production

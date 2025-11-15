@@ -1,0 +1,21 @@
+{
+    "success": 1,
+    "message": "NO_ERROR",
+    "errors": null,
+    "result": [
+        {
+            "TagId": 1,
+            "UserId": null,
+            "Name": "25 +procurados AP ",
+            "Creation_Date": "2020-11-24T18:10:05.000Z",
+            "Websites": "31"
+        },
+        {
+            "TagId": 73,
+            "UserId": null,
+            "Name": "Nova categoria",
+            "Creation_Date": "2025-07-21T08:32:04.000Z",
+            "Websites": "1"
+        }
+    ]
+}

@@ -1,31 +1,116 @@
-# AmAdmin
+## AMS (React)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+Aplicação web em React para gestão e visualização de métricas de acessibilidade, páginas, entidades e diretórios. Utiliza Vite, React Router, i18n (Português/English), Chart.js, Axios e o AMA Design System.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Requisitos
 
-## Code scaffolding
+- Node.js 18+ (recomendado LTS)
+- npm 9+ (ou pnpm/yarn, se preferir)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Tecnologias principais
 
-## Build
+- React 18 com Vite
+- React Router 7
+- i18next e detetor de língua do browser
+- Chart.js e react-chartjs-2
+- Axios
+- Moment.js (com salvaguarda global para datas inválidas)
+- AMA Design System
 
-1 - Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod --build-optimizer` flag for a production build.
+---
 
-2 - Go to `dist/index.html` and change the `href` attribute from the `<base>` tag, to the relative path used by the application. 
+### Começar
 
-3 - Deploy the application (files inside the `dist/` directory), to the server.
+1. Instalar dependências:
+   ```bash
+   npm install
+   ```
+2. Ambiente de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+   Abra o endereço mostrado no terminal (por defeito `http://localhost:5173`).
 
-## Running unit tests
+### Scripts
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- `npm run dev` — inicia servidor de desenvolvimento (Vite)
+- `npm run build` — gera build de produção
+- `npm run build:preprod` — gera build de pré-produção
+- `npm run preview` — serve a build gerada para validação
+- `npm run lint` — executa ESLint
 
-## Running end-to-end tests
+### Configuração
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+- API e Autenticação: ver `src/config/api.js`.
+  - A base da API é lida de `localStorage.getItem('@AMS:apiUrl') + '/api'`.
+  - Tokens são geridos em `localStorage` (`@AMS:token`, `@AMS:user`).
+  - Em respostas 401/403, a app limpa sessão e redireciona para `/ams/login`.
+- i18n e locale de datas: ver `src/i18n/index.jsx`.
+  - O idioma é detetado automaticamente (fallback para `en`).
+  - O Moment acompanha o idioma do i18n.
+  - Datas inválidas em `moment().format()` devolvem string vazia por salvaguarda global.
 
-## Further help
+### Estrutura (resumo)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- `src/pages` — páginas (Home, Login, Users, Websites, Pages, Entities, Directories, etc.)
+- `src/components` — componentes reutilizáveis (gráficos, cartões, modais, etc.)
+- `src/config` — configuração (API, dados mock)
+- `src/context` — contextos (Autenticação, Tema)
+- `src/utils` — utilitários, conversões, CSV, etc.
+- `src/i18n` — internacionalização e configuração do Moment
+
+### Ambientes (.env)
+
+O projeto utiliza diferentes ficheiros .env para definir as variáveis de ambiente de acordo com o modo em execução.
+Estas variáveis controlam o caminho base da aplicação, o subpath e a API utilizada.
+
+Ambiente Ficheiro usado Comando Exemplo de API URL
+Desenvolvimento .env.development npm run dev http://localhost:5173/ams
+Pré-produção .env.preprod npm run build:preprod http://<IP_DO_SERVIDOR>/ams
+Produção .env.production npm run build http://<IP_DO_SERVIDOR>/ams
+
+### Exemplo de ficheiros .env
+
+.env.development
+
+VITE_ROUTE_URL="/"
+VITE_ROUTE_URL_ABB="ams"
+VITE_API_URL=http://localhost:5173/ams
+
+### Build e Deploy
+
+1. Build de produção:
+   ```bash
+   npm run build
+   ```
+2. Pré-visualizar:
+   ```bash
+   npm run preview
+   ```
+3. Caminho base: o `package.json` define `"homepage": "ams"`.
+   - Se servir em subpath (ex.: `https://dominio/ams/`), mantenha-o.
+   - Se servir na raiz, poderá ajustar a configuração conforme necessário.
+
+### Boas práticas / Qualidade
+
+- Execute `npm run lint` e resolva avisos/erros antes de abrir PRs.
+- Prefira componentes claros e funções com nomes descritivos.
+- Centralize lógicas comuns em `src/utils`.
+
+### Problemas comuns
+
+- Datas a mostrar "Invalid date": mitigado globalmente em `src/i18n/index.jsx` — quando a data for inválida, é exibida string vazia.
+- Sem dados a carregar: confirme a chave `@AMS:apiUrl` no `localStorage` e a disponibilidade da API.
+- Sessão expirada: o app redireciona para login ao receber 401/403.
+
+### Contribuição
+
+1. Crie uma branch a partir de `main`.
+2. Faça commits pequenos e claros.
+3. Abra um Pull Request descrevendo o objetivo e o impacto.
+
+### Licença
+
+Especifique aqui a licença do projeto (se aplicável).
