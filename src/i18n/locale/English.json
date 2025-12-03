@@ -18,6 +18,7 @@
     "skip_link_text":"Skip to the main content",
     "skip_link_label":"Skip to the main content",
     "alt":"AMS",
+    "logo_alt": "AMS - Admin Monitor Suite, Administration Console",
     "messages": {
       "password_match": "Wrong username or password",
       "no_user": "Wrong username or password",

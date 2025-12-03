@@ -18,6 +18,7 @@
     "skip_link_label": "Saltar para o conteúdo principal",
     "skip_link_text": "Saltar para o conteúdo principal",
     "alt":"AMS",
+    "logo_alt": "AMS - Admin Monitor Suite, Consola de Administração",
     "messages": {
       "password_match": "Utilizador ou palavra-chave incorretos",
       "no_user": "Utilizador ou palavra-chave incorretos",
