@@ -123,6 +123,7 @@ export default function CrawlerList() {
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
+          checkedItems={checkboxesSelected}
         />
       </div>
 

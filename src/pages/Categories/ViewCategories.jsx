@@ -38,9 +38,6 @@ const ViewCategoriesComponent = () => {
   const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
   const [search, setSearch] = useState("");
-  const [totalItems, setTotalItems] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(50);
 
   // Charts & indicators
   const [radarWebsites, setRadarWebsites] = useState([]);
@@ -392,40 +389,23 @@ const ViewCategoriesComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName]);
 
-  // -------- Server-side pagination & search ----------
+  // Client-side search filtering for category websites
   useEffect(() => {
     // Only run after initial load is complete
     if (!hasInitialLoad) return;
     
-    const fetchPaginated = async () => {
-      try {
-        const countRes = await api.get(`/tag/${encodeURIComponent(categoryName)}/user/admin/websites/count/search=${encodeURIComponent(search || '')}`);
-        setTotalItems(Number(countRes.data.result || 0));
-        const offset = currentPage - 1;
-        const listRes = await api.get(`/tag/${encodeURIComponent(categoryName)}/user/admin/websites/all/${itemsPerPage}/${offset}/sort=/direction=/search=${encodeURIComponent(search || '')}`);
-        const rows = (listRes.data.result || []).map(w => ({
-          id: w.WebsiteId,
-          Name: w.Name,
-          StartingUrl: w.StartingUrl,
-          Pages: w.Pages + "(" + w.Evaluated_Pages + ")",
-          Creation_Date: moment(w.Creation_Date).format('DD/MM/YYYY'),
-          Declaration:
-            w.Declaration === null ? "Não avaliado" :
-            w.Declaration === 1 ? "Selo de Ouro" :
-            w.Declaration === 2 ? "Selo de Prata" :
-            w.Declaration === 3 ? "Selo de Bronze" :
-            "Declaração não conforme",
-          edit: "Editar",
-        }));
-        setData(rows);
-        setOriginalData(rows);
-      } catch (e) {}
-    };
-    fetchPaginated();
-  }, [categoryName, currentPage, itemsPerPage, search]);
-
-  const handlePageChange = (page) => setCurrentPage(page);
-  const handleItemsPerPageChange = (n) => { setItemsPerPage(n); setCurrentPage(1); };
+    if (search.trim() === '') {
+      // No search, show all websites
+      setData(originalData);
+    } else {
+      // Filter websites by search term (client-side)
+      const filtered = originalData.filter(item => 
+        item.Name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.StartingUrl?.toLowerCase().includes(search.toLowerCase())
+      );
+      setData(filtered);
+    }
+  }, [search, hasInitialLoad, originalData]);
 
   // -------- Actions expected by ContentListWebSites ----------
   const handleOpenReevaluateModal = () => {
@@ -587,7 +567,7 @@ const ViewCategoriesComponent = () => {
             onDeletePagesWebsites={handleDeletePagesWebsites}
             onReevaluateWebsites={handleOpenReevaluateModal}
             onCrawlWebsites={handleOpenCrawlingModal}
-            setItemsPerPage={setItemsPerPage}
+            serverSidePagination={false}
             navigate={navigate}
           />
         </div>
@@ -683,17 +663,7 @@ const ViewCategoriesComponent = () => {
                 "Última página"
               ]}
               project=""
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              paginationOptions={[
-                  50,
-                  60,
-                  70,
-                  80,
-                  90,
-                  100,            
-       
-              ]}
+              paginationOptions={[50, 100, 200, 500]}
               setCheckboxesSelected={() => {}}
             />
           )}

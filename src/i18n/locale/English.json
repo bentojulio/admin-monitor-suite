@@ -447,6 +447,7 @@
         "elements_label": "Nº of elements",
         "a_label": "Nº errors A",
         "aa_label": "Nº errors AA",
+        "import": "Import",
         "aaa_label": "Nº errors AAA",
         "observatory_label": "Observatory"
       }

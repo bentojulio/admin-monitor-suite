@@ -60,6 +60,7 @@ export default function LogsList() {
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
+          checkedItems={checkboxesSelected}
         />
 
 
@@ -90,6 +91,7 @@ export default function LogsList() {
           paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
+          checkedItems={checkboxesSelected}
         />
       </div>
     </div>

@@ -21,7 +21,7 @@ export const directoriesHeaders = [
 
 export const columnsOptions = {
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
-  Uri: { type: "Link", center: true, bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/pages/view/" + encodeURIComponent(row.Uri) },
+  Uri: { type: "Link", center: true, isCheckboxLabel: true, bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/pages/view/" + encodeURIComponent(row.Uri) },
   Score: { type: "Text", center: true, bold: false, decimalPlace: true },
   Evaluation_Date: {
     type: "Text",
@@ -166,7 +166,7 @@ export const directoriesHeadersPage = [
 
 export const columnsOptionsPage = (navigate, url)=>({
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false }, // Checkbox
-  date_avaliation: { type: "Text", center: false, bold: false, decimalPlace: false },
+  date_avaliation: { type: "Text", center: false, bold: false, decimalPlace: false, isCheckboxLabel: true },
   score: { type: "Text", center: false, bold: false, decimalPlace: false },
   elementsNumber: { type: "Text", center: false, bold: false, decimalPlace: false },
   A: { type: "Text", center: false, bold: false, decimalPlace: false },

@@ -56,9 +56,6 @@ const ViewEntitiesComponent = () => {
   const [showCrawlingModal, setShowCrawlingModal] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [search, setSearch] = useState("");
-  const [totalItems, setTotalItems] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(50);
   const [originalData, setOriginalData] = useState([]); 
   const [dataForCSV, setDataForCSV] = useState([]);
   const [counter, setCounter] = useState(0);
@@ -358,19 +355,6 @@ const ViewEntitiesComponent = () => {
       edit: "Editar",
     })));
   }
-  useEffect(() => {
-    if (search.length < 2) {
-      setData(originalData);
-      return;
-    }
-    const foundResults = data.filter(item => {
-      return Object.values(item).some(value =>
-        typeof value === 'string' && value.toLowerCase().includes(search.toLowerCase())
-      );
-    });
-
-    setData(foundResults)
-  }, [search, data]);
   const handleCrawlingWebsites = async ({ maxDepth, maxPages, waitJS, selectedItems }) => {
     if (selectedItems.length === 0) {
       setFeedbackMessage("Por favor, selecione pelo menos um sítio web para fazer crawling.");
@@ -421,7 +405,6 @@ const ViewEntitiesComponent = () => {
         setCheckboxesSelected([]);
         setData(originalData.filter(item => !websiteIds.includes(item.id)));
         setOriginalData(originalData.filter(item => !websiteIds.includes(item.id)));
-        setTotalItems(originalData.length);
       }
     } catch (error) {
       setFeedbackMessage("Erro ao eliminar sítios web. Tente novamente.");
@@ -429,43 +412,23 @@ const ViewEntitiesComponent = () => {
     setShowFeedbackModal(true);
   };
 
-  // -------- Server-side pagination & search for websites list ----------
+  // Client-side search filtering for entity websites
   useEffect(() => {
     // Only run after initial load is complete
     if (!hasInitialLoad) return;
     
-    const fetchPaginated = async () => {
-      try {
-   
-
-        // page data
-        const offset = currentPage - 1;
-        const listRes = await api.get(`/${encodeURIComponent(entityName)}/user/admin/websites/all/${itemsPerPage}/${offset}/sort=/direction=/search=${encodeURIComponent(search || '')}`);
-        const rows = (listRes.data.result || []).map(item => ({
-          id: item.WebsiteId,
-          Name: item.Name,
-          StartingUrl: item.StartingUrl,
-          Pages: `${item.Pages}(${item.Evaluated_Pages})`,
-          Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
-          Declaration:
-            item.Declaration === null ? "Não avaliado" :
-            item.Declaration === 1 ? "Selo de Ouro" :
-            item.Declaration === 2 ? "Selo de Prata" :
-            item.Declaration === 3 ? "Selo de Bronze" :
-            "Declaração não conforme",
-          edit: "Editar",
-        }));
-        setData(rows);
-        setOriginalData(rows);
-      } catch (e) {
-        // ignore if endpoint not available
-      }
-    };
-    fetchPaginated();
-  }, [entityName, currentPage, itemsPerPage, search]);
-
-  const handlePageChange = (page) => setCurrentPage(page);
-  const handleItemsPerPageChange = (n) => { setItemsPerPage(n); setCurrentPage(1); };
+    if (search.trim() === '') {
+      // No search, show all websites
+      setData(originalData);
+    } else {
+      // Filter websites by search term (client-side)
+      const filtered = originalData.filter(item => 
+        item.Name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.StartingUrl?.toLowerCase().includes(search.toLowerCase())
+      );
+      setData(filtered);
+    }
+  }, [search, hasInitialLoad, originalData]);
 
   // Handle delete pages
   const handleDeletePagesWebsites = async () => {
@@ -546,8 +509,7 @@ const ViewEntitiesComponent = () => {
         onDeletePagesWebsites={handleDeletePagesWebsites}
         onReevaluateWebsites={handleReevaluateWebsites}
         onCrawlWebsites={handleOpenCrawlingModal}
-        setItemsPerPage={setItemsPerPage}
-        
+        serverSidePagination={false}
       />
       <div className="bg-white mt-5">
         <div>

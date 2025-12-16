@@ -14,7 +14,12 @@ export const categoriesHeaders = [
 
 export const columnsOptions = (navigate)=>({
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label: "Selecionar" },
-  Name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => {
+  Name: { type: "Link", 
+    center: false, 
+    bold: false, 
+    decimalPlace: false,
+    isCheckboxLabel: true,
+    href: (row) => {
     return `${apiUrl}dashboard/categories/view/${row.Name}`
   } },
   Websites: { type: "Text", center: false, bold: false, decimalPlace: false },
