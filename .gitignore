@@ -12,11 +12,16 @@ node_modules
 dist
 dist-ssr
 *.local
-
+*.test*
+*\test*
+*\tests*
+*\tests*
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
+*.bat
+*.zip
 .DS_Store
 *.suo
 *.ntvs*

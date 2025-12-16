@@ -67,7 +67,7 @@ const EvaluationWithErrors = () => {
     const response = await api.post("/page/reEvaluateMulti", {
       pages: pagesUrls,
     })
-    if (isRequestSuccessful(response)) {
+    if (response.status === 200 || response.status === 201) {
       setFeedbackMessage("As páginas que selecionou estão a ser reavaliadas pelo sistema. Pode fechar a janela e prosseguir o seu trabalho.!");
       await fetchData();
       setCheckboxesSelected([]);
@@ -85,7 +85,7 @@ const EvaluationWithErrors = () => {
     const response = await api.post("/page/evaluationList/error/delete", {
       pages: pagesIds,
     })
-    if (isRequestSuccessful(response)) {
+    if (response.status === 200 || response.status === 201) {
       setFeedbackMessage("Páginas removidas da lista com sucesso!");
       await fetchData();
       setCheckboxesSelected([]);
@@ -104,7 +104,7 @@ const EvaluationWithErrors = () => {
     const response = await api.post("/page/delete", {   
       pages: pagesIds,
     })
-    if (isRequestSuccessful(response)) {
+    if (response.status === 200 || response.status === 201) {
       setFeedbackMessage("Páginas apagadas com sucesso!");
       await fetchData();
       setCheckboxesSelected([]);
@@ -201,6 +201,7 @@ const EvaluationWithErrors = () => {
         project={""}
         checkboxesSelected={checkboxesSelected}
         setCheckboxesSelected={setCheckboxesSelected}
+        checkedItems={checkboxesSelected}
         rowKey="id"
         />  
       </div>

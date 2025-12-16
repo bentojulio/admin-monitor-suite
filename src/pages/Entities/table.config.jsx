@@ -42,7 +42,7 @@ export const directoriesHeaders = [
 
 export const columnsOptions = (navigate)=>({
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
-  Short_Name: { type: "Link", center: false, bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/entities/view/" + row.Long_Name },
+  Short_Name: { type: "Link", isCheckboxLabel: true, center: false, bold: false, decimalPlace: false, href: (row) => apiUrl + "dashboard/entities/view/" + row.Long_Name },
   Long_Name: { type: "Text", center: false, bold: false, decimalPlace: false },
   Creation_at: { type: "Text", center: true, bold: false, decimalPlace: false },
   Websites: {
