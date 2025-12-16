@@ -13,29 +13,31 @@ export const directoriesHeaders = [
 ];
 
 export const columnsOptions = (navigate)=>({
-  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, 
+   },
   Username: {
     type: "Link",
     center: true,
     bold: false,
     decimalPlace: false,
+    isCheckboxLabel: true,
     href: (row) => (row.Type === "MyMonitor" ? `.${import.meta.env.VITE_ROUTE_URL}users/websites/${row.Username}` : "#"),
     children: (row, value) => {
       const linkClass = "ama-typography-body bold";
       if (row.Type === "MyMonitor") {
         const href = `.${import.meta.env.VITE_ROUTE_URL}users/websites/${row.Username}`;
         return (
-          <a href={href} className={linkClass}>
+          <a href={href} className={linkClass} id={`link_${row.id}_Username`}>
             {value}
           </a>
         );
       }
       return (
-        <span className={linkClass}>
+        <label htmlFor={'checkbox_' + row.id} className={linkClass}>
           {value}
-        </span>
+        </label>
       );
-    },
+    }
   },
   Type: { type: "Text", center: false, bold: false, decimalPlace: false },
   Websites: {

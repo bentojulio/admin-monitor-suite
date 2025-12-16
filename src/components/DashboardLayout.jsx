@@ -99,7 +99,7 @@ const DashboardLayout = () => {
         } 
       });
     }
-    setActiveItem(found ? found : "");
+    setActiveItem(found ? found.id : "");
   }, [location.pathname]);
 
 

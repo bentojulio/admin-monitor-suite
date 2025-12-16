@@ -211,9 +211,6 @@ const ViewDirectoriesComponent = () => {
   const [data, setData] = useState(dataRowsWebSites || []);
   const [checkboxesSelected, setCheckboxesSelected] = useState([]);
   const [search, setSearch] = useState("");
-  const [totalItems, setTotalItems] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(50);
   // Memoize initial empty states
   const initialSuccessCriteria = useMemo(() => ({}), []);
 
@@ -376,35 +373,26 @@ const ViewDirectoriesComponent = () => {
 
   const [barDataDynamic, setBarDataDynamic] = useState(barData);
   const barOptionsCopy = JSON.parse(JSON.stringify(barOptions || {}));
-  // Server-side pagination & search for directory websites
+  // Client-side search filtering for directory websites
   useEffect(() => {
     // Only run after initial load is complete
     if (!hasInitialLoad) return;
     
-    const fetchPaginated = async () => {
-      try {
-        const countRes = await api.get(`/directory/${encodeURIComponent(directoryName)}/websites/count/search=${encodeURIComponent(search || '')}`);
-        setTotalItems(Number(countRes.data.result || 0));
-        const offset = currentPage - 1;
-        const listRes = await api.get(`/directory/${encodeURIComponent(directoryName)}/websites/all/${itemsPerPage}/${offset}/sort=/direction=/search=${encodeURIComponent(search || '')}`);
-        const rows = (listRes.data.result || []).map(item => ({
-          id: item.WebsiteId,
-          Name: item.Name,
-          StartingUrl: item.StartingUrl,
-          Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
-          Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
-          Declaration: item.Declaration === null ? "Nao avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaracao nao conforme",
-          edit: "Editar",
-        }));
-        setData(rows);
-        setOriginalData(rows);
-      } catch (e) {}
-    };
-    fetchPaginated();
-  }, [directoryName, currentPage, itemsPerPage, search]);
+    if (search.trim() === '') {
+      // No search, show all websites
+      setData(originalData);
+    } else {
+      // Filter websites by search term (client-side)
+      const filtered = originalData.filter(item => 
+        item.Name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.StartingUrl?.toLowerCase().includes(search.toLowerCase())
+      );
+      setData(filtered);
+    }
+  }, [search, hasInitialLoad, originalData]);
 
-  const handlePageChange = (page) => setCurrentPage(page);
-  const handleItemsPerPageChange = (n) => { setItemsPerPage(n); setCurrentPage(1); };
+  // No need for page change handlers in client-side pagination
+  // The SortingTable component handles pagination internally
 
   const handleCrawlingWebsites = async ({ maxDepth, maxPages, waitJS, selectedItems }) => {
     if (selectedItems.length === 0) {
@@ -553,6 +541,7 @@ const ViewDirectoriesComponent = () => {
         onDeletePagesWebsites={handleDeletePagesWebsites}
         onReevaluateWebsites={handleReevaluateWebsites}
         onCrawlWebsites={handleOpenCrawlingModal}
+        serverSidePagination={false}
       />
 
       <div className="bg-white mt-5">
