@@ -1,5 +1,24 @@
 import axios from 'axios';
 
+const normalizeBaseUrl = (url) => {
+  if (!url || typeof url !== 'string' || url === 'undefined') {
+    return '';
+  }
+  return url.replace(/\/+$/, '');
+};
+
+const resolveBaseUrl = () => {
+  if (typeof window === 'undefined') {
+    return '/api';
+  }
+
+  const storedUrl = localStorage.getItem('@AMS:apiUrl');
+  const fallbackUrl = import.meta?.env?.VITE_API_URL;
+  const base = normalizeBaseUrl(storedUrl || fallbackUrl);
+
+  return base ? `${base}/api` : '/api';
+};
+
 const api = axios.create({
   baseURL: localStorage.getItem("@AMS:apiUrl") + '/api',
  // baseURL: 'http://localhost:3000/',
@@ -20,6 +39,8 @@ export const createApiInstance = (token) => {
 
 api.interceptors.request.use(
   (config) => {
+    // Always refresh the baseURL from localStorage before each request
+    config.baseURL = refreshApiBaseUrl();
     const token = localStorage.getItem('@AMS:token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
