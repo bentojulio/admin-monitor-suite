@@ -65,7 +65,7 @@ export const columnsOptions = (navigate) => ({
     isCheckboxLabel: true,
     decimalPlace: false,
     href: (row) => {
-      return `${import.meta.env.VITE_ROUTE_URL}dashboard/websites/view/${row.id}/${row.Name}`;
+      return `/ams/dashboard/websites/view/${row.id}/${row.Name}`;
     },
   },
   StartingUrl: {
@@ -86,7 +86,7 @@ export const columnsOptions = (navigate) => ({
     text: i18n.t("WEBSITES_PAGE.LIST.table.edit_label"),
     onClick: (row) => {
       navigate(
-        `${import.meta.env.VITE_ROUTE_URL}dashboard/websites/edit/${row.id}`
+        `/ams/dashboard/websites/edit/${row.id}`
       );
     },
     center: true,
