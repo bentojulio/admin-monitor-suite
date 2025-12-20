@@ -1251,23 +1251,115 @@ function splitConcatenatedJSONs(responseText) {
 
 export async function downloadCSVByDirectory(directories, fileBaseName = "websites") {
   try {
+    console.log(`\n========== CSV EXPORT DEBUG LOG ==========`);
+    console.log(`Starting export for ${directories.length} directories`);
+    console.log(`Directories:`, directories);
+
+    // Get total website count from the system for comparison
+    let totalSystemWebsites = 0;
+    try {
+      const totalCountResponse = await api.get('/website/all/count/search=');
+      totalSystemWebsites = Number(totalCountResponse.data.result);
+      console.log(`Total websites in system (excluding studies): ${totalSystemWebsites}`);
+    } catch (err) {
+      console.warn('Failed to get total website count:', err?.message);
+    }
+
     const unique = new Map(); // WebsiteId -> { WebsiteId, Name }
+    const failedDirectories = [];
+    const directoryStats = [];
 
     for (const directory of directories) {
       try {
+        console.log(`\nFetching directory: "${directory}"`);
         const res = await api.get(`/directory/${encodeURIComponent(directory)}/websites`);
         const websites = res?.data?.result ?? [];
+        console.log(`  - Found ${websites.length} websites in directory "${directory}"`);
+
+        let addedCount = 0;
+        let skippedCount = 0;
+        let nullIdCount = 0;
+
         for (const w of websites) {
-          if (w?.WebsiteId == null) continue;
+          if (w?.WebsiteId == null) {
+            nullIdCount++;
+            console.warn(`  - Website with null ID found in directory "${directory}":`, w?.Name || 'Unknown');
+            continue;
+          }
           if (!unique.has(w.WebsiteId)) {
             unique.set(w.WebsiteId, { WebsiteId: w.WebsiteId, Name: w.Name });
+            addedCount++;
+          } else {
+            skippedCount++;
           }
         }
+
+        directoryStats.push({
+          directory,
+          totalWebsites: websites.length,
+          addedToExport: addedCount,
+          duplicates: skippedCount,
+          nullIds: nullIdCount
+        });
+
+        console.log(`  - Added: ${addedCount} new, Skipped: ${skippedCount} duplicates, Null IDs: ${nullIdCount}`);
       } catch (err) {
-        console.warn(`Falha ao buscar diretório "${directory}":`, err?.message || err);
-        // continua; só ignora este diretório
+        console.error(`Falha ao buscar diretório "${directory}":`, err?.message || err);
+        failedDirectories.push({ directory, error: err?.message || String(err) });
       }
     }
+
+    const exportedWebsiteCount = unique.size;
+
+    console.log(`\n========== EXPORT SUMMARY ==========`);
+    console.log(`Total websites in system: ${totalSystemWebsites}`);
+    console.log(`Unique websites collected for export: ${exportedWebsiteCount}`);
+    console.log(`Discrepancy: ${totalSystemWebsites - exportedWebsiteCount} websites NOT in export`);
+
+    if (failedDirectories.length > 0) {
+      console.log(`\nFailed directories (${failedDirectories.length}):`);
+      failedDirectories.forEach(({ directory, error }) => {
+        console.error(`  - "${directory}": ${error}`);
+      });
+    }
+
+    console.log(`\nDirectory Statistics:`);
+    directoryStats.forEach(stat => {
+      console.log(`  - ${stat.directory}: ${stat.totalWebsites} total, ${stat.addedToExport} added, ${stat.duplicates} duplicates, ${stat.nullIds} null IDs`);
+    });
+
+    // Get list of websites that are in system but NOT in export
+    if (totalSystemWebsites > 0 && exportedWebsiteCount > 0) {
+      try {
+        console.log(`\n========== INVESTIGATING MISSING WEBSITES ==========`);
+        const allWebsitesResponse = await api.get('/website/all/10000/0/sort=/direction=/search=');
+        const allWebsites = allWebsitesResponse?.data?.result ?? [];
+        const exportedIds = new Set([...unique.keys()]);
+
+        const missingWebsites = allWebsites.filter(w => !exportedIds.has(w.WebsiteId));
+
+        if (missingWebsites.length > 0) {
+          console.log(`\nFound ${missingWebsites.length} websites in system but NOT in export:`);
+          missingWebsites.slice(0, 50).forEach((w, index) => {
+            console.log(`  ${index + 1}. [ID: ${w.WebsiteId}] ${w.Name} - ${w.StartingUrl}`);
+          });
+          if (missingWebsites.length > 50) {
+            console.log(`  ... and ${missingWebsites.length - 50} more`);
+          }
+
+          // Save missing websites to sessionStorage for further investigation
+          sessionStorage.setItem('missingWebsitesFromExport', JSON.stringify(missingWebsites));
+          console.log(`\n✓ Missing websites saved to sessionStorage key: 'missingWebsitesFromExport'`);
+          console.log(`  You can inspect them in the browser console with: JSON.parse(sessionStorage.getItem('missingWebsitesFromExport'))`);
+        } else {
+          console.log(`No missing websites found - all system websites are in export!`);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch all websites for comparison:', err?.message);
+      }
+    }
+
+    console.log(`\n========================================\n`);
 
     // passa só os únicos
     await downloadCSV([...unique.values()], fileBaseName);
@@ -1317,27 +1409,63 @@ export async function downloadCSV(websites, fileBaseName = "websites") {
     const CHUNK_SIZE = 30; // 5 req por segundo
     let data = headers.join(";") + "\n";
 
+    console.log(`\n========== FETCHING WEBSITE INFO FOR CSV ==========`);
+    console.log(`Processing ${uniq.length} websites in chunks of ${CHUNK_SIZE}...`);
+
+    let successCount = 0;
+    let failedCount = 0;
+    const failedWebsites = [];
+
     for (let i = 0; i < uniq.length; i += CHUNK_SIZE) {
       const startedAt = Date.now();
       const chunk = uniq.slice(i, i + CHUNK_SIZE);
+      console.log(`Processing chunk ${Math.floor(i / CHUNK_SIZE) + 1}/${Math.ceil(uniq.length / CHUNK_SIZE)} (websites ${i + 1}-${Math.min(i + CHUNK_SIZE, uniq.length)})`);
 
       const results = await Promise.allSettled(
         chunk.map((w) => api.get(`/website/info/${w.WebsiteId}`))
       );
 
-      for (const r of results) {
+      for (let j = 0; j < results.length; j++) {
+        const r = results[j];
+        const website = chunk[j];
+
         if (r.status !== "fulfilled") {
-          console.warn("Falha a obter info do website:", r.reason);
+          console.warn(`  ✗ [ID: ${website.WebsiteId}] ${website.Name} - API call failed:`, r.reason?.message || r.reason);
+          failedWebsites.push({
+            WebsiteId: website.WebsiteId,
+            Name: website.Name,
+            reason: 'API call failed',
+            error: r.reason?.message || String(r.reason)
+          });
+          failedCount++;
           continue;
         }
         const res = r.value;
         if (res?.status !== 200) {
-          console.warn("Resposta não-200:", res?.status);
+          console.warn(`  ✗ [ID: ${website.WebsiteId}] ${website.Name} - Non-200 response:`, res?.status);
+          failedWebsites.push({
+            WebsiteId: website.WebsiteId,
+            Name: website.Name,
+            reason: 'Non-200 response',
+            status: res?.status
+          });
+          failedCount++;
           continue;
         }
 
         const websiteData = res?.data?.result;
-        if (!websiteData) continue;
+        if (!websiteData) {
+          console.warn(`  ✗ [ID: ${website.WebsiteId}] ${website.Name} - No data in response`);
+          failedWebsites.push({
+            WebsiteId: website.WebsiteId,
+            Name: website.Name,
+            reason: 'No data in response'
+          });
+          failedCount++;
+          continue;
+        }
+
+        successCount++;
 
         const entity =
           (websiteData.entities || [])
@@ -1381,6 +1509,26 @@ export async function downloadCSV(websites, fileBaseName = "websites") {
         await new Promise((r) => setTimeout(r, remaining));
       }
     }
+
+    console.log(`\n========== CSV GENERATION SUMMARY ==========`);
+    console.log(`Successfully fetched info for: ${successCount} websites`);
+    console.log(`Failed to fetch info for: ${failedCount} websites`);
+    console.log(`Success rate: ${((successCount / uniq.length) * 100).toFixed(2)}%`);
+
+    if (failedWebsites.length > 0) {
+      console.log(`\nFailed websites during info fetch:`);
+      failedWebsites.forEach((fw, index) => {
+        console.error(`  ${index + 1}. [ID: ${fw.WebsiteId}] ${fw.Name} - ${fw.reason}${fw.error ? ': ' + fw.error : ''}${fw.status ? ' (Status: ' + fw.status + ')' : ''}`);
+      });
+
+      // Save failed websites to sessionStorage
+      sessionStorage.setItem('failedWebsiteInfoFetch', JSON.stringify(failedWebsites));
+      console.log(`\n✓ Failed websites saved to sessionStorage key: 'failedWebsiteInfoFetch'`);
+      console.log(`  You can inspect them in the browser console with: JSON.parse(sessionStorage.getItem('failedWebsiteInfoFetch'))`);
+    }
+
+    console.log(`\nCSV file will contain ${successCount} websites`);
+    console.log(`========================================\n`);
 
     // Add BOM (Byte Order Mark) for UTF-8 to ensure Excel recognizes encoding correctly
     const BOM = "\uFEFF";
