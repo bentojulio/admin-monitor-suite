@@ -100,18 +100,46 @@ const PageCreateForm = () => {
   };
 
     const handleInsertPages = async (data) => {
-     const response = await api.post('/page/add', {
-       websiteId: selectedWebsites[0],
-       uris: JSON.stringify(data.urls.split("\n")),
-       observatory:"[]"
-     });
-     
-     if(response.status === 200 || response.status === 201) {
-      setFeedbackMessage("Páginas adicionadas com sucesso");
-      setSelectedWebsites([]);
-      navigate("/dashboard/pages");
-     } else {
-       setFeedbackMessage("Erro ao adicionar páginas");
+     // Validate that we have a website selected
+     if (selectedWebsites.length === 0) {
+       setFeedbackMessage("Por favor, selecione pelo menos um sítio web.");
+       return;
+     }
+
+     // Validate that we have URLs
+     if (!data.urls || data.urls.trim() === "") {
+       setFeedbackMessage("Por favor, insira pelo menos um URL.");
+       return;
+     }
+
+     // Process URLs: split by newline, trim whitespace, filter empty lines
+     const urls = data.urls
+       .split("\n")
+       .map(url => url.trim())
+       .filter(url => url.length > 0);
+
+     if (urls.length === 0) {
+       setFeedbackMessage("Por favor, insira pelo menos um URL válido.");
+       return;
+     }
+
+     try {
+       const response = await api.post('/page/add', {
+         websiteId: selectedWebsites[0],
+         uris: JSON.stringify(urls),
+         observatory: "[]"
+       });
+       
+       if(response.status === 200 || response.status === 201) {
+         setFeedbackMessage(`${urls.length} página(s) adicionada(s) com sucesso`);
+         setSelectedWebsites([]);
+         navigate("/dashboard/pages");
+       } else {
+         setFeedbackMessage("Erro ao adicionar páginas");
+       }
+     } catch (error) {
+       console.error("Error adding pages:", error);
+       setFeedbackMessage("Erro ao adicionar páginas. Tente novamente.");
      }
    };
 
