@@ -39,22 +39,39 @@ const PageList = () => {
   // Fetch total count and current page data
   useEffect(() => {
     const fetchData = async () => {
-      const responseTotal = await api.get(`/page/all/count/search=${search}`);
-      setTotalItems(Number(responseTotal.data.result));
-      const offset = currentPage - 1;
-      const response = await api.get(`/page/all/${itemsPerPage}/${offset}/sort=/direction=/search=${search}`); 
-      setData(response.data.result.map(item => ({
-        id: item.PageId,
-        Uri: item.Uri,
-        Score: Number(item.Score),
-        Evaluation_Date: moment(item.Evaluation_Date).format('DD/MM/YYYY'),
-        Element_Count: 12,//item.Element_Count,
-        A: item.A,
-        AA: item.AA,
-        AAA: item.AAA,
-        e: "N/A",
-        OPAW: "OPAW",
-      })));
+      setCheckboxesSelected([]);
+      
+      try {
+        const offset = currentPage - 1;
+        let url = `/page/all/${itemsPerPage}/${offset}/sort=desc/direction=/search=${search}`;
+        const [totalItemsResponse, dataResponse] = await Promise.all([
+          api.get(`/page/all/count/search=${search}`),
+          api.get(url)
+        ]);
+        
+        console.log("Pages API response:", { total: totalItemsResponse.data, data: dataResponse.data });
+        
+        setTotalItems(Number(totalItemsResponse.data.result));
+        
+        const transformedData = (dataResponse.data.result || []).map(item => ({
+          id: item.PageId,
+          Uri: item.Uri,
+          Score: item.Score != null ? Number(item.Score) : 0,
+          Evaluation_Date: item.Evaluation_Date ? formatDate(item.Evaluation_Date) : "Pendente",
+          Element_Count: calculateTotalElements(item.Element_Count),
+          A: item.A ?? 0,
+          AA: item.AA ?? 0,
+          AAA: item.AAA ?? 0,
+          e: "?",
+          OPAW: item.Show_In ? (item.Show_In.split("")[2] === "1" ? "Sim" : "Nao") : "Nao",
+        }));
+        
+        setData(transformedData);
+      } catch (error) {
+        console.error("Error loading pages:", error);
+        setFeedbackMessage("Erro ao carregar paginas!");
+        setShowFeedbackModal(true);
+      }
     };
     fetchData();
   }, [currentPage, itemsPerPage, search]);

@@ -28,6 +28,177 @@ import CrawlingModal from "../../components/CrawlingModal";
 import { setRootNavigationContext } from "../../utils/navigation";
 import { set } from "lodash";
 
+const buildPracticesData = (simplifiedPracticesData, t) => {
+  const practicesBySuccessCriteria = {
+    success: {},
+    errors: {}
+  };
+
+  const mapPractice = (target, item) => {
+    const scs = item.scs;
+    if (!scs || scs === '') return;
+    scs.split(',').forEach(criteria => {
+      const trimmed = criteria.trim();
+      if (!target[trimmed]) target[trimmed] = [];
+      target[trimmed].push({
+        practice: t(`ELEMS.${item.practice}`),
+        pages: item.pages,
+        occurrences: item.occurrences,
+        level: item.level.toUpperCase(),
+        websiteCount: item.pages
+      });
+    });
+  };
+
+  (simplifiedPracticesData.success || []).forEach(item => mapPractice(practicesBySuccessCriteria.success, item));
+  (simplifiedPracticesData.errors || []).forEach(item => mapPractice(practicesBySuccessCriteria.errors, item));
+
+  const formatSuccessCriteriaData = (practicesData) => {
+    const formatted = {};
+    Object.keys(practicesData).sort().forEach(criteria => {
+      const practices = practicesData[criteria];
+      formatted[criteria] = {
+        criteriaCode: criteria,
+        practiceCount: practices.length,
+        practices: practices
+      };
+    });
+    return formatted;
+  };
+
+  return {
+    details: (simplifiedPracticesData.success || []).map(item => ({
+      practice: t(`ELEMS.${item.practice}`),
+      pages: item.pages,
+      occurrences: item.occurrences,
+      level: item.level.toUpperCase()
+    })),
+    detailsBad: (simplifiedPracticesData.errors || []).map(item => ({
+      practice: t(`ELEMS.${item.practice}`),
+      pages: item.pages,
+      occurrences: item.occurrences,
+      level: item.level.toUpperCase()
+    })),
+    successCriteriaSuccess: formatSuccessCriteriaData(practicesBySuccessCriteria.success),
+    successCriteriaErrors: formatSuccessCriteriaData(practicesBySuccessCriteria.errors)
+  };
+};
+
+const buildDirectoryMetrics = (pages = [], websites = [], barDataTemplate = barData) => {
+  const scoreBuckets = Array(9).fill(0);
+  const websiteStats = {};
+  let evaluatedCount = 0;
+  let scoreSum = 0;
+  let oldestDate = null;
+  let newestDate = null;
+
+  pages.forEach(page => {
+    const score = Number(page.Score || 0);
+    const hasEvaluation = page.Evaluation_Date !== null && page.Evaluation_Date !== undefined;
+    const hasScore = !Number.isNaN(score) && hasEvaluation;
+    const websiteId = page.WebsiteId;
+
+    if (!websiteStats[websiteId]) {
+      websiteStats[websiteId] = {
+        hasA: false,
+        hasAA: false,
+        hasAAA: false,
+        evaluatedCount: 0,
+        scoreSum: 0
+      };
+    }
+
+    const stats = websiteStats[websiteId];
+    stats.hasA = stats.hasA || (page.A || 0) > 0;
+    stats.hasAA = stats.hasAA || (page.AA || 0) > 0;
+    stats.hasAAA = stats.hasAAA || (page.AAA || 0) > 0;
+
+    if (hasScore) {
+      evaluatedCount += 1;
+      scoreSum += score;
+      stats.evaluatedCount += 1;
+      stats.scoreSum += score;
+
+      const evalDate = new Date(page.Evaluation_Date);
+      if (!oldestDate || evalDate < oldestDate) oldestDate = evalDate;
+      if (!newestDate || evalDate > newestDate) newestDate = evalDate;
+
+      const bucketIndex = Math.min(Math.max(Math.floor(score) - 1, 0), 8);
+      scoreBuckets[bucketIndex] += 1;
+    }
+  });
+
+  const totalPages = pages.length;
+  const totalWebsites = Object.keys(websiteStats).length;
+  const totalEvaluatedPages = evaluatedCount;
+  const averageScore = evaluatedCount ? scoreSum / evaluatedCount : 0;
+
+  let conformantWebsites = 0;
+  let nonConformantWebsites = 0;
+  let conformCounts = { A: 0, AA: 0, AAA: 0 };
+
+  Object.values(websiteStats).forEach(stat => {
+    const hasErrors = stat.hasA || stat.hasAA || stat.hasAAA;
+    if (hasErrors) {
+      nonConformantWebsites += 1;
+    } else {
+      conformantWebsites += 1;
+      conformCounts.A += 1;
+      conformCounts.AA += 1;
+      conformCounts.AAA += 1;
+    }
+  });
+
+  const safeTotalPages = totalPages || 1;
+  const dataListBar = scoreBuckets.map((count, index) => {
+    const cumulative = scoreBuckets.slice(0, index + 1).reduce((acc, curr) => acc + curr, 0);
+    return {
+      range: `[${index + 1} - ${index + 2}[`,
+      frequency: count,
+      frequency_percent: `${((count / safeTotalPages) * 100).toFixed(2)}%`,
+      cumulative: cumulative,
+      cumulative_percent: `${((cumulative / safeTotalPages) * 100).toFixed(2)}%`
+    };
+  });
+
+  const radarWebsites = Object.entries(websiteStats).map(([websiteId, stat]) => {
+    const website = websites.find(w => w.WebsiteId?.toString() === websiteId.toString());
+    if (!website) return null;
+    const average = stat.evaluatedCount ? stat.scoreSum / stat.evaluatedCount : 0;
+    return {
+      url: website.StartingUrl,
+      averageScore: average.toFixed(2)
+    };
+  }).filter(Boolean);
+
+  return {
+    scoreBuckets,
+    radarWebsites,
+    dataListBar,
+    listItems: [
+      { title: 'Pontuação média', value: averageScore.toFixed(1) },
+      { title: 'Avaliação mais antiga de uma página', value: oldestDate ? moment(oldestDate).format('DD/MM/YY') : '-' },
+      { title: 'Avaliação mais recente de uma página', value: newestDate ? moment(newestDate).format('DD/MM/YY') : '-' },
+      { title: 'Nº de Sítios Web', value: totalWebsites },
+      { title: 'Nº de páginas(Avaliadas)', value: `${totalPages} (${totalEvaluatedPages})` },
+      { title: 'Nº médio de páginas por Sítios', value: totalWebsites ? (totalPages / totalWebsites).toFixed(1) : '0.0' },
+    ],
+    listItemsGlobal: [
+      { title: 'Sítios Web', value: totalWebsites },
+      { title: 'Sítios Web não conformes', value: nonConformantWebsites },
+      {
+        title: 'Sítios Web conformes', value: conformantWebsites,
+        itemsList: [
+          { title: 'A', value: `${conformCounts.A} (${totalWebsites ? ((conformCounts.A / totalWebsites) * 100).toFixed(1) : '0.0'}%)` },
+          { title: 'AA', value: `${conformCounts.AA} (${totalWebsites ? ((conformCounts.AA / totalWebsites) * 100).toFixed(1) : '0.0'}%)` },
+          { title: 'AAA', value: `${conformCounts.AAA} (${totalWebsites ? ((conformCounts.AAA / totalWebsites) * 100).toFixed(1) : '0.0'}%)` },
+        ]
+      },
+    ],
+    barDataTemplate
+  };
+};
+
 const ViewDirectoriesComponent = () => {
   const location = useLocation();
   const { directoryName } = useParams();
