@@ -12,11 +12,13 @@ import { isRequestSuccessful } from "../../utils/apiHelpers.js";
 import moment from "moment";
 import { Modal } from "../../components/Modal";
 import { useTheme } from '../../context/ThemeContext';
+import { setWebsiteNavigationContext } from "../../utils/navigation";
+import { useUniqueCheckboxSelection } from "../../hooks/useUniqueCheckboxSelection";
 
 const PageList = () => {
   const { t } = useTranslation();
   const [data, setData] = useState([]);
-  const [checkboxesSelected, setCheckboxesSelected] = useState([]);
+  const [checkboxesSelected, setCheckboxesSelected] = useUniqueCheckboxSelection([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -30,6 +32,11 @@ const PageList = () => {
       title: "Páginas",
     },
   ];
+
+  // Clear website context when viewing pages list directly
+  useEffect(() => {
+    setWebsiteNavigationContext(null);
+  }, []);
 
   const handleSearchChange = (value) => {
     setSearch(value.target.value);

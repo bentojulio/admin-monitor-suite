@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { Button, InputSearch, SortingTable } from "ama-design-system";
 import {
   directoriesHeaders,
@@ -9,6 +9,7 @@ import {
 } from "../table.config";
 import { useTheme } from "../../../context/ThemeContext";
 import { useTranslation } from 'react-i18next';
+import { useSyncCheckboxVisuals } from "../../../hooks/useSyncCheckboxVisuals";
 
 export default function ContentListPages ({ 
   checkboxesSelected, 
@@ -24,10 +25,31 @@ export default function ContentListPages ({
   handleSearchChange,
   handleDeletePages,
   handleReevaluatePages,
-  handleShowHideObservatory
+  handleShowHideObservatory,
+  onSortChange,
+  sortField = '',
+  sortDirection = '',
+  useClientSideSorting = false // Issue #60: Use client-side sorting for all data
 }){
   const { theme } = useTheme();
   const { t } = useTranslation();
+  
+  // Fix for Issue #64 - sync checkbox visuals when dealing with duplicate URIs
+  useSyncCheckboxVisuals(checkboxesSelected, data, 'id', 'table');
+  
+  // Issue #60: Filter data by search if client-side sorting is enabled
+  const filteredData = useMemo(() => {
+    if (!useClientSideSorting || !search) {
+      return data;
+    }
+    const searchLower = search.toLowerCase();
+    return data.filter(item => 
+      item.Uri?.toLowerCase().includes(searchLower) ||
+      item.Score?.toString().includes(searchLower) ||
+      item.Element_Count?.toString().includes(searchLower)
+    );
+  }, [data, search, useClientSideSorting]);
+  
   return(
      <div>
 
@@ -67,41 +89,47 @@ export default function ContentListPages ({
             disabled={checkboxesSelected.length === 0}
             />
         </div>
-        <SortingTable
-          darkTheme={theme}
-          headers={directoriesHeaders}
-          setDataList={setData}
-          dataList={data}
-          columnsOptions={columnsOptions}
-          nextPage={() => null}
-          caption={t('PAGES_PAGE.LIST.table.title')}
-          iconsAltTexts={nameOfIcons}
-          project={""}
-          setCheckboxesSelected={setCheckboxesSelected}
-          pagination={true}
-          totalItems={totalItems}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-          onPageChange={onPageChange}
-          onItemsPerPageChange={onItemsPerPageChange}
-          paginationButtonsTexts={[
-            "Primeira página",
-            "Página anterior",
-            "Página seguinte",
-            "Última página"
-          ]}
-          nItemsPerPageTexts={[
-            "Ver",           // see
-            "por página",    // per_page
-            "Selector de itens por página", // selectorAria
-            "Navegação do seletor de itens por página" // selectorNav
-          ]}
-          itemsPaginationTexts={[
-            " de ",    // of
-            " itens "  // items
-          ]}
-          paginationOptions={[50, 100, 250, 500]}
-        />
-          </div>
+          <SortingTable
+            darkTheme={theme}
+            headers={directoriesHeaders}
+            setDataList={setData}
+            dataList={useClientSideSorting ? filteredData : data}
+            columnsOptions={columnsOptions}
+            nextPage={() => null}
+            caption={t('PAGES_PAGE.LIST.table.title')}
+            iconsAltTexts={nameOfIcons}
+            project={""}
+            setCheckboxesSelected={setCheckboxesSelected}
+            checkedItems={checkboxesSelected}
+            pagination={true}
+            serverSidePagination={!useClientSideSorting}
+            {...(!useClientSideSorting && {
+              totalItems,
+              currentPage,
+              itemsPerPage,
+              onPageChange,
+              onItemsPerPageChange,
+              setItemsPerPage
+            })}
+            paginationButtonsTexts={[
+              "Primeira página",
+              "Página anterior",
+              "Página seguinte",
+              "Última página"
+            ]}
+            nItemsPerPageTexts={[
+              "Ver",
+              "por página",
+              "Selector de itens por página",
+              "Navegação do seletor de itens por página"
+            ]}
+            itemsPaginationTexts={[
+              " de ",
+              " itens "
+            ]}
+            paginationOptions={[10, 25, 50, 100]}
+            rowKey="id"
+          />
+        </div>
   )
 }

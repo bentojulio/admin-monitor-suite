@@ -8,33 +8,33 @@ export const directoriesHeaders = [
   [
     {
       type: "Checkbox",
-      nRow: 2,
+      nRow: 1,
       name: i18n.t("MISC.select"),
       property: "id",
       label: i18n.t("MISC.select"),
     },
     {
       type: "SortingText",
-      nRow: 2,
+      nRow: 1,
       name: i18n.t("WEBSITES_PAGE.LIST.table.name_label"),
       property: "Name",
     },
     {
       type: "SortingText",
-      nRow: 2,
+      nRow: 1,
       name: i18n.t("WEBSITES_PAGE.LIST.table.url_label"),
       property: "StartingUrl",
     },
     {
       type: "SortingText",
-      nRow: 2,
+      nRow: 1,
       name: i18n.t("WEBSITES_PAGE.LIST.table.pages_label"),
       property: "Pages",
       justifyCenter: true,
     },
     {
       type: "SortingText",
-      nRow: 2,
+      nRow: 1,
       name: i18n.t("WEBSITES_PAGE.LIST.table.creation_label"),
       property: "Creation_Date",
       justifyCenter: true,
@@ -42,7 +42,7 @@ export const directoriesHeaders = [
      { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.stamp_label'), property: "Declaration" },
     {
       type: "SortingText",
-      nRow: 2,
+      nRow: 1,
       name: i18n.t("WEBSITES_PAGE.LIST.table.edit_label"),
       property: "edit",
       justifyCenter: true,
