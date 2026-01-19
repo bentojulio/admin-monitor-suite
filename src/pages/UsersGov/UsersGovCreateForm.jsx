@@ -28,6 +28,21 @@ const UsersGovCreateForm = () => {
         { title: t('GOV_USERS_PAGE.ADD.title') },
     ];
 
+    const handleUpdateGovUser = async (payload) => {
+        
+        const result = associatedUsersOptions.filter(item => associatedUser.includes(item.value));
+        
+        payload.entities = result.map(item => ({
+            UserId: item.value,
+            Username: item.label,
+            Last_Login: item.Last_Login,
+            Register_Date: item.Register_Date,
+            Websites: item.Websites,
+            Type: item.Type
+        }));
+        return api.post('/gov-user/update', payload);
+    }
+
     const onSubmit = async (data) => {
         setIsSubmitting(true);
         try {
@@ -36,22 +51,26 @@ const UsersGovCreateForm = () => {
                 ccNumber: data.citizen_card_number
             };
             let response;
+
             if(id){
                 payload.id = Number(id);
-                const result = associatedUsersOptions.filter(item => associatedUser.includes(item.value));
-                payload.entities = result.map(item => ({
-                    UserId: item.value,
-                    Username: item.label
-                }));
-                response = await api.post('/gov-user/update', payload);
+                response = await handleUpdateGovUser(payload);
             } else {
-                response = await api.post('/gov-user/create', payload);
+               response = await api.post('/gov-user/create', payload);
+               if(response.status === 201 || response.status === 200){
+                   //Preciso actualizar o utilizadorGov com os utilizadores associados não vi no endpoint /gov-user/create como fazer isso diretamente
+                   payload.id = response.data.result.id;
+                   response = await handleUpdateGovUser(payload);
+                }
+    
             }
             if (response.status === 201 || response.status === 200) {
                 setFeedbackMessage(id ? "Utilizador Gov atualizado com sucesso!" : "Utilizador Gov criado com sucesso!");
                 setTimeout(() => {
                     navigate('/dashboard/usersgov');
                 }, 2000);
+
+               
             } else {
                 setFeedbackMessage(id ? "Erro ao atualizar utilizador Gov. Tente novamente." : "Erro ao criar utilizador Gov. Tente novamente.");
             }
@@ -85,7 +104,11 @@ const UsersGovCreateForm = () => {
             const response = await api.get('/user/all');
             setAssociatedUsersOptions(response.data.result.map(item => ({
                 value: item.UserId,
-                label: item.Username
+                label: item.Username,
+                Websites: item.Websites,
+                Last_Login: item.Last_Login ,
+                Register_Date: item.Register_Date,
+                Type: item.Type,
             })));
         };
         fetchAssociatedUsers();
