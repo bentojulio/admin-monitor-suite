@@ -572,46 +572,40 @@ const ViewCategoriesComponent = () => {
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Distribuição detalhada das melhores práticas</h2>
-          <SortingTable
-            hasSort={false}
-            headers={detailsTableHeaders || []}
-            dataList={dataListDetails.filter(item => !item.occurrences.toString().includes("lang"))}
-            columnsOptions={columnsOptionsDetails || {}}
-            darkTheme={theme}
-            pagination={true}
-            links={false}
-            ariaLabels={ariaLabels || {}}
-            caption="Distribuição detalhada das melhores práticas"
-            setDataList={() => {}}
-            nextPage={() => {}}
-            itemsPaginationTexts={[]}
-            nItemsPerPageTexts={[
-              "Ver",           // see
-              "por página",    // per_page
-              "Selector de itens por página", // selectorAria
-              "Navegação do seletor de itens por página" // selectorNav
-            ]}
-            iconsAltTexts={[]}
-            paginationButtonsTexts={[
-              "Primeira página",
-              "Página anterior",
-              "Página seguinte",
-              "Última página"
-            ]}
-            project=""
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            paginationOptions={[
-                50,
-                60,
-                70,
-                80,
-                90,
-                100,            
-     
-            ]}
-            setCheckboxesSelected={() => {}}
-          />
+          {isProcessingStats ? (
+            <p className="text-muted">A calcular práticas...</p>
+          ) : (
+            <SortingTable
+              hasSort={false}
+              headers={detailsTableHeaders || []}
+              dataList={dataListDetails.filter(item => !item.occurrences.toString().includes("lang"))}
+              columnsOptions={columnsOptionsDetails || {}}
+              darkTheme={theme}
+              pagination={true}
+              links={false}
+              ariaLabels={ariaLabels || {}}
+              caption="Distribuição detalhada das melhores práticas"
+              setDataList={() => {}}
+              nextPage={() => {}}
+              itemsPaginationTexts={[]}
+              nItemsPerPageTexts={[
+                "Ver",           // see
+                "por página",    // per_page
+                "Selector de itens por página", // selectorAria
+                "Navegação do seletor de itens por página" // selectorNav
+              ]}
+              iconsAltTexts={[]}
+              paginationButtonsTexts={[
+                "Primeira página",
+                "Página anterior",
+                "Página seguinte",
+                "Última página"
+              ]}
+              project=""
+              paginationOptions={[50, 100, 200, 500, dataListDetails.filter(item => !item.occurrences.toString().includes("lang")).length].filter((v, i, a) => v && a.indexOf(v) === i).sort((a, b) => a - b)}
+              setCheckboxesSelected={() => {}}
+            />
+          )}
         </div>
 
         <div className="mt-5 bg-white p-4">

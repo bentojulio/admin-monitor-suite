@@ -114,8 +114,7 @@ export default function ContentListWebSites({
           " itens "  // items
         ]}
         rowKey="WebsiteId"
-        paginationOptions={[50, 100, 250, 500]}
-        setItemsPerPage={setItemsPerPage}
+        paginationOptions={[10, 20, 50, 100, 250, 500, totalItems].filter((v, i, a) => v && a.indexOf(v) === i).sort((a, b) => a - b)}
       />
     </div>
   );
