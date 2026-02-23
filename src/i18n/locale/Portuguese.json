@@ -788,6 +788,37 @@
   "descList": "Listas de descrição com itens ordenados corretamente",
   "notDescList": "Listas de descrição com elementos que não são itens de lista ou que não estão corretamente ordenados"
 },
+"ELEMENT_RESULTS": {
+  "subtitle": "Detalhes do teste",
+  "elements_tab": "Elementos",
+  "page_tab": "Página",
+  "total_elements": "elementos encontrados",
+  "inline_css_tab": "Estilos em linha",
+  "embedded_css_tab": "Estilos embutidos",
+  "caption": "Resultado {{ value }} da prática",
+  "result": {
+    "element": "Elemento:",
+    "attributes": "Atributos:",
+    "content": "Conteúdo/texto:",
+    "code": "Código:",
+    "file": "Ficheiro:",
+    "description": "Descrição:",
+    "line": "Linha:",
+    "location": "Localização:",
+    "property": "Propriedade:",
+    "value": "Valor:",
+    "caption": "Ocorrências encontradas desta prática",
+    "ocurrenceNumber": "Nº Ocorrência",
+    "ocurrenceDetail": "Detalhe da ocorrência"
+  }
+},
+"CODE": {
+  "subtitle": "Código da página",
+  "actions": {
+    "download_code": "Descarregar código da página",
+    "open_webpage": "Abrir página web"
+  }
+},
   "TEST_RESULTS": {
     "a_01a": "Primeiro link permite saltar para o conteúdo principal",
     "a_01b": "Primeiro link não permite saltar para o conteúdo principal",

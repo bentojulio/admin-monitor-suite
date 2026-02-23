@@ -14,6 +14,17 @@ import { Modal } from "../../components/Modal";
 import { useTheme } from '../../context/ThemeContext';
 import { setWebsiteNavigationContext } from "../../utils/navigation";
 import { useUniqueCheckboxSelection } from "../../hooks/useUniqueCheckboxSelection";
+import { calculateTotalElements } from "../../utils/utils";
+// Lightweight date formatter to replace moment.js
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+
 
 const PageList = () => {
   const { t } = useTranslation();
@@ -62,7 +73,7 @@ const PageList = () => {
         Uri: item.Uri,
         Score: item.Score != null ? Number(item.Score) : 0,
         Evaluation_Date: item.Evaluation_Date ? formatDate(item.Evaluation_Date) : "Pendente",
-        Element_Count: calculateTotalElements(item.Element_Count),
+        Element_Count: calculateTotalElements(JSON.parse(item.Tag_Count)),
         A: item.A ?? 0,
         AA: item.AA ?? 0,
         AAA: item.AAA ?? 0,

@@ -1,3 +1,4 @@
+import { ceil } from 'lodash';
 import i18n from '../../i18n';
 const apiUrl = import.meta.env.VITE_API_URL + "/";
 
@@ -20,9 +21,9 @@ export const directoriesHeaders = [
 ];
 
 export const columnsOptions = {
-  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, label:"Selecionar"},
-  Uri: { type: "Link", center: true, bold: false, decimalPlace: false, isCheckboxLabel: true, href: (row) => apiUrl + "dashboard/pages/view/" + encodeURIComponent(row.Uri) },
-  Score: { type: "Text", center: true, bold: false, decimalPlace: true },
+  id: { type: "Checkbox", center: false, bold: false, decimalPlace: false, label:"Selecionar"},
+  Uri: { type: "Link", center: false, bold: false, decimalPlace: false, isCheckboxLabel: true, href: (row) => apiUrl + "dashboard/pages/view/" + encodeURIComponent(row.Uri) },
+  Score: { type: "Text", center: false, bold: false, decimalPlace: true },
   Evaluation_Date: {
     type: "Text",
     center: true,
@@ -113,14 +114,14 @@ export const options = [
 
 export const directoriesHeadersPage = [
   [
-    { type: "Checkbox", nRow: 1, name: "rank ", property: "id", justifyCenter: false },
-    { type: "SortingText", nRow: 1, name: "Data Avaliação ", property: "date_avaliation", justifyCenter: false },
+    { type: "Checkbox", nRow: 1, name: "rank ", property: "id", justifyCenter: true, center: true },
+    { type: "SortingText", nRow: 1, name: "Data Avaliação ", property: "date_avaliation", justifyCenter: false, center: false },
     {
       type: "SortingText",
       nRow: 1,
       name: "Pontuação",
       property: "score",
-      justifyCenter: false,
+      justifyCenter: true,
     },
 
     {
@@ -128,7 +129,7 @@ export const directoriesHeadersPage = [
       nRow: 1,
       name: "Elementos HTML",
       property: "elementsNumber",
-      justifyCenter: false,
+      justifyCenter: true,
     },
 
     {
@@ -144,7 +145,7 @@ export const directoriesHeadersPage = [
       nRow: 1,
       name: "AA",
       property: "AA",
-      justifyCenter: false,
+      justifyCenter: true,
     },
 
     {
@@ -152,27 +153,27 @@ export const directoriesHeadersPage = [
       nRow: 1,
       name: "AAA",
       property: "AAA",
-      justifyCenter: false,
+      justifyCenter: true,
     },
     {
       type: "SortingText",
       nRow: 1,
       name: "Ver relatório",
       property: "state",
-      justifyCenter: false,
+      justifyCenter: true,
     },
   ],
 ];
 
 export const columnsOptionsPage = (navigate, url)=>({
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false }, // Checkbox
-  date_avaliation: { type: "Text", center: false, bold: false, decimalPlace: false },
-  score: { type: "Text", center: false, bold: false, decimalPlace: false },
-  elementsNumber: { type: "Text", center: false, bold: false, decimalPlace: false },
-  A: { type: "Text", center: false, bold: false, decimalPlace: false },
-  AA: { type: "Text", center: false, bold: false, decimalPlace: false },
-  AAA: { type: "Text", center: false, bold: false, decimalPlace: false },
-  state: { type: "Button", text: "Relatório", center: false, bold: false, decimalPlace: false, onClick: (row)=>{ 
+  date_avaliation: { type: "Text", center: true, bold: false, decimalPlace: false, isCheckboxLabel: true },
+  score: { type: "Text", center: true, bold: false, decimalPlace: false },
+  elementsNumber: { type: "Text", center: true, bold: false, decimalPlace: false },
+  A: { type: "Text", center: true, bold: false, decimalPlace: false },
+  AA: { type: "Text", center: true, bold: false, decimalPlace: false },
+  AAA: { type: "Text", center: true, bold: false, decimalPlace: false },
+  state: { type: "Button", text: "Relatório", center: true, bold: false, decimalPlace: false, onClick: (row)=>{ 
     if(row.id === 0){
       return;
     }

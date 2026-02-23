@@ -69,13 +69,12 @@ const DirectoriesCreateForm = () => {
 
     // If editing from a specific directory view
     if (id && navContext && navContext.type === 'directory') {
-        const { directoryName } = navContext.data;
         breadcrumbs = [
             { children: <Link to="/dashboard/home">Início</Link> },
             { children: <Link to="/dashboard/directories">Diretórios</Link> },
-            { children: <Link to={`/dashboard/directories/view/${encodeURIComponent(directoryName)}`}>{directoryName}</Link> },
+            { children: <Link to={`/dashboard/directories/view/${id}`}>{watch("name")}</Link> },
             {
-                title: t('DIRECTORIES_PAGE.EDIT.title'),
+                title: "Editar Diretório",
             }
         ];
     }
@@ -183,7 +182,7 @@ const DirectoriesCreateForm = () => {
         <div>
             <Breadcrumb data={breadcrumbs} />
 
-            <h1>{t('DIRECTORIES_PAGE.ADD.title')}</h1>
+            <h1>{id ? "Editar Diretório" : "Criar Diretório"}</h1>
            
             <form className="bg-white p-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
                  <p>Um Diretório é um agregador de sítios web. Os Diretórios têm por objetivo publicar sítios web publicamente no Observatório. Os Diretórios são construídos com base nas Categorias/tags que se encontram agarradas aos sítios web.</p>

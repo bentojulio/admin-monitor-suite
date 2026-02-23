@@ -21,7 +21,7 @@ import Indicators from "../../components/Indicators/index.jsx";
 import tests from "../../utils/tests.js";
 import { useTranslation } from "react-i18next";
 import { getEffectiveNavigationContext } from "../../utils/navigation";
-
+import { calculateTotalElements } from "../../utils/utils";
 const calculateMatrix = (data) => {
   const matrix = {
     A: { ok: 0, err: 0, war: 0 },
@@ -60,6 +60,8 @@ const DetailsPage = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const location = useLocation();
+  const [resultData, setResult] = useState({});
+
   const [statsTitle, setWebsiteStatsTitle] = useState([
     { subtitle: 'Sítios Web', subtitle2: "" },
     { subtitle: 'Sítios Web não conformes', subtitle2: "" },
@@ -184,17 +186,18 @@ const DetailsPage = () => {
     const fetchData = async () => {
       const response = await api.get(`/evaluation/${encodeURIComponent(pageUrl)}/${id}`); 
       const result = response.data.result.data;
+      localStorage.setItem('@AMS:evalData', JSON.stringify(result));
       setListItems([
         { title: 'Pontuação média', value: result.score },
         { title: 'URL', value: result.tot.info.url},
         { title: 'Título', value: result.tot.info.title },
-        { title: 'Nº de elementos (x)HTML	', value: result.tot.info.htmlTags },
-        { title: 'Tamanho da página	', value:result.tot.info.size + " bytes"},
+        { title: 'Nº de elementos (x)HTML	', value: calculateTotalElements(result.tot.info.cTags) },
+        { title: 'Tamanho da página	', value: result.tot.info.size + " bytes"},
       ]);
-
+      setResult(result);
       const mappedData = Object.keys(result.tot.results).map(item => ({
-        id: item.id,
-        title: <div dangerouslySetInnerHTML={{__html: t('TESTS_RESULTS.' +item + '.p')}} />,
+        id:  tests[item].test,
+        title: <div dangerouslySetInnerHTML={{__html: t('TESTS_RESULTS.' +item + '.p', {value: result.tot.elems[tests[item].test]})}} />,
         lvl: tests[item].level.toUpperCase(),
         component: (
     <div className="text-start">
@@ -208,10 +211,9 @@ const DetailsPage = () => {
             </div>
         ),
         iconName: tests[item].result === "warning" ? "AMA-Middle-Line" : tests[item].result === "failed" ? "AMA-Wrong-Line" : "AMA-Check-Line",
-        ele: tests[item].ele,
-        tdClassName: tests[item].result === "warning" ? "warning-cell" : tests[item].result === "failed" ? "error-cell" : "success-cell"
+        ele: item,
+        tdClassName: tests[item].result === "warning" ? "warning-cell" : tests[item].result === "failed" ? "error-cell" : "success-cell",
       }));
-
       setData(mappedData);
       setMatrixData(calculateMatrix(mappedData));
 
@@ -247,20 +249,21 @@ const DetailsPage = () => {
      
         <div className="d-flex justify-content-start align-items-end gap-3">
          <TableComponent 
-         data={data} 
-         onClick={e => console.log(e)} 
-         caption={"Práticas avaliadas"} 
-         col1={"Prática encontrada"} 
-         col2={"Nível"} 
-         col3={"Ver detalhe"} 
-         lvlTitle={"Nível: "} 
-         imageTitlesCallback={t => ()=>{}} 
-         darkTheme={theme} 
-         ariaLabels={{
-          AA: "duplo ",
-          AAA: "triplo ",
-          button: "Ver detalhe"
-        }} />
+            data={data} 
+            onClick={(e, i) => {navigate(`/dashboard/pages/detailed/${encodeURIComponent(pageUrl)}/${e}/${id}`)}} 
+            caption={"Práticas avaliadas"} 
+            col1={"Prática encontrada"} 
+            col2={"Nível"} 
+            col3={"Ver detalhe"} 
+            lvlTitle={"Nível: "} 
+            imageTitlesCallback={t => ()=>{}} 
+            darkTheme={theme} 
+            ariaLabels={{ 
+              AA: "duplo ",
+              AAA: "triplo ",
+              button: "Ver detalhe"
+            }} 
+          />
         </div>
       </div>
     </div>
