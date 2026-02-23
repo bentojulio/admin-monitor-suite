@@ -112,11 +112,10 @@ const EntitiesCreateForm = () => {
 
     // If editing from a specific entity view
     if (id && navContext && navContext.type === 'entity') {
-        const { entityName } = navContext.data;
         breadcrumbs = [
             { children: <Link to="/dashboard/home">Início</Link> },
             { children: <Link to="/dashboard/entities">Entidades</Link> },
-            { children: <Link to={`/dashboard/entities/view/${encodeURIComponent(entityName)}`}>{entityName}</Link> },
+            { children: <Link to={`/dashboard/entities/view/${id}`}>{watch("entityName")}</Link> },
             { title: "Editar Entidade" },
         ];
     }

@@ -44,7 +44,7 @@ const CategoriesCreateForm = () => {
     let breadcrumbs = [
         { children: <Link to="/dashboard/home">Início</Link> },
         { children: <Link to="/dashboard/categories">Categorias</Link> },
-        { title: id ? t('CATEGORIES_PAGE.EDIT.title') : t('CATEGORIES_PAGE.ADD.title') },
+        { title: id ? "Editar Categoria" : t('CATEGORIES_PAGE.ADD.title') },
     ];
 
     // If editing from a specific category view
@@ -54,7 +54,7 @@ const CategoriesCreateForm = () => {
             { children: <Link to="/dashboard/home">Início</Link> },
             { children: <Link to="/dashboard/categories">Categorias</Link> },
             { children: <Link to={`/dashboard/categories/view/${encodeURIComponent(categoryName)}`}>{categoryName}</Link> },
-            { title: t('CATEGORIES_PAGE.EDIT.title') },
+            { title: "Editar Categoria"},
         ];
     }
 
@@ -188,7 +188,7 @@ const CategoriesCreateForm = () => {
     return (
         <div>
             <Breadcrumb data={breadcrumbs} />
-            <h1>{t('CATEGORIES_PAGE.ADD.title')}</h1>
+            <h1>{id ? "Editar Categoria" : "Criar Categoria"}</h1>
             <form className="bg-white p-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
                 <p>{t('CATEGORIES_PAGE.ADD.description_category')}</p>
                 <p>{t('CATEGORIES_PAGE.ADD.note')}</p>

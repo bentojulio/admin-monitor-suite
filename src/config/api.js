@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { encodeBase64Url } from '../utils/utils.js';
 const normalizeBaseUrl = (url) => {
   if (!url || typeof url !== 'string' || url === 'undefined') {
     return '';
@@ -43,6 +43,15 @@ export const createApiInstance = (token) => {
     }
   });
 };
+
+export const getEvalDataByAPI = async (content, currentURLorHTML) => {
+  if(content === "html") {
+   return await api.post(`amp/eval/html`, { html: currentURLorHTML })
+  } else {
+   const encodedURL = encodeBase64Url(currentURLorHTML);
+   return await api.get(`amp/eval/${encodeURIComponent(encodedURL)}`);  
+  }
+}
 
 api.interceptors.request.use(
   (config) => {

@@ -625,29 +625,13 @@ const WebSiteCreateForm = () => {
         { children: <Link to={`/dashboard/directories/view/${encodeURIComponent(directoryName)}`}>{directoryName}</Link> },
         { title: id ? "Editar Sítio Web" : "Criar Sítio Web" },
       ];
-    } else if (navContext.type === 'entity') {
-      const { entityName } = navContext.data;
-      breadcrumbs = [
-        { children: <Link to="/dashboard/home">Início</Link> },
-        { children: <Link to="/dashboard/entities">Entidades</Link> },
-        { children: <Link to={`/dashboard/entities/view/${encodeURIComponent(entityName)}`}>{entityName}</Link> },
-        { title: id ? "Editar Sítio Web" : "Criar Sítio Web" },
-      ];
-    } else if (navContext.type === 'category') {
-      const { categoryName } = navContext.data;
-      breadcrumbs = [
-        { children: <Link to="/dashboard/home">Início</Link> },
-        { children: <Link to="/dashboard/categories">Categorias</Link> },
-        { children: <Link to={`/dashboard/categories/view/${encodeURIComponent(categoryName)}`}>{categoryName}</Link> },
-        { title: id ? "Editar Sítio Web" : "Criar Sítio Web" },
-      ];
     } else if (navContext.type === 'website') {
-      const { websiteId, websiteSlug, websiteName } = navContext.data;
+      const { websiteSlug, websiteName } = navContext.data;
       const slugOrName = websiteSlug || encodeURIComponent(websiteName || "");
       breadcrumbs = [
         { children: <Link to="/dashboard/home">Início</Link> },
         { children: <Link to="/dashboard/websites">Sítios Web</Link> },
-        { children: <Link to={`/dashboard/websites/view/${websiteId}/${slugOrName}`}>{websiteName}</Link> },
+        { children: <Link to={`/dashboard/websites/view/${id}/${slugOrName}`}>{watch("name")}</Link> },
         { title: "Editar Sítio Web" },
       ];
     }
