@@ -13,7 +13,7 @@ import { Modal } from "../../components/Modal";
 import { useTheme } from '../../context/ThemeContext';
 import { setWebsiteNavigationContext } from "../../utils/navigation";
 import { useUniqueCheckboxSelection } from "../../hooks/useUniqueCheckboxSelection";
-
+import { calculateTotalElements } from "../../utils/utils";
 // Lightweight date formatter to replace moment.js
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -23,19 +23,7 @@ const formatDate = (dateString) => {
   return `${day}/${month}/${year}`;
 };
 
-// Function to count total elements from structure like {"document":1,"generic":1,"heading":1,"separator":1}
-const calculateTotalElements = (elementCount) => {
-  if (!elementCount || typeof elementCount !== 'object') {
-    return 0;
-  }
-  
-  // Sum all values in the object
-  return Object.values(elementCount).reduce((total, count) => {
-    const num = Number(count);
-    return total + (isNaN(num) ? 0 : num);
-  }, 0);
-  
-};
+
 
 const PageList = () => {
   const { t } = useTranslation();
@@ -84,7 +72,7 @@ const PageList = () => {
         Uri: item.Uri,
         Score: item.Score != null ? Number(item.Score) : 0,
         Evaluation_Date: item.Evaluation_Date ? formatDate(item.Evaluation_Date) : "Pendente",
-        Element_Count: calculateTotalElements(item.Element_Count),
+        Element_Count: calculateTotalElements(JSON.parse(item.Tag_Count)),
         A: item.A ?? 0,
         AA: item.AA ?? 0,
         AAA: item.AAA ?? 0,

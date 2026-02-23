@@ -1,27 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Button, StatisticsHeader, Breadcrumb, SortingTable } from "ama-design-system";
+import { Button, StatisticsHeader, Breadcrumb, Icon } from "ama-design-system";
 import "./style.users.css";
 import { useParams } from "react-router-dom";
-import { directoriesHeadersPage, dataRowsPage, columnsOptionsPage, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
-import { RadarGraph } from "../../components/RadarGraph/index.jsx";
-import GoodBadTab from "../../components/GoodBadTab/GoodBadTab.jsx";
+import { dataRowsPage  } from "./table.config.jsx";
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BarLineGraphTabs } from "../../components/BarLineGraph/index.jsx";
-import { 
-  barData,
-  barOptions,
-  dataHeaders as dataHeadersBar,
-  columnsOptions as columnsOptionsBar,
-  dataList as dataListBar
- } from "../../components/BarLineGraph/table.config.jsx";
+
 import { useTheme } from '../../context/ThemeContext';
-import { api } from "../../config/api";
-import moment from "moment";
+import { useTranslation } from "react-i18next";
 import { getEffectiveNavigationContext } from "../../utils/navigation";
-import { calculateTotalElements } from "../../utils/utils";
-const ViewPages = () => {
+import {  getTestResults } from "../../utils/utils";
+import { getEvalDataByAPI } from "../../config/api.js";
+import tests from "../../utils/tests.js";
+import TableDetails from "../../components/TableDetails/TableDetails.jsx";
+
+const DetailedPageLine = () => {
   const { theme } = useTheme();
   const location = useLocation();
+  const { t } = useTranslation();
+
   const [statsTitle, setWebsiteStatsTitle] = useState([
     { subtitle: 'Sítios Web', subtitle2: "" },
     { subtitle: 'Sítios Web não conformes', subtitle2: "" },
@@ -41,7 +38,8 @@ const ViewPages = () => {
   const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [data, setData] = useState(dataRowsPage)
   const [checkboxesSelected, setCheckboxesSelected] = useState([])
-  const { pageUrl } = useParams();
+  const [detailsData, setDetailsData] = useState({});
+  const { pageUrl, details, idPage } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
     const currentPath = location.pathname;
@@ -55,7 +53,9 @@ const ViewPages = () => {
   useEffect(() => {
     const currentPath = location.pathname;
     const navContext = getEffectiveNavigationContext(currentPath);
-    
+    const pageLink = `/dashboard/pages/view/${encodeURIComponent(pageUrl || "")}`;
+    const detailsPageLink = idPage ? `/dashboard/pages/details/${encodeURIComponent(pageUrl || "")}/${idPage}` : pageLink;
+
     if (navContext) {
       if (navContext.type === 'website') {
         const { websiteId, websiteSlug, websiteName } = navContext.data;
@@ -64,7 +64,9 @@ const ViewPages = () => {
           { children: <Link to="/dashboard/home">Início</Link> },
           { children: <Link to="/dashboard/websites">Sítios Web</Link> },
           { children: <Link to={`/dashboard/websites/view/${websiteId}/${slugOrName}`}>{websiteName || "Sítio Web"}</Link> },
-          { title: "Páginas" }
+          { children: <Link to={pageLink}>Páginas</Link> },
+          { children: <Link to={detailsPageLink}>Detalhes da página</Link> },
+          { title: "Detalhes do teste" }
         ]);
       } else if (navContext.type === 'directory') {
         const { directoryName } = navContext.data;
@@ -72,7 +74,9 @@ const ViewPages = () => {
           { children: <Link to="/dashboard/home">Início</Link> },
           { children: <Link to="/dashboard/directories">Diretórios</Link> },
           { children: <Link to={`/dashboard/directories/view/${encodeURIComponent(directoryName)}`}>{directoryName}</Link> },
-          { title: "Páginas" }
+          { children: <Link to={pageLink}>Páginas</Link> },
+          { children: <Link to={detailsPageLink}>Detalhes da página</Link> },
+          { title: "Detalhes do teste" }
         ]);
       } else if (navContext.type === 'entity') {
         const { entityName } = navContext.data;
@@ -80,7 +84,9 @@ const ViewPages = () => {
           { children: <Link to="/dashboard/home">Início</Link> },
           { children: <Link to="/dashboard/entities">Entidades</Link> },
           { children: <Link to={`/dashboard/entities/view/${encodeURIComponent(entityName)}`}>{entityName}</Link> },
-          { title: "Páginas" }
+          { children: <Link to={pageLink}>Páginas</Link> },
+          { children: <Link to={detailsPageLink}>Detalhes da página</Link> },
+          { title: "Detalhes do teste" }
         ]);
       } else if (navContext.type === 'category') {
         const { categoryName } = navContext.data;
@@ -88,77 +94,60 @@ const ViewPages = () => {
           { children: <Link to="/dashboard/home">Início</Link> },
           { children: <Link to="/dashboard/categories">Categorias</Link> },
           { children: <Link to={`/dashboard/categories/view/${encodeURIComponent(categoryName)}`}>{categoryName}</Link> },
-          { title: "Páginas" }
+          { children: <Link to={pageLink}>Páginas</Link> },
+          { children: <Link to={detailsPageLink}>Detalhes da página</Link> },
+          { title: "Detalhes do teste" }
         ]);
       }
     } else {
       setBreadcrumbs([
         { children: <Link to="/dashboard/home">Início</Link> },
         { children: <Link to="/dashboard/pages">Páginas</Link> },
-        { title: "Páginas" }
+        { children: <Link to={detailsPageLink}>Detalhes da página</Link> },
+        { title: "Detalhes do teste" }
       ]);
     }
 
     const fetchData = async () => {
-      const response = await api.get(`/evaluation/admin/page/${encodeURIComponent(pageUrl)}`);
-      console.log(response)
-      setData(response.data.result.map(item => ({
-        id: item.EvaluationId,
-        date_avaliation: moment(item.Evaluation_Date).format('DD/MM/YYYY'),
-        score: item.Score,
-        elementsNumber: calculateTotalElements(JSON.parse(item.Tag_Count)),
-        A: item.A,
-        AA: item.AA,
-        AAA: item.AAA,
-        state: "Relatório",
-      })));
+      const response = JSON.parse(localStorage.getItem('@AMS:evalData'));
+      
+      const responseDetails = getTestResults(tests[details].test, response);
+      setData(responseDetails);
+      console.log(responseDetails)
+      setDetailsData(responseDetails.tot.results[details]);
     };
     fetchData();
-  }, [pageUrl]);
+  }, [pageUrl, details, idPage]);
   return (
     <div>
       <Breadcrumb data={breadcrumbs} />
 
-      <h1>Página</h1>
+      <h1>Detalhes do teste</h1>
+      <div className="bg-white show_details">
+              <div className="d-flex flex-row justify-content-between align-items-center show_details-container">
+                <div className="d-flex flex-row align-items-center">
+                  <div className={`d-flex align-items-center justify-content-center m-2 p-3 ${data.result === "R" ? "error-cell" : detailsData?.result === "Y" ? "warning-cell" : "success-cell"}`}>
+                    <Icon name={data?.result === "R" ? "AMA-Wrong-Line" : data?.result === "Y" ? "AMA-Middle-Line" : "AMA-Check-Line"} />
+                  </div>
+
+                  <span
+                    className="textHeader ama-typography-body-large bold"
+                    dangerouslySetInnerHTML={{ __html: t('ELEMS.' + tests[details].test, {value: data.size}) }}
+                  />
+                </div>
+
+                <div className="result_left_container">
+                  <span className="ama-typography-display-6 bold p-2 ps-4">{data.size}</span>
+                  <span className="ama-typography-body p-2">{t("ELEMENT_RESULTS.total_elements")}</span>
+                </div>
+              </div>
+            </div>
       <div className="mt-5 bg-white p-4">
-        <h2 className="mb-4">Avaliações efetuadas ao longo do tempo</h2>
-        <SortingTable
-          darkTheme={theme}
-          headers={directoriesHeadersPage}
-          setDataList={setData}
-          dataList={data}
-          columnsOptions={columnsOptionsPage(navigate, pageUrl)}
-          nextPage={() => null}
-          caption="Histórico de avaliações da página"
-          iconsAltTexts={nameOfIcons}
-          paginationButtonsTexts={paginationButtonsTexts}
-          project={""}
-          setCheckboxesSelected={setCheckboxesSelected}
-          checkedItems={checkboxesSelected}
-        />
+        <TableDetails data={data.elements} domainUrl={pageUrl} />
       </div>
 
-      <div className="mt-5 bg-white">
-        <h2>Exportação de dados</h2>
-        <p>Para exportar os dados da última avaliação da página pressione o botão "Exportar úlitma avaliação da página em CSV". Para exportar os dados de todas as avaliações efetuadas à página pressione "Exportar todas as avaliações da página em CSV".
-        </p>
-        <div className="d-flex justify-content-start align-items-end gap-3">
-          <Button
-            darkTheme={theme}
-            text={"Exportar última avaliação da página em CSV"}
-            className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
-          />
-          <Button
-            darkTheme={theme}
-            text={"Exportar todas as avaliações da página em CSV"}
-            className="btn-primary"
-            onClick={() => console.log("Criar Utilizador")}
-          />
-        </div>
-      </div>
     </div>
   )
 }
 
-export default ViewPages;
+export default DetailedPageLine;

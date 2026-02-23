@@ -612,6 +612,30 @@
   "BREADCRUMB": {
     "tag_here": "You are here"
   },  
+  "ELEMENT_RESULTS": {
+    "subtitle": "Test details",
+    "elements_tab": "Elements",
+    "page_tab": "Page",
+    "total_elements": "elements found",
+    "inline_css_tab": "Inline CSS",
+    "embedded_css_tab": "Embedded CSS",
+    "caption": "Result {{ value }} of the practice",
+    "result": {
+      "element": "Element:",
+      "attributes": "Attributes:",
+      "content": "Content/text:",
+      "code": "Code:",
+      "file": "File:",
+      "description": "Description:",
+      "line": "Line:",
+      "location": "Location:",
+      "property": "Property:",
+      "value": "Value:",
+      "caption": "Occurrences of this practice",
+      "ocurrenceNumber": "Occurrence Nº",
+      "ocurrenceDetail": "Details of the occurrence"
+    }
+  },
   "ELEMS": {
     "imgAltNo": "Images without equivalent alternative in text",
     "imgAltNull": "Images with empty <code>alt</code>",

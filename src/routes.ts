@@ -32,6 +32,7 @@ import EvaluationWithErrors from "./pages/EvaluationWithErrors";
 import WebsitesForUsers from "./pages/Users/WebsitesForUsers";
 import PagesForUsers from "./pages/Users/PagesForUsers";
 import DetailsPageUsers from "./pages/Users/DetailsPageUsers";
+import DetailedPageLine from "./pages/Pages/DetailedPageLine";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -97,7 +98,8 @@ const router = createBrowserRouter([
           { path: "view", element: React.createElement(ViewPages)},
           { path: "view/:pageUrl", element: React.createElement(ViewPages)},
           { path: "details/:pageUrl/:id", element: React.createElement(DetailsPage)},
-          { path: "edit/:id", element: React.createElement(PageCreateForm)}
+          { path: "detailed/:pageUrl/:details/:idPage", element: React.createElement(DetailedPageLine)},
+          { path: "edit/:id", element: React.createElement(PageCreateForm)},
        ],
       },
       { path: "usersgov",

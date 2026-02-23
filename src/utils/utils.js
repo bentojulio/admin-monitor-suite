@@ -1007,7 +1007,6 @@ function testView(ele, txt, test, color, tot) {
 }
 
 function processData(evaluation) {
-  console.log("EVALUATION: ", evaluation);
   const tot = evaluation.tot;
 
   const data = {};
@@ -1705,4 +1704,145 @@ export function groupPracticesBySuccessCriteria(practiceTable = []) {
  );
 
  return result;
+}
+
+export const calculateTotalElements = (elementCount) => {
+  if (!elementCount || typeof elementCount !== 'object') {
+    return 0;
+  }
+
+    return Object.values(elementCount).reduce((total, count) => {
+    const num = Number(count);
+    return total + (isNaN(num) ? 0 : num);
+  }, 0);
+  
+};
+
+export function encodeBase64Url(url) {
+  return btoa(url);
+}
+
+
+export function getTestResults(test, data) {
+  const { nodes } = data;
+  const allNodes = nodes;
+  const ele = test;
+
+  return getElements(allNodes, ele, data);
+}
+
+export function getElements(allNodes, ele, tot) {
+  // const ead = processData(tot);
+
+  const dataTransform = processData(tot);
+
+  if (ele === "form") {
+    ele = "formSubmitNo";
+  }
+
+  const elements = getElementsList(allNodes && allNodes[ele], tot);
+
+  let result = "G";
+  const results = dataTransform?.results.map((r) => r.msg);
+  for (const test in tests || {}) {
+    const _test = tests[test];
+    if (_test.test === ele && results?.includes(test)) {
+      result = tests_colors[test];
+      break;
+    }
+  }
+
+  return {
+    type: "html",
+    result,
+    elements,
+    size: elements.length,
+    finalUrl: dataTransform?.metadata.url,
+  };
+}
+
+export function getElementsList(nodes, tot) {
+  tot = tot.tot;
+  const elements = new Array();
+  for (const node of nodes || []) {
+    if (node.elements) {
+      const ele = getTagName(node.elements[0]);
+      elements.push({
+        ele,
+        code:
+          ele === "style"
+            ? node.elements[0].attributes
+            : fixCode(node.elements[0].htmlCode, tot),
+        showCode: ele === "style" ? undefined : fixCode(node.elements[0].htmlCode, tot, true),
+        pointer: node.elements[0].pointer,
+      });
+    } else {
+      const ele = getTagName(node);
+      elements.push({
+        ele,
+        code: ele === "style" ? node.attributes : fixCode(node.htmlCode, tot),
+        showCode: ele === "style" ? undefined : fixCode(node.htmlCode, tot, true),
+        pointer: node.pointer,
+      });
+    }
+  }
+
+  return elements;
+}
+
+
+export function getTagName(element) {
+  let name = element.htmlCode.slice(1);
+
+  let k = 0;
+  for (let i = 0; i < name.length; i++, k++) {
+    if (name[i] === " " || name[i] === ">") {
+      break;
+    }
+  }
+
+  name = name.substring(0, k);
+
+  return name;
+}
+
+export function fixCode(code, tot, showCode) {
+  code = code.replace(/_cssrules="true"/g, "");
+  code = code.replace(/_documentselector="undefined"/g, "");
+
+  let index = code.indexOf('_selector="');
+  while (index !== -1) {
+    let foundEnd = false;
+    let foundStart = false;
+    let k = index;
+    while (!foundEnd) {
+      k++;
+      if (code[k] === '"') {
+        if (!foundStart) {
+          foundStart = true;
+        } else {
+          foundEnd = true;
+        }
+      }
+    }
+
+    code = code.replace(code.substring(index, k), "");
+    index = code.indexOf('_selector="');
+  }
+  return showCode ? removeImgStyles(code) : code;
+}
+
+function removeImgStyles(code) {
+
+  let htmlString = code.replace(/<img[^>]*>/g, function(imgTag) {
+    // Remove style, width, and height attributes from the <img> tag
+    imgTag = imgTag.replace(/style="[^"]*"/g, '');  // Remove the style attribute
+    imgTag = imgTag.replace(/width="[^"]*"/g, '');  // Remove the width attribute
+    imgTag = imgTag.replace(/height="[^"]*"/g, ''); // Remove the height attribute
+
+    // Clean up any extra spaces that may be left behind
+    imgTag = imgTag.replace(/\s+/g, ' ').trim();
+    return imgTag;
+  });
+  return htmlString;
 }
