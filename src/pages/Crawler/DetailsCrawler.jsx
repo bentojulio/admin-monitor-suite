@@ -114,9 +114,10 @@ export default function DetailsCrawler() {
     setData(newData);
   };
   const handleImport = async () => {
+    const selectedItems = data.filter((item) => item.Import);
     const response = await api.post(`page/add`, {
-      observatory: JSON.stringify(data.map((item) => item.Uri)),
-      uris: JSON.stringify(data.map((item) => item.Uri)),
+      observatory: JSON.stringify(selectedItems.map((item) => item.Uri)),
+      uris: JSON.stringify(selectedItems.map((item) => item.Uri)),
       websiteId: websiteId,
     });
 
@@ -212,12 +213,11 @@ export default function DetailsCrawler() {
                   const checkboxId = `checkbox_${startIndex + index}`;
                   return (
                     <tr key={index}>
-                      <th scope="row" className="text-center">
+                      <td className="checkbox text-center">
                         <input
                           type="checkbox"
                           id={checkboxId}
                           name={`${startIndex + index}`}
-                          className="form-check-input"
                           checked={row.Import || false}
                           aria-labelledby={`link_${index}`}
                           onChange={(e) =>
@@ -228,7 +228,7 @@ export default function DetailsCrawler() {
                             )
                           }
                         />
-                      </th>
+                      </td>
                       <td
                         className="ama-typography-body"
                         style={{ wordBreak: "break-all" }}
