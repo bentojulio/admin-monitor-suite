@@ -9,13 +9,9 @@ import ContentListPages from "../Pages/components/ContentListPage.jsx";
 import {
   dataHeaders as dataHeadersBad,
   columnsOptions as columnsOptionsBad,
-  dataRows as dataRowsBad,
-  itemsPaginationText,
-  nameOfIcons,
-  nItemsPerPageText,
-  paginationButtonsTexts,
+  dataRows as dataRowsBad
 } from "../../components/GoodBadTab/table.config.jsx";
-import { barOptionsDark, dataRows, optionsHorizontalBar, horizontalData, optionsHorizontalBarDark } from "./table.config.jsx";
+import { barOptionsDark, optionsHorizontalBar, optionsHorizontalBarDark } from "./table.config.jsx";
 import {
   barData,
   barOptions,
