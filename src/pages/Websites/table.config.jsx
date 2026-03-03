@@ -55,7 +55,7 @@ export const directoriesHeaders = [
 export const columnsOptions = (navigate) => ({
   id: {
     type: "Checkbox",
-    center: false,
+    center: true,
     bold: false,
     decimalPlace: false,
     label: "Selecionar",

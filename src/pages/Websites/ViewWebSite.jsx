@@ -283,8 +283,9 @@ const ViewWebSitesComponent = () => {
       setTotalItems(pagesData.length);
       
       // Transform all pages data once
-      const allTransformedPages = pagesData.map(page => ({
-        id: page.PageId,
+      // Ensure we always have a valid, unique id for each row (some pages may have null/undefined PageId)
+      const allTransformedPages = pagesData.map((page, index) => ({
+        id: page.PageId ?? index,
         Uri: page.Uri,
         Score: page.Score ?? 0,
         Evaluation_Date: page.Evaluation_Date ? moment(page.Evaluation_Date).format('DD/MM/YYYY') : 'Pendente',
