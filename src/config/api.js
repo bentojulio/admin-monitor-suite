@@ -7,19 +7,19 @@ const normalizeBaseUrl = (url) => {
   return url.replace(/\/+$/, '');
 };
 
-export const getDefaultDevApiUrl = () => {
-  return (import.meta?.env?.VITE_DEV_API_URL || 'http://10.55.37.17').replace(/\/+$/, '');
-};
-
+export const getDefaultApiUrl = () => {
+  const envUrl = import.meta?.env?.VITE_API_URL;
+  return normalizeBaseUrl(envUrl);
+}
 const resolveBaseUrl = () => {
   if (typeof window === 'undefined') {
-    return '/api';
+    return '/';
   }
 
   const storedUrl = localStorage.getItem('@AMS:apiUrl');
   const base = normalizeBaseUrl(storedUrl || getDefaultDevApiUrl());
 
-  return base ? `${base}/api` : '/api';
+  return base ? `${base}/` : '/';
 };
 
 const api = axios.create({
@@ -55,7 +55,6 @@ export const getEvalDataByAPI = async (content, currentURLorHTML) => {
 
 api.interceptors.request.use(
   (config) => {
-    // Always refresh the baseURL from localStorage before each request
     config.baseURL = refreshApiBaseUrl();
     const token = localStorage.getItem('@AMS:token');
     if (token) {
