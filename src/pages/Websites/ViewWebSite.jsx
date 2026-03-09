@@ -26,7 +26,7 @@ import { useTranslation } from "react-i18next";
 import Indicators from "../../components/Indicators";
 import { api } from "../../config/api";
 import moment from "moment";
-import { ruleset } from "@a12e/accessmonitor-rulesets";
+import {ruleset} from "@a12e/accessmonitor-rulesets";
 import { downloadCSV, downloadWebsiteCSV, getData, getSimplifiedPracticesData } from "../../utils/utils.js";
 import { isRequestSuccessful } from "../../utils/apiHelpers.js";
 import { Modal } from "../../components/Modal";
@@ -56,8 +56,7 @@ const decodeAndFormatErrors = (errorsBase64) => {
     // Parse JSON
     const errorsData = JSON.parse(decodedString);
 
-    // You'll need to define your tests object with level information
-    // This is a placeholder - replace with your actual tests mapping
+
 
 
     const errors = [];
