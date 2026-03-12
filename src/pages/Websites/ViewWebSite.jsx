@@ -278,7 +278,6 @@ const ViewWebSitesComponent = () => {
       // Only one API call needed - fetch all pages at once
       const responsePages = await api.get(`/website/${encodeURIComponent(websiteName)}/user/admin/pages`);
       const pagesData = responsePages.data.result || [];
-      console.log('Pages API Response - Total pages:', pagesData.length);
       setTotalItems(pagesData.length);
       
       // Transform all pages data once
@@ -289,7 +288,7 @@ const ViewWebSitesComponent = () => {
         Score: page.Score ?? 0,
         Evaluation_Date: page.Evaluation_Date ? moment(page.Evaluation_Date).format('DD/MM/YYYY') : 'Pendente',
         Evaluation_Date_Raw: page.Evaluation_Date, // Keep raw date for sorting
-        Element_Count: calculateTotalElements(page.Element_Count),
+        Element_Count: calculateTotalElements(page.Tag_Count),
         A: page.A ?? 0,
         AA: page.AA ?? 0,
         AAA: page.AAA ?? 0,
