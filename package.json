@@ -5,9 +5,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --mode development",
-    "build": "vite build --mode production",
+    "dev": "vite --host 0.0.0.0 --mode dev",
+    "build": "vite build --mode prod",
     "build:preprod": "vite build --mode preprod",
+    "build:noenv": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
@@ -15,7 +16,8 @@
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
-    "ama-design-system": "file:../Storybook Design System AMA/ama-design-system-1.1.92.tgz",
+    "@a12e/accessmonitor-rulesets": "1.0.0",
+    "ama-design-system": "./ama-design-system-1.1.92.tgz",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
     "chart.js": "^4.4.9",
