@@ -13,11 +13,11 @@ export const getDefaultApiUrl = () => {
 }
 const resolveBaseUrl = () => {
   if (typeof window === 'undefined') {
-    return '/';
+    return '/api';
   }
 
   const storedUrl = localStorage.getItem('@AMS:apiUrl');
-  const base = normalizeBaseUrl(storedUrl || getDefaultDevApiUrl());
+  const base = normalizeBaseUrl(storedUrl || getDefaultApiUrl());
 
   return base ? `${base}/` : '/';
 };
