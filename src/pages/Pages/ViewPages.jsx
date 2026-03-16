@@ -101,7 +101,6 @@ const ViewPages = () => {
 
     const fetchData = async () => {
       const response = await api.get(`/evaluation/admin/page/${encodeURIComponent(pageUrl)}`);
-      console.log(response)
       setData(response.data.result.map(item => ({
         id: item.EvaluationId,
         date_avaliation: moment(item.Evaluation_Date).format('DD/MM/YYYY'),

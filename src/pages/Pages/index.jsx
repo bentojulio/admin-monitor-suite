@@ -15,6 +15,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { setWebsiteNavigationContext } from "../../utils/navigation";
 import { useUniqueCheckboxSelection } from "../../hooks/useUniqueCheckboxSelection";
 import { calculateTotalElements } from "../../utils/utils";
+import { getEvaluationStatus } from "../../utils/utils";
 // Lightweight date formatter to replace moment.js
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -23,7 +24,6 @@ const formatDate = (dateString) => {
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
-
 
 
 const PageList = () => {
@@ -64,8 +64,7 @@ const PageList = () => {
         api.get(url)
       ]);
       
-      console.log("Pages API response:", { total: totalItemsResponse.data, data: dataResponse.data });
-      
+
       setTotalItems(Number(totalItemsResponse.data.result));
       
       const transformedData = (dataResponse.data.result || []).map(item => ({
@@ -77,7 +76,7 @@ const PageList = () => {
         A: item.A ?? 0,
         AA: item.AA ?? 0,
         AAA: item.AAA ?? 0,
-        e: "?",
+        e: getEvaluationStatus(item),
         OPAW: item.Show_In ? (item.Show_In.split("")[2] === "1" ? "Sim" : "Nao") : "Nao",
       }));
       
