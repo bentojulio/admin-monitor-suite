@@ -3,7 +3,7 @@ import { InputSearch, SortingTable, Button, Breadcrumb } from "ama-design-system
 import { Link, useNavigate } from "react-router";
 import { useTheme } from '../../context/ThemeContext.jsx';
 import { useTranslation } from 'react-i18next';
-import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons, paginationButtonsTexts } from "./table.config.jsx";
+import { directoriesHeaders, dataRows, columnsOptions, nameOfIcons } from "./table.config.jsx";
 import { api } from "../../config/api";
 import moment from "moment";
 import { Modal } from "../../components/Modal";
@@ -120,10 +120,29 @@ export default function CrawlerList() {
           nextPage={() => null}
           caption={t('CRAWLER_PAGE.LIST.table.title')}
           iconsAltTexts={nameOfIcons}
-          paginationButtonsTexts={paginationButtonsTexts}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
           checkedItems={checkboxesSelected}
+          pagination={true}
+          serverSidePagination={false}
+          paginationButtonsTexts={[
+            "Primeira página",
+            "Página anterior",
+            "Página seguinte",
+            "Última página"
+          ]}
+          nItemsPerPageTexts={[
+            "Ver",
+            "por página",
+            "Selector de itens por página",
+            "Navegação do seletor de itens por página"
+          ]}
+          itemsPaginationTexts={[
+            " de ",
+            " itens "
+          ]}
+          paginationOptions={[10, 25, 50, 100, filteredData.length].filter((v, i, a) => v && a.indexOf(v) === i).sort((a, b) => a - b)}
+          rowKey="id"
         />
       </div>
 
