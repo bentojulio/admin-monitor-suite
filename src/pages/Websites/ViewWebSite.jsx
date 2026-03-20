@@ -26,8 +26,8 @@ import { useTranslation } from "react-i18next";
 import Indicators from "../../components/Indicators";
 import { api } from "../../config/api";
 import moment from "moment";
-import tests from "../../utils/tests.js";
-import { downloadCSV, downloadWebsiteCSV, getData, getSimplifiedPracticesData, getEvaluationStatus } from "../../utils/utils.js";
+import {ruleset} from "@a12e/accessmonitor-rulesets";
+import { downloadCSV, downloadWebsiteCSV, getData, getSimplifiedPracticesData } from "../../utils/utils.js";
 import { isRequestSuccessful } from "../../utils/apiHelpers.js";
 import { Modal } from "../../components/Modal";
 import { getEffectiveNavigationContext, setWebsiteNavigationContext } from "../../utils/navigation";
@@ -56,8 +56,7 @@ const decodeAndFormatErrors = (errorsBase64) => {
     // Parse JSON
     const errorsData = JSON.parse(decodedString);
 
-    // You'll need to define your tests object with level information
-    // This is a placeholder - replace with your actual tests mapping
+
 
 
     const errors = [];
@@ -67,9 +66,9 @@ const decodeAndFormatErrors = (errorsBase64) => {
           key,
           n_elems: errorsData[key], // This is the count of errors for this test
           n_pages: 1, // This page has this error
-          lvl: tests[key]?.level?.toUpperCase() || 'UNKNOWN',
-          description: tests[key]?.test || `Test ${key}`, // Use the test name as description
-          elem: tests[key]?.elem || 'unknown' // Element type
+          lvl: ruleset[key]?.level?.toUpperCase() || 'UNKNOWN',
+          description: ruleset[key]?.test || `Test ${key}`, // Use the test name as description
+          elem: ruleset[key]?.elem || 'unknown' // Element type
         });
       }
     }
@@ -279,7 +278,6 @@ const ViewWebSitesComponent = () => {
       // Only one API call needed - fetch all pages at once
       const responsePages = await api.get(`/website/${encodeURIComponent(websiteName)}/user/admin/pages`);
       const pagesData = responsePages.data.result || [];
-      console.log('Pages API Response - Total pages:', pagesData.length);
       setTotalItems(pagesData.length);
       
       // Transform all pages data once
@@ -290,7 +288,7 @@ const ViewWebSitesComponent = () => {
         Score: page.Score ?? 0,
         Evaluation_Date: page.Evaluation_Date ? moment(page.Evaluation_Date).format('DD/MM/YYYY') : 'Pendente',
         Evaluation_Date_Raw: page.Evaluation_Date, // Keep raw date for sorting
-        Element_Count: calculateTotalElements(page.Element_Count),
+        Element_Count: calculateTotalElements(page.Tag_Count),
         A: page.A ?? 0,
         AA: page.AA ?? 0,
         AAA: page.AAA ?? 0,

@@ -4,6 +4,16 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: true,
+    watch: {
+      usePolling: true, 
+    },
+  hmr: {
+    path: '/ams/',
+    
+  }
+  },
   test: {
     globals: true,
     environment: 'jsdom',
@@ -21,6 +31,7 @@ export default defineConfig({
     }
   },
   resolve: {
+    preserveSymlinks: true,
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
