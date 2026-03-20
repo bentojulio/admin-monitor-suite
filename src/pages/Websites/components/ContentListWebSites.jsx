@@ -29,6 +29,7 @@ export default function ContentListWebSites({
   onCrawlWebsites,
   navigate,
   setItemsPerPage,
+  serverSidePagination = true,
 }) {
   const { t } = useTranslation();
   const { theme } = useTheme();
@@ -97,6 +98,16 @@ export default function ContentListWebSites({
         itemsPerPage={itemsPerPage}
         onPageChange={onPageChange}
         onItemsPerPageChange={onItemsPerPageChange}
+        checkedItems={checkboxesSelected}
+        serverSidePagination={serverSidePagination}
+        {...(serverSidePagination && {
+          totalItems,
+          currentPage,
+          itemsPerPage,
+          onPageChange,
+          onItemsPerPageChange,
+          setItemsPerPage
+        })}
         paginationButtonsTexts={[
           "Primeira página",
           "Página anterior",

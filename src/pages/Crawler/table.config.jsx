@@ -15,9 +15,14 @@ export const directoriesHeaders = [
 // Column rendering options
 export const columnsOptions = (navigate) => {
   return {
-  websiteId: { type: "Hidden", center: true, bold: false, decimalPlace: false },
   id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
-  url: { type: "Text", center: true, bold: false, decimalPlace: false },
+  url: { 
+    type: "Text", 
+    center: true, 
+    bold: false, 
+    decimalPlace: false, 
+    isCheckboxLabel: true, 
+  },
   startDate: { type: "Text", center: true, bold: false, decimalPlace: false },
   status: { type: "Text", center: true, bold: false, decimalPlace: false },
   results: {
@@ -54,7 +59,7 @@ export const directoriesHeadersCrawlDetails = [
 
 export const columnsOptionsCrawlDetails = {
   Import: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
-  Uri: { type: "Link", center: false, href: (row) => {
+  Uri: { type: "Link", center: false, isCheckboxLabel: true, href: (row) => {
     return `${row.Uri}`
   }, bold: false, decimalPlace: false },
 };

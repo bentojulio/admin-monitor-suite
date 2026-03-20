@@ -212,6 +212,7 @@ const EntitiesList = () => {
             " itens "  // items
           ]}
           pagination={true}
+          serverSidePagination={true}
           totalItems={totalItems}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
@@ -221,6 +222,7 @@ const EntitiesList = () => {
           iconsAltTexts={nameOfIcons}
           project={""}
           setCheckboxesSelected={setCheckboxesSelected}
+          checkedItems={checkboxesSelected}
           rowKey="id"
         />
         <Modal

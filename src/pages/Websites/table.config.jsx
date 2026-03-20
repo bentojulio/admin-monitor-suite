@@ -25,6 +25,7 @@ export const directoriesHeaders = [
       nRow: 1,
       name: i18n.t("WEBSITES_PAGE.LIST.table.url_label"),
       property: "StartingUrl",
+      justifyCenter: false,
     },
     {
       type: "SortingText",
@@ -64,6 +65,7 @@ export const columnsOptions = (navigate) => ({
     type: "Link",
     center: true,
     bold: false,
+    isCheckboxLabel: true,
     decimalPlace: false,
     href: (row) => {
       return `${apiUrl}dashboard/websites/view/${row.id}/${row.Name}`;

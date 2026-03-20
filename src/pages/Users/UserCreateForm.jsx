@@ -27,6 +27,15 @@ const UsersCreateForm = () => {
     const watchedConfirmPassword = watch("confirmPassword");
     const watchedUsername = watch("username");
     const { id } = useParams();
+    
+    // Password strength validation helpers
+    const passwordRequirements = {
+        minLength: watchedPassword?.length >= 8,
+        hasUpperCase: /[A-Z]/.test(watchedPassword || ""),
+        hasLowerCase: /[a-z]/.test(watchedPassword || ""),
+        hasNumber: /\d/.test(watchedPassword || ""),
+        hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(watchedPassword || "")
+    };
     // Helper: validation rules for username
     const usernameValidation = {
         required: <div dangerouslySetInnerHTML={{__html: t('MISC.required_field')}} />,
@@ -326,7 +335,70 @@ const UsersCreateForm = () => {
                                 onChange={e => setValue("password", e.target.value)}
                                 error={errors.password?.message}
                                 autoComplete="off"
+                                aria-describedby={role !== '2' ? "password-requirements" : undefined}
                             />
+                            
+                            {role !== '2' && (
+                                <div 
+                                    id="password-requirements"
+                                    role="region"
+                                    aria-label="Requisitos da palavra-passe"
+                                    style={{ 
+                                        marginTop: '-8px', 
+                                        marginBottom: '16px', 
+                                        padding: '12px', 
+                                        backgroundColor: '#f8f9fa', 
+                                        borderRadius: '4px',
+                                        fontSize: '14px'
+                                    }}
+                                >
+                                    <p style={{ margin: '0 0 8px 0', fontWeight: 'bold', color: '#495057' }} id="password-requirements-title">
+                                        A palavra-passe deve ter:
+                                    </p>
+                                    <ul 
+                                        style={{ margin: 0, paddingLeft: '20px', listStyle: 'none' }}
+                                        aria-labelledby="password-requirements-title"
+                                        aria-live="polite"
+                                        aria-relevant="all"
+                                    >
+                                        <li style={{ 
+                                                color: watchedPassword ? (passwordRequirements.minLength ? '#198754' : '#dc3545') : '#495057',
+                                                marginBottom: '4px'
+                                            }}
+                                        >
+                                            <span aria-hidden="true">{watchedPassword ? (passwordRequirements.minLength ? '✓' : '✗') : '•'}</span> Pelo menos 8 caracteres
+                                        </li>
+                                        <li style={{ 
+                                                color: watchedPassword ? (passwordRequirements.hasUpperCase ? '#198754' : '#dc3545') : '#495057',
+                                                marginBottom: '4px'
+                                            }}
+                                        >
+                                            <span aria-hidden="true">{watchedPassword ? (passwordRequirements.hasUpperCase ? '✓' : '✗') : '•'}</span> Pelo menos uma letra maiúscula (A-Z)
+                                        </li>
+                                        <li style={{ 
+                                                color: watchedPassword ? (passwordRequirements.hasLowerCase ? '#198754' : '#dc3545') : '#495057',
+                                                marginBottom: '4px'
+                                            }}
+                                        >
+                                            <span aria-hidden="true">{watchedPassword ? (passwordRequirements.hasLowerCase ? '✓' : '✗') : '•'}</span> Pelo menos uma letra minúscula (a-z)
+                                        </li>
+                                        <li style={{ 
+                                                color: watchedPassword ? (passwordRequirements.hasNumber ? '#198754' : '#dc3545') : '#495057',
+                                                marginBottom: '4px'
+                                            }}
+                                        >
+                                            <span aria-hidden="true">{watchedPassword ? (passwordRequirements.hasNumber ? '✓' : '✗') : '•'}</span> Pelo menos um número (0-9)
+                                        </li>
+                                        <li style={{ 
+                                                color: watchedPassword ? (passwordRequirements.hasSpecialChar ? '#198754' : '#dc3545') : '#495057'
+                                            }}
+                                        >
+                                            <span aria-hidden="true">{watchedPassword ? (passwordRequirements.hasSpecialChar ? '✓' : '✗') : '•'}</span> Pelo menos um caractere especial (!@#$%^&*...)
+                                        </li>
+                                    </ul>
+                                </div>
+                            )}
+                            
                             <Input
                                 key={`confirmPassword-${role}`}
                                 label={t('USERS_PAGE.ADD.confirm_password_label') + (role === '2' ? " (opcional)" : "")}

@@ -99,7 +99,7 @@ const DashboardLayout = () => {
         } 
       });
     }
-    setActiveItem(found ? found : "");
+    setActiveItem(found ? found.id : "");
   }, [location.pathname]);
 
   // Fix for Issue #68: Remove default checked attribute from header checkboxes

@@ -201,6 +201,7 @@ const EvaluationWithErrors = () => {
         project={""}
         checkboxesSelected={checkboxesSelected}
         setCheckboxesSelected={setCheckboxesSelected}
+        checkedItems={checkboxesSelected}
         rowKey="id"
         />  
       </div>

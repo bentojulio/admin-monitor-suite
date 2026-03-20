@@ -63,6 +63,10 @@ const ViewCategoriesComponent = () => {
   const [showCrawlingModal, setShowCrawlingModal] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [counter, setCounter] = useState(0);
+  const [isLoadingWebsites, setIsLoadingWebsites] = useState(true);
+  const [isProcessingStats, setIsProcessingStats] = useState(true);
+  const [websitesError, setWebsitesError] = useState(null);
+  const [hasInitialLoad, setHasInitialLoad] = useState(false);
   // -------- Breadcrumbs / Path memory ----------
   useEffect(() => {
     setBreadcrumbs([
@@ -88,6 +92,12 @@ const ViewCategoriesComponent = () => {
     }
     localStorage.setItem('currentPath', currentPath);
   }, [location.pathname]);
+
+  // -------- Fetch websites only (fast) ----------
+  const fetchWebsitesOnly = async () => {
+    const response = await api.get(`/tag/${categoryName}/user/admin/websites`);
+    return response.data.result || [];
+  };
 
   // -------- Fetch (reutilizável após ações) ----------
   const fetchDataWebsites = async () => {
@@ -325,43 +335,80 @@ const ViewCategoriesComponent = () => {
     setSuccessCriteriaErrors(sortFormat(practicesBySuccessCriteria.errors));
   };
 
-  // Initial fetch
+  // Initial fetch - two phases
   useEffect(() => {
-    fetchDataWebsites();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryName]);
+    let isCancelled = false;
 
-  // -------- Server-side pagination & search ----------
-  useEffect(() => {
-    const fetchPaginated = async () => {
+    const loadData = async () => {
       try {
-        const countRes = await api.get(`/tag/${encodeURIComponent(categoryName)}/user/admin/websites/count/search=${encodeURIComponent(search || '')}`);
-        setTotalItems(Number(countRes.data.result || 0));
-        const offset = currentPage - 1;
-        const listRes = await api.get(`/tag/${encodeURIComponent(categoryName)}/user/admin/websites/all/${itemsPerPage}/${offset}/sort=/direction=/search=${encodeURIComponent(search || '')}`);
-        const rows = (listRes.data.result || []).map(w => ({
-          id: w.WebsiteId,
-          Name: w.Name,
-          StartingUrl: w.StartingUrl,
-          Pages: w.Pages + "(" + w.Evaluated_Pages + ")",
-          Creation_Date: moment(w.Creation_Date).format('DD/MM/YYYY'),
+        // Reset flags for new category
+        setHasInitialLoad(false);
+        
+        // Phase 1: Load websites quickly
+        setIsLoadingWebsites(true);
+        setWebsitesError(null);
+        const websites = await fetchWebsitesOnly();
+        
+        if (isCancelled) return;
+
+        const websitesRows = websites.map(item => ({
+          id: item.WebsiteId,
+          Name: item.Name,
+          StartingUrl: item.StartingUrl,
+          Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
+          Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
           Declaration:
-            w.Declaration === null ? "Não avaliado" :
-            w.Declaration === 1 ? "Selo de Ouro" :
-            w.Declaration === 2 ? "Selo de Prata" :
-            w.Declaration === 3 ? "Selo de Bronze" :
+            item.Declaration === null ? "Não avaliado" :
+            item.Declaration === 1 ? "Selo de Ouro" :
+            item.Declaration === 2 ? "Selo de Prata" :
+            item.Declaration === 3 ? "Selo de Bronze" :
             "Declaração não conforme",
           edit: "Editar",
         }));
-        setData(rows);
-        setOriginalData(rows);
-      } catch (e) {}
-    };
-    fetchPaginated();
-  }, [categoryName, currentPage, itemsPerPage, search]);
 
-  const handlePageChange = (page) => setCurrentPage(page);
-  const handleItemsPerPageChange = (n) => { setItemsPerPage(n); setCurrentPage(1); };
+        setData(websitesRows);
+        setOriginalData(websitesRows);
+        setIsLoadingWebsites(false);
+        setHasInitialLoad(true); // Mark initial load complete
+
+        // Phase 2: Load pages and compute metrics
+        setIsProcessingStats(true);
+        await fetchDataWebsites();
+        setIsProcessingStats(false);
+      } catch (error) {
+        console.error("Error loading category data:", error);
+        setWebsitesError('Erro ao carregar dados da categoria');
+        setIsLoadingWebsites(false);
+        setIsProcessingStats(false);
+        setHasInitialLoad(true); // Mark as complete even on error
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isCancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryName]);
+
+  // Client-side search filtering for category websites
+  useEffect(() => {
+    // Only run after initial load is complete
+    if (!hasInitialLoad) return;
+    
+    if (search.trim() === '') {
+      // No search, show all websites
+      setData(originalData);
+    } else {
+      // Filter websites by search term (client-side)
+      const filtered = originalData.filter(item => 
+        item.Name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.StartingUrl?.toLowerCase().includes(search.toLowerCase())
+      );
+      setData(filtered);
+    }
+  }, [search, hasInitialLoad, originalData]);
 
   // -------- Actions expected by ContentListWebSites ----------
   const handleOpenReevaluateModal = () => {
@@ -522,7 +569,7 @@ const ViewCategoriesComponent = () => {
             onDeletePagesWebsites={handleDeletePagesWebsites}
             onReevaluateWebsites={handleOpenReevaluateModal}
             onCrawlWebsites={handleOpenCrawlingModal}
-            setItemsPerPage={setItemsPerPage}
+            serverSidePagination={false}
             navigate={navigate}
           />
         </div>
@@ -545,29 +592,45 @@ const ViewCategoriesComponent = () => {
 
         <div className="mt-5 bg-white">
           <h2 className="mb-4">Indicadores globais da Categoria</h2>
-          <Indicators listItems={listItems}/>
+          {isProcessingStats ? (
+            <p className="text-muted">A calcular indicadores...</p>
+          ) : (
+            <Indicators listItems={listItems}/>
+          )}
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Conformidade global da Categoria</h2>
-          <Indicators listItems={listItemsGlobal}/>
+          {isProcessingStats ? (
+            <p className="text-muted">A calcular conformidade...</p>
+          ) : (
+            <Indicators listItems={listItemsGlobal}/>
+          )}
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Distribuição das pontuações AccessMonitor no universo da Categoria</h2>
-          <BarLineGraphTabs
-            columnsOptions={columnsOptionsBar}
-            barData={barDataDynamic}
-            barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
-            dataHeaders={dataHeadersBar}
-            dataList={dataListBar}
-            darkTheme={theme}
-          />
+          {isProcessingStats ? (
+            <p className="text-muted">A preparar distribuição...</p>
+          ) : (
+            <BarLineGraphTabs
+              columnsOptions={columnsOptionsBar}
+              barData={barDataDynamic}
+              barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
+              dataHeaders={dataHeadersBar}
+              dataList={dataListBar}
+              darkTheme={theme}
+            />
+          )}
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Mancha Gráfica da Acessibilidade</h2>
-          <RadarGraph websites={radarWebsites} labelDataSet="Pontuação por sítio Web" darkTheme={theme} showTabs={true} />
+          {isProcessingStats ? (
+            <p className="text-muted">A preparar gráfico radar...</p>
+          ) : (
+            <RadarGraph websites={radarWebsites} labelDataSet="Pontuação por sítio Web" darkTheme={theme} showTabs={true} />
+          )}
         </div>
 
         <div className="mt-5 bg-white p-4">
@@ -610,29 +673,36 @@ const ViewCategoriesComponent = () => {
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Distribuição detalhada das piores práticas</h2>
-          <SortingTable
-            hasSort={false}
-            headers={detailsTableHeaders || []}
-            dataList={dataListDetailsBad.filter(item => !item.occurrences.toString().includes("lang"))}
-            columnsOptions={columnsOptionsDetails || {}}
-            darkTheme={theme}
-            pagination={false}
-            links={false}
-            ariaLabels={ariaLabels || {}}
-            caption="Distribuição detalhada das piores práticas"
-            setDataList={() => {}}
-            nextPage={() => {}}
-            itemsPaginationTexts={[]}
-            nItemsPerPageTexts={[]}
-            iconsAltTexts={[]}
-            paginationButtonsTexts={[]}
-            project=""
-            setCheckboxesSelected={() => {}}
-          />
+          {isProcessingStats ? (
+            <p className="text-muted">A calcular más práticas...</p>
+          ) : (
+            <SortingTable
+              hasSort={false}
+              headers={detailsTableHeaders || []}
+              dataList={dataListDetailsBad.filter(item => !item.occurrences.toString().includes("lang"))}
+              columnsOptions={columnsOptionsDetails || {}}
+              darkTheme={theme}
+              pagination={false}
+              links={false}
+              ariaLabels={ariaLabels || {}}
+              caption="Distribuição detalhada das piores práticas"
+              setDataList={() => {}}
+              nextPage={() => {}}
+              itemsPaginationTexts={[]}
+              nItemsPerPageTexts={[]}
+              iconsAltTexts={[]}
+              paginationButtonsTexts={[]}
+              project=""
+              setCheckboxesSelected={() => {}}
+            />
+          )}
         </div>
 
         <div className="mt-5 bg-white p-4">
           <h2 className="mb-4">Práticas por Critério de Sucesso WCAG 2.1</h2>
+          {isProcessingStats ? (
+            <p className="text-muted">A processar critérios de sucesso...</p>
+          ) : (
           <div>
             <h3 style={{ fontWeight: 700, marginTop: 32 }}>Boas práticas</h3>
             {Object.keys(successCriteriaSuccess).length > 0 ? (
@@ -682,6 +752,7 @@ const ViewCategoriesComponent = () => {
               </div>
             )}
           </div>
+          )}
         </div>
       </div>
 

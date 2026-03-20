@@ -1308,14 +1308,14 @@ export async function downloadCSV(websites, fileBaseName = "websites") {
       "averagePoints",
     ];
 
-    const needsQuote = /[\n\r",]/;
+    const needsQuote = /[\n\r";]/;
     const esc = (v) => {
       const s = (v ?? "").toString().replace(/\r?\n/g, " ");
       return needsQuote.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
     };
 
     const CHUNK_SIZE = 30; // 5 req por segundo
-    let data = headers.join(",") + "\n";
+    let data = headers.join(";") + "\n";
 
     for (let i = 0; i < uniq.length; i += CHUNK_SIZE) {
       const startedAt = Date.now();
@@ -1376,7 +1376,7 @@ export async function downloadCSV(websites, fileBaseName = "websites") {
           esc(directories),
           esc(numberOfPages),
           esc(avg),
-        ].join(",");
+        ].join(";");
 
         data += line + "\n";
       }
@@ -1424,7 +1424,7 @@ export async function downloadWebsiteCSV(website, fileBaseName = "evaluation", t
     ];
 
     // --- local helpers (no external helpers created) ---
-    const needsQuote = /[\n\r",]/;
+    const needsQuote = /[\n\r";]/;
     const esc = (v) => {
       const s = (v ?? "").toString().replace(/\r?\n/g, " ");
       return needsQuote.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
@@ -1472,7 +1472,7 @@ export async function downloadWebsiteCSV(website, fileBaseName = "evaluation", t
       return { value: m[1], count: m[2] };
     };
 
-    let csv = headers.join(",") + "\n";
+    let csv = headers.join(";") + "\n";
 
     for (const page of pages) {
       const totDecoded = decodeTot(page?.Tot);
@@ -1508,7 +1508,7 @@ export async function downloadWebsiteCSV(website, fileBaseName = "evaluation", t
           esc(count),               // Número de ocorrências
           esc(value),               // Valor
           formatPontuacao(score),   // Pontuação (decimal com vírgula)
-        ].join(",");
+        ].join(";");
 
         csv += row + "\n";
       }

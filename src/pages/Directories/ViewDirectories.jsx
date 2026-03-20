@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, memo } from "react";
+import React, { useState, useEffect, useMemo, memo, useTransition, useRef } from "react";
 import { Button, StatisticsHeader, Breadcrumb, SortingTable, RadioGroup } from "ama-design-system";
 import "./style.users.css";
 import { RadarGraph } from "../../components/RadarGraph/index.jsx";
@@ -236,6 +236,12 @@ const ViewDirectoriesComponent = () => {
     cumulative: 2,
     cumulative_percent: '5%'
   }]);
+  const [isPending, startTransition] = useTransition();
+  const pagesCacheRef = useRef({});
+  const [isLoadingWebsites, setIsLoadingWebsites] = useState(true);
+  const [isProcessingStats, setIsProcessingStats] = useState(true);
+  const [websitesError, setWebsitesError] = useState(null);
+  const [hasInitialLoad, setHasInitialLoad] = useState(false);
   useEffect(() => {
     const currentPath = location.pathname;
     const lastPath = localStorage.getItem('currentPath');
@@ -520,7 +526,11 @@ const ViewDirectoriesComponent = () => {
         data: { directoryName }
       });
     }
-  }, [directoryName]);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [directoryName, t]);
 
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
@@ -608,6 +618,7 @@ const ViewDirectoriesComponent = () => {
         setFeedbackMessage("Sítios web eliminados com sucesso!");
         setCheckboxesSelected([]);
         setSearch("");
+        clearDirectoryPagesCache();
       }
     } catch (error) {
       setFeedbackMessage("Erro ao eliminar sítios web. Tente novamente.");
@@ -632,6 +643,7 @@ const ViewDirectoriesComponent = () => {
         setFeedbackMessage("Páginas dos sítios web eliminadas com sucesso!");
         setCheckboxesSelected([]);
         setSearch("");
+        clearDirectoryPagesCache();
         await fetchDataWebsite();
       }
     } catch (error) {
@@ -655,6 +667,7 @@ const ViewDirectoriesComponent = () => {
         setCheckboxesSelected([]);
         setShowModal(false);
         setSearch("");
+        clearDirectoryPagesCache();
         await fetchDataWebsite();
       }
     } catch (error) {
@@ -701,6 +714,7 @@ const ViewDirectoriesComponent = () => {
         onDeletePagesWebsites={handleDeletePagesWebsites}
         onReevaluateWebsites={handleReevaluateWebsites}
         onCrawlWebsites={handleOpenCrawlingModal}
+        serverSidePagination={false}
       />
 
       <div className="bg-white mt-5">
@@ -719,75 +733,99 @@ const ViewDirectoriesComponent = () => {
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">{t('DIRECTORIES_PAGE.LIST.global_indicators')}</h2>
-        <Indicators listItems={listItems} />
+        {isProcessingStats ? (
+          <p className="text-muted">A calcular indicadores...</p>
+        ) : (
+          <Indicators listItems={listItems} />
+        )}
       </div>
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Conformidade global do Diretório</h2>
-        <Indicators listItems={listItemsGlobal} />
+        {isProcessingStats ? (
+          <p className="text-muted">A calcular conformidade...</p>
+        ) : (
+          <Indicators listItems={listItemsGlobal} />
+        )}
       </div>
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição das pontuações AccessMonitor no universo do Diretório</h2>
-        <BarLineGraphTabs
-          columnsOptions={columnsOptionsBar}
-          barData={barDataDynamic}
-          barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
-          dataHeaders={dataHeadersBar}
-          dataList={dataListBar}
-          darkTheme={theme}
-        />
+        {isProcessingStats ? (
+          <p className="text-muted">A preparar distribuição...</p>
+        ) : (
+          <BarLineGraphTabs
+            columnsOptions={columnsOptionsBar}
+            barData={barDataDynamic}
+            barOptions={theme === "light" ? barOptionsCopy : barOptionsDark}
+            dataHeaders={dataHeadersBar}
+            dataList={dataListBar}
+            darkTheme={theme}
+          />
+        )}
       </div>
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Mancha Gráfica da Acessibilidade</h2>
-        <RadarGraph darkTheme={theme} labelDataSet="Pontuação por sítio Web" websites={radarWebsites}showTabs={true} />
+        {isProcessingStats ? (
+          <p className="text-muted">A preparar gráfico radar...</p>
+        ) : (
+          <RadarGraph darkTheme={theme} labelDataSet="Pontuação por sítio Web" websites={radarWebsites}showTabs={true} />
+        )}
       </div>
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição detalhada das melhores práticas</h2>
-        <SortingTable
-          hasSort={false}
-          headers={detailsTableHeaders}
-          dataList={dataListDetails?.filter(e => !e.occurrences.toString()?.includes("lang"))}
-          columnsOptions={columnsOptionsDetails}
-          darkTheme={theme}
-          pagination={false}
-          links={false}
-          ariaLabels={ariaLabels}
-          caption="Distribuição detalhada das melhores práticas"
-          setDataList={() => { }}
-          nextPage={() => { }}
-          itemsPaginationTexts={[]}
-          nItemsPerPageTexts={[]}
-          iconsAltTexts={[]}
-          paginationButtonsTexts={[]}
-          project=""
-          setCheckboxesSelected={() => { }}
-        />
+        {isProcessingStats ? (
+          <p className="text-muted">A calcular práticas...</p>
+        ) : (
+          <SortingTable
+            hasSort={false}
+            headers={detailsTableHeaders}
+            dataList={dataListDetails?.filter(e => !e.occurrences.toString()?.includes("lang"))}
+            columnsOptions={columnsOptionsDetails}
+            darkTheme={theme}
+            pagination={false}
+            links={false}
+            ariaLabels={ariaLabels}
+            caption="Distribuição detalhada das melhores práticas"
+            setDataList={() => { }}
+            nextPage={() => { }}
+            itemsPaginationTexts={[]}
+            nItemsPerPageTexts={[]}
+            iconsAltTexts={[]}
+            paginationButtonsTexts={[]}
+            project=""
+            setCheckboxesSelected={() => {}}
+          />
+        )}
       </div>
 
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição detalhada das piores práticas</h2>
-        <SortingTable
-          hasSort={false}
-          headers={detailsTableHeaders}
-          dataList={dataListDetailsBad?.filter(e => !e.occurrences.toString()?.includes("lang"))}
-          columnsOptions={columnsOptionsDetails}
-          darkTheme={theme}
-          pagination={false}
-          links={false}
-          ariaLabels={ariaLabels}
-          caption="Distribuição detalhada das piores práticas"
-          setDataList={() => { }}
-          nextPage={() => { }}
-          itemsPaginationTexts={[]}
-          nItemsPerPageTexts={[]}
-          iconsAltTexts={[]}
-          paginationButtonsTexts={[]}
-          project=""
-          setCheckboxesSelected={() => { }}
-        />
+        {isProcessingStats ? (
+          <p className="text-muted">A calcular más práticas...</p>
+        ) : (
+          <SortingTable
+            hasSort={false}
+            headers={detailsTableHeaders}
+            dataList={dataListDetailsBad?.filter(e => !e.occurrences.toString()?.includes("lang"))}
+            columnsOptions={columnsOptionsDetails}
+            darkTheme={theme}
+            pagination={false}
+            links={false}
+            ariaLabels={ariaLabels}
+            caption="Distribuição detalhada das piores práticas"
+            setDataList={() => { }}
+            nextPage={() => { }}
+            itemsPaginationTexts={[]}
+            nItemsPerPageTexts={[]}
+            iconsAltTexts={[]}
+            paginationButtonsTexts={[]}
+            project=""
+            setCheckboxesSelected={() => {}}
+          />
+        )}
       </div>
 
       <div className="mt-5 bg-white p-4">

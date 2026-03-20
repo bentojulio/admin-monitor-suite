@@ -18,6 +18,7 @@ export default function ContentListPages ({
   totalItems,
   currentPage,
   itemsPerPage,
+  setItemsPerPage,
   onPageChange,
   onItemsPerPageChange,
   search,
