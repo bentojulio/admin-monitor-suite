@@ -8,9 +8,6 @@ const normalizeBaseUrl = (url) => {
   return url.replace(/\/+$/, '');
 };
 const envPathApi = import.meta.env.VITE_PATH_API;
-const envUrl = import.meta.env.VITE_API_URL;
-
-const envPathApi = import.meta.env.VITE_PATH_API;
 
 export const getDefaultApiUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;
