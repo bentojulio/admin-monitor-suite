@@ -17,6 +17,8 @@ export default function CrawlerList() {
   const [search, setSearch] = useState("");
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const breadcrumbs = [
     { children: <Link to="/dashboard/home">Início</Link> },
@@ -45,6 +47,16 @@ export default function CrawlerList() {
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (items) => {
+    setItemsPerPage(items);
+    setCurrentPage(1);
   };
 
   const handleDeleteCrawlers = async () => {
@@ -125,6 +137,12 @@ export default function CrawlerList() {
           checkedItems={checkboxesSelected}
           pagination={true}
           serverSidePagination={false}
+          totalItems={filteredData.length}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          setItemsPerPage={setItemsPerPage}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
           paginationButtonsTexts={[
             "Primeira página",
             "Página anterior",
@@ -141,7 +159,7 @@ export default function CrawlerList() {
             " de ",
             " itens "
           ]}
-          paginationOptions={[10, 25, 50, 100, filteredData.length].filter((v, i, a) => v && a.indexOf(v) === i).sort((a, b) => a - b)}
+          paginationOptions={[10, 25, 50, 100].filter(v => v <= filteredData.length || v === 10).concat(filteredData.length > 100 ? [filteredData.length] : []).filter((v, i, a) => a.indexOf(v) === i).sort((a, b) => a - b)}
           rowKey="id"
         />
       </div>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { encodeBase64Url } from '../utils/utils.js';
+
 const normalizeBaseUrl = (url) => {
   if (!url || typeof url !== 'string' || url === 'undefined') {
     return '';
@@ -9,9 +10,12 @@ const normalizeBaseUrl = (url) => {
 const envPathApi = import.meta.env.VITE_PATH_API;
 const envUrl = import.meta.env.VITE_API_URL;
 
+const envPathApi = import.meta.env.VITE_PATH_API;
+
 export const getDefaultApiUrl = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
   return normalizeBaseUrl(envUrl + envPathApi);
-} 
+}
 
 const resolveBaseUrl = () => {
   if (typeof window === 'undefined') {
@@ -19,10 +23,9 @@ const resolveBaseUrl = () => {
   }
 
   const storedUrl = localStorage.getItem('@AMS:apiUrl');
+  const base = normalizeBaseUrl(storedUrl + envPathApi	 || getDefaultApiUrl());
 
-  const base = normalizeBaseUrl(storedUrl + envPathApi || getDefaultApiUrl());
-
-  return base;
+  return base ? `${base}/` : '/';
 };
 
 const api = axios.create({

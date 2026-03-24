@@ -29,6 +29,7 @@ dist-ssr
 *.sw?
 .env.preprod
 .env.prod
-.env.dev
-*.tgz
+.env
+.env.*
+!.env.example
 admin-scripts/
