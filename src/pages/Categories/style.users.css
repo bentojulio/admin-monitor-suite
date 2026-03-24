@@ -1,0 +1,8 @@
+.content{
+    background-color: white;
+    padding: 25px;
+}
+.bg-white {
+    background-color: var(--ama-color-background-white) !important;
+  padding: 30px 30px important;
+  }

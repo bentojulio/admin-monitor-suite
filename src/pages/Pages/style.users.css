@@ -1,0 +1,27 @@
+.content{
+    background-color: white;
+    padding: 25px;
+}
+
+.list-table{
+    list-style-type: disc;
+    
+}
+
+.warning-cell {
+    background: #ff9 !important;
+}
+
+.error-cell {
+    background: #f99 !important;
+}
+
+.success-cell {
+    background: #bce1bc !important;
+}
+
+.error-cell,
+.success-cell,
+.warning-cell {
+  font-size: 36px;
+}

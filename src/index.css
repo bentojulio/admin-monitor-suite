@@ -1,0 +1,571 @@
+:root {
+  /* COLORS PALLETE */
+  --ama-color-brand-primary: #333399;
+  --ama-color-brand-secondary: #333333;
+  --ama-color-brand-tertiary: #1acc60;
+
+  --ama-color-text-gray: #333333;
+  --ama-color-text-blue: #b6dcf6;
+  --ama-color-text-blue-light: #e9f6ff;
+  --ama-color-system-warning: #ffc107;
+  --ama-color-system-error: #dc3545;
+  --ama-color-system-success: #38b458;
+
+  --ama-color-background-white: #ffffff;
+  --ama-color-background-light-lighter: #efefee;
+  --ama-color-background-light-darker: #e4e4e4;
+  --ama-color-background-dark-lighter: #2d3241;
+  --ama-color-background-dark-darker: #21242c;
+
+  --ama-color-headers-light: #efefee;
+  --ama-color-headers-pre-header: #e4e4e4;
+
+  --ama-color-blue-0: #f0f0fa;
+  --ama-color-blue-50: #d2d1ef;
+  --ama-color-blue-100: #b5b3e5;
+  --ama-color-blue-200: #9793d9;
+  --ama-color-blue-300: #7974cf;
+  --ama-color-blue-400: #5d56c5;
+  --ama-color-blue-500: #3a3297;
+  --ama-color-blue-600: #2e2879;
+  --ama-color-blue-700: #231e5b;
+  --ama-color-blue-800: #16143c;
+  --ama-color-blue-900: #0b0a1f;
+
+  --ama-color-grey-0: #ffffff;
+  --ama-color-grey-50: #d6d6d6;
+  --ama-color-grey-100: #c2c2c2;
+  --ama-color-grey-200: #adadad;
+  --ama-color-grey-300: #939393;
+  --ama-color-grey-400: #858585;
+  --ama-color-grey-500: #707070;
+  --ama-color-grey-600: #5c5c5c;
+  --ama-color-grey-700: #515151;
+  --ama-color-grey-800: #1f1f1f;
+  --ama-color-grey-900: #0a0a0a;
+
+  --ama-color-green-0: #eefdf3;
+  --ama-color-green-50: #cdf7dc;
+  --ama-color-green-100: #acf2c5;
+  --ama-color-green-200: #8deeae;
+  --ama-color-green-300: #6deb98;
+  --ama-color-green-400: #55e380;
+  --ama-color-green-500: #38b458;
+  --ama-color-green-600: #2c8f47;
+  --ama-color-green-700: #206b35;
+  --ama-color-green-800: #144724;
+  --ama-color-green-900: #092411;
+
+  --ama-color-yellow-0: #fefaeb;
+  --ama-color-yellow-50: #fff6d3;
+  --ama-color-yellow-100: #fcecaf;
+  --ama-color-yellow-200: #fbe189;
+  --ama-color-yellow-300: #fad763;
+  --ama-color-yellow-400: #f9ce41;
+  --ama-color-yellow-500: #daaa20;
+  --ama-color-yellow-600: #b38b18;
+  --ama-color-yellow-700: #8b6c10;
+  --ama-color-yellow-800: #634e09;
+  --ama-color-yellow-900: #3b2e03;
+
+  --ama-color-red-0: #fbeeef;
+  --ama-color-red-50: #f7dddf;
+  --ama-color-red-100: #f3cccf;
+  --ama-color-red-200: #ebaab0;
+  --ama-color-red-300: #e38991;
+  --ama-color-red-400: #db6872;
+  --ama-color-red-500: #c8313b;
+  --ama-color-red-600: #a62831;
+  --ama-color-red-700: #851f27;
+  --ama-color-red-800: #64171d;
+  --ama-color-red-900: #420f13;
+
+  --font-lato: "Lato", sans-serif;
+  /* --font-red-hat: "Red Hat Display", sans-serif; */
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+fieldset {
+  border: 1px solid var(--ama-color-blue-500) !important;
+  padding: 10px !important;
+  border-radius: 5px !important;
+}
+
+.main-content-dashboard {
+  display: grid;
+  grid-template-areas:
+    "menu header"
+    "menu content"
+    "menu footer";
+  grid-template-columns: 20% 80%;
+  grid-template-rows: auto auto auto;
+  min-height: 100vh;
+}
+
+/* Collapsed menu layout */
+.main-content-dashboard.menu-collapsed {
+  grid-template-columns: 0px calc(100% - 0px);
+}
+.dashboard-menu {
+  width: 100% !important;
+  padding: 10px !important;
+  height: 100% !important;
+  overflow-y: auto;
+  /* Custom Scrollbar Styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--ama-color-background-light-darker)
+    var(--ama-color-background-dark-darker);
+}
+
+/* Webkit-based browsers (Chrome, Safari, Edge) */
+.dashboard-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dashboard-menu::-webkit-scrollbar-track {
+  background: var(--ama-color-blue-50);
+  border-radius: 4px;
+  margin: 4px 0;
+}
+
+.dashboard-menu::-webkit-scrollbar-thumb {
+  background: var(--ama-color-blue-400);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard-menu::-webkit-scrollbar-thumb:hover {
+  background: var(--ama-color-blue-500);
+}
+
+.dashboard-menu::-webkit-scrollbar-thumb:active {
+  background: var(--ama-color-blue-600);
+}
+
+/* Dark theme scrollbar styling */
+.dark-theme .dashboard-menu {
+  scrollbar-color: var(--ama-color-blue-300)
+    var(--ama-color-background-dark-darker);
+}
+
+.dark-theme .dashboard-menu::-webkit-scrollbar-track {
+  background: var(--ama-color-background-dark-darker);
+}
+
+.dark-theme .dashboard-menu::-webkit-scrollbar-thumb {
+  background: var(--ama-color-blue-300);
+}
+
+.dark-theme .dashboard-menu::-webkit-scrollbar-thumb:hover {
+  background: var(--ama-color-blue-200);
+}
+
+.dark-theme .dashboard-menu::-webkit-scrollbar-thumb:active {
+  background: var(--ama-color-blue-100);
+}
+
+header {
+  grid-area: header;
+  background-color: var(--ama-color-brand-primary);
+  padding: 20px;
+  width: 100%;
+  z-index: 2;
+  height: 100px;
+}
+
+aside {
+  grid-area: menu;
+  background-color: var(--ama-color-background-dark-darker);
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content-dashboard.menu-collapsed aside {
+  width: 0px;
+  overflow: hidden;
+}
+
+.main-content-dashboard.menu-collapsed aside h2 {
+  display: none;
+}
+
+.main-content-dashboard.menu-collapsed .dashboard-menu {
+  overflow: hidden;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+}
+
+main {
+  grid-area: content;
+  background-color: #f5f5f5;
+  padding: 35px;
+  z-index: 1;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+footer.app-footer {
+  grid-area: footer;
+  background-color: var(--ama-color-background-white);
+  border-top: 1px solid var(--ama-color-blue-50);
+  padding: 12px 20px;
+}
+
+.dark-theme footer.app-footer {
+  background-color: var(--ama-color-background-dark-darker);
+  border-top-color: var(--ama-color-blue-800);
+  color: var(--ama-color-text-blue-light);
+}
+
+.last_column_no_gauge {
+  margin-left: 45px !important;
+}
+.last_column {
+  margin-right: 30px !important;
+}
+.dark-theme main {
+  background-color: #2d3241;
+  color: white;
+}
+
+.dark-theme {
+  background-color: var(--ama-color-background-dark-lighter);
+  color: white;
+}
+
+.dark-theme main {
+  background-color: var(--ama-color-background-dark-lighter);
+  color: white;
+}
+
+.dark-theme .bg-white {
+  background-color: var(--ama-color-background-dark-darker) !important;
+  color: white;
+}
+
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme label.form-label,
+.dark-theme p {
+  color: white !important;
+}
+
+.last_column_no_gauge {
+  width: 67.3vw !important;
+}
+
+.skip-to-content {
+  position: absolute;
+  left: -999px;
+  top: 10px;
+  background: #333399;
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 1000;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: left 0.2s;
+}
+.skip-to-content:focus {
+  left: 10px;
+  outline: 2px solid #fff;
+}
+
+.bg-white {
+  background-color: var(--ama-color-background-white) !important;
+  padding: 30px 30px important;
+}
+
+.last_column_no_gauge {
+  width: 62.8vw !important;
+}
+
+h2 {
+  font-size: 0.2rem !important;
+}
+
+.dark-theme .ama.tabs-container .nav-tabs {
+  background-color: var(--ama-color-background-dark-darker) !important;
+  color: var(--ama-color-text-blue) !important;
+}
+.dark-theme .ama.tabs-container .nav-tabs .nav-link {
+  color: var(--ama-color-text-blue) !important;
+}
+.dark-theme .ama.tabs-container .nav-tabs .nav-link.active {
+  border-bottom-color: var(--ama-color-text-blue);
+  color: var(--ama-color-text-blue) !important;
+  background-color: var(--ama-color-background-dark-darker);
+}
+
+.dark-theme .ama.section_container.dark {
+  background-color: var(--ama-color-background-dark-darker) !important;
+}
+
+.dark-theme .ama.section_container.dark .grid_container .last_column {
+  background-color: var(--ama-color-background-dark-lighter) !important;
+}
+
+.dark-theme .ama.breadcrumbs .breadcrumb li.breadcrumb-item {
+  color: var(--ama-color-text-blue-light) !important;
+}
+.dark-theme .ama.breadcrumbs .breadcrumb li.breadcrumb-item a {
+  color: var(--ama-color-text-blue-light) !important;
+}
+
+.field-search {
+  width: 50% !important;
+}
+
+canvas[aria-label="Histograma das pontuações do AccessMonitor"] {
+  width: 70% !important;
+  height: 60% !important;
+}
+.dark-theme .list-group-item {
+  background-color: var(--ama-color-background-dark-darker) !important;
+  color: var(--ama-color-text-blue) !important;
+}
+aside h2 {
+  color: white !important;
+  background-color: var(--ama-color-background-dark-darker) !important;
+  padding: 0;
+  margin: 0;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-indent: 15px;
+}
+
+/* ========== MOBILE MENU OVERLAY ========== */
+.mobile-menu-toggle {
+  display: none;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.mobile-menu-content {
+  background-color: var(--ama-color-background-white);
+  width: 280px;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.dark-theme .mobile-menu-content {
+  background-color: var(--ama-color-background-dark-darker);
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 15px;
+  border-bottom: 1px solid var(--ama-color-blue-50);
+  background-color: var(--ama-color-background-dark-darker);
+}
+
+.dark-theme .mobile-menu-header {
+  border-bottom-color: var(--ama-color-blue-800);
+}
+
+.mobile-menu-header h2 {
+  color: white !important;
+  font-size: 1.2rem !important;
+  margin: 0;
+}
+
+.mobile-menu-close {
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* ========== RESPONSIVE BREAKPOINTS ========== */
+/* Mobile devices (up to 768px) */
+@media (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+  .main-content-dashboard {
+    grid-template-areas:
+      "header"
+      "content"
+      "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .main-content-dashboard.menu-collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  aside {
+    display: none;
+  }
+
+  header {
+    padding: 15px;
+    height: auto;
+  }
+
+  header .d-flex {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+
+  header .d-flex:first-child {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  main {
+    padding: 20px 15px;
+  }
+
+  .bg-white {
+    padding: 20px 15px !important;
+  }
+
+  /* Form responsiveness */
+  .w-50 {
+    width: 100% !important;
+  }
+
+  /* Button responsiveness */
+  .d-flex.gap-3 {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Table responsiveness */
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  /* Modal responsiveness */
+  .modal-dialog {
+    margin: 10px;
+  }
+}
+
+/* Tablet devices (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content-dashboard {
+    grid-template-columns: 250px 1fr;
+  }
+
+  .main-content-dashboard.menu-collapsed {
+    grid-template-columns: 0px 1fr;
+  }
+
+  aside {
+    width: 250px;
+  }
+
+  header {
+    padding: 18px;
+  }
+
+  main {
+    padding: 25px;
+  }
+
+  .w-50 {
+    width: 70% !important;
+  }
+
+  /* Adjust button layout for tablets */
+  .d-flex.gap-3 {
+    flex-wrap: wrap;
+  }
+}
+
+/* Large tablets and small desktops (1025px to 1200px) */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .main-content-dashboard {
+    grid-template-columns: 280px 1fr;
+  }
+
+  .main-content-dashboard.menu-collapsed {
+    grid-template-columns: 0px 1fr;
+  }
+
+  aside {
+    width: 280px;
+  }
+}
+
+@media (min-width: 1201px) {
+  .main-content-dashboard {
+    grid-template-columns: 20% 80%;
+  }
+
+  .main-content-dashboard.menu-collapsed {
+    grid-template-columns: 0px 100%;
+  }
+}
+
+/* ========== FIX HORIZONTAL SCROLL IN TABLES (Issue #83) ========== */
+/* Ensure long URLs in table cells wrap and don't cause horizontal overflow */
+.ama.sorting_table_responsive {
+  overflow-x: auto !important;
+  max-width: 100%;
+}
+
+.ama.sorting_table_responsive .sorting_table tbody tr td a,
+.ama.sorting_table_responsive .sorting_table tbody tr td {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* ========== ACCESSIBILITY FIX FOR SCREEN READERS (Issue #68) ========== */
+/* Ensure table elements are properly read by screen readers like VoiceOver */
+/* This fixes the issue where screen readers only see 2 rows instead of all tbody rows */
+table {
+  display: table !important;
+}
+
+table thead {
+  display: table-header-group !important;
+}
+
+table tbody {
+  display: table-row-group !important;
+}
+
+table tfoot {
+  display: table-footer-group !important;
+}
+
+table tr {
+  display: table-row !important;
+}
+
+table th,
+table td {
+  display: table-cell !important;
+}
+
+/* Ensure tbody content is visible and accessible */
+table tbody tr {
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  overflow: visible !important;
+}

@@ -1,0 +1,18 @@
+.content{
+    background-color: white;
+    padding: 25px;
+}
+
+.bg-white {
+    background-color: var(--ama-color-background-white) !important;
+    padding: 30px !important;
+}
+
+ul {
+    list-style: disc;
+}
+
+canvas[aria-label="Histograma das pontuações do AccessMonitor"] {
+    width: 70% !important;
+    height: 60% !important;
+  }

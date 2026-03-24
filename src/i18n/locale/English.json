@@ -1,0 +1,616 @@
+{
+  "HEADER": {
+    "name": "Admin console",
+    "logout": "Logout",
+    "optional": "(optional)"
+  },
+  "LOGIN": {
+    "title": "Login",
+    "machineIP_label": "Machine IP to connect",
+    "email_label": "Email",
+    "password_label": "Password",
+    "email_error": "The e-mail is not valid. <strong>E.g. name@service.com</strong>",
+    "show_password": "Click here to show the password text",
+    "hide_password": "Click here to hide the password text",
+    "submit": "Login",
+    "loading_text": "Logging in...",
+    "loading_error": "There was an error while logging in",
+    "skip_link_text":"Skip to the main content",
+    "skip_link_label":"Skip to the main content",
+    "alt":"AMS",
+    "logo_alt": "AMS - Admin Monitor Suite, Administration Console",
+    "messages": {
+      "password_match": "Wrong username or password",
+      "no_user": "Wrong username or password",
+      "system_error": "There was a system error. Please try later"
+    }
+  },
+  "ADMIN_CONSOLE": {
+    "update_and_exit": "Update and exit",
+    "save_and_exit": "Save and exit",
+    "add_button": "Add content",
+    "bottom_sheet": {
+      "user": {
+        "title": "User",
+        "subtitle": "Create a new user"
+      },
+      "directory": {
+        "title": "Directory",
+        "subtitle": "Create a new directory"
+      },
+      "tag": {
+        "title": "Tag",
+        "subtitle": "Create a new tag"
+      },
+      "entity": {
+        "title": "Entity",
+        "subtitle": "Create a new entity"
+      },
+      "website": {
+        "title": "Website",
+        "subtitle": "Create a new website"
+      },
+      "page": {
+        "title": "Pages",
+        "subtitle": "Create new pages"
+      }
+    }
+  },
+  "MENU": {
+    "home": "Home",
+    "govUsers": "GovUsers",
+    "users": "Users",
+    "directories": "Directories",
+    "tags": "Tags",
+    "entities": "Entities",
+    "websites": "Websites",
+    "ay11Statements": "Accessibility statements",
+    "crawler": "Crawler",
+    "pages": "Pages",
+    "settings": "Settings",
+    "csv": "CSV",
+    "export_data": "Export data",
+    "export_data_description": "To export all data from the Observatory to today's date, press the 'Export CSV' button below.",
+    "export_csv": "Export CSV",
+    "global_indicators": "Global indicators of the directory",
+    "table": {
+      "name_label": "Name",
+      "type_label": "Type",
+      "observatory_label": "Observatory"  
+    },
+    "my_monitor": "My Monitor",
+    "study_monitor": "Study Monitor",
+    "access_monitor": "Access Monitor",
+    "admin_evaluations": "Admin evaluations",
+    "user_evaluations": "My Monitor/Study Monitor evaluations",
+    "evaluations_since": "Nº of evaluation requests since",
+    "pages_being_evaluated": "Nº of pages being evaluated",
+    "waiting_evaluations": "Nº of pages waiting for evaluation",
+    "evaluations_error": "Nº of pages without evaluation due to an error",
+    "generate_observatory_title": "Observatory global statistics synchronization",
+    "generate_observatory_description": "The information processed in the / AMS (back office) is synchronized with the Observatory every day at midnight, thus updating its data. To force the update of the Observatory data at any time of the day, click on the button below. The duration of synchronization depends on the number of pages, which can take up to 5 minutes to complete.",
+    "generate_observatory_button": "Sync Observatory"
+  },
+  "HOME_PAGE": {
+    "title": "Welcome",
+    "subtitle": "Applications summary",
+    "users_label": "Users",
+    "directories_label": "Directories",
+    "tags_label": "Tags",
+    "entities_label": "Entities",
+    "websites_label": "Websites",
+    "pages_label": "Pages",
+    "sentence": "Total of {{value}}",
+    "observatory": "Observatory",
+    "monitor": "My Monitor",
+    "studies": "Study Monitor",
+    "admin_console": "AMS",
+    "admin_evaluations": "Admin evaluations",
+    "user_evaluations": "My Monitor/Study Monitor evaluations",
+    "evaluations_since": "Nº of evaluation requests since",
+    "pages_being_evaluated": "Nº of pages being evaluated",
+    "waiting_evaluations": "Nº of pages waiting for evaluation",
+    "evaluations_error": "Nº of pages without evaluation due to an error",
+    "generate_observatory_title": "Observatory global statistics synchronization",
+    "generate_observatory_description": "The information processed in the / AMS (back office) is synchronized with the Observatory every day at midnight, thus updating its data. To force the update of the Observatory data at any time of the day, click on the button below. The duration of synchronization depends on the number of pages, which can take up to 5 minutes to complete.",
+    "generate_observatory_button": "Sync Observatory",
+    "generate_observatory_data_message": "Observatory data is being synchronized",
+    "evaluation_state_title": "Evaluations state",
+    "evaluation_am_state_title": "Access Monitor evaluations",
+    "evaluation_observatory_state_title": "AMS/Observatory evaluations",
+    "evaluation_mm_state_title": "My Monitor evaluations",
+    "evaluation_sm_state_title": "Study Monitor evaluations",
+    "reset_evaluation_list": "Reset",
+    "reset_evaluation_list_message": "Evaluation list reset successfully",
+    "delete_evaluation_list": "Delete",
+    "delete_evaluation_list_confirmation": "Confirm that you want to delete the evaluation list"
+  },
+  "ITEMS_PER_PAGE_LABEL": "Items per page",
+  "NEXT_PAGE_LABEL": "Next page",
+  "PREVIOUS_PAGE_LABEL": "Previous page",
+  "FIRST_PAGE_LABEL": "First page",
+  "LAST_PAGE_LABEL": "Last page",
+  "RANGE_PAGE_LABEL_1": "0 of {{length}}",
+  "RANGE_PAGE_LABEL_2": "{{startIndex}} - {{endIndex}} of {{length}}",
+  "USERS_PAGE": {
+    "title": "User:",
+    "LIST": {
+      "title": "Users",
+      "delete_users": "Delete users",
+      "subtitle": "List of all users from the applications Study Monitor and My Monitor",
+      "table": {
+        "title":"List of users",
+        "id_label": "ID",
+        "username_label": "Username",
+        "app_label": "App",
+        "websites_label": "Nº Websites",
+        "register_label": "Register date",
+        "last_login_label": "Last login",
+        "edit_label": "Edit",
+        "edit_tooltip": "Edit this user",
+        "see_tooltip": "See user"
+      }
+    },
+    "ADD": {
+      "description_user": "To use AdminMonitorSuite (AMS) and My Monitor you need a user",
+      "description_user_ams": "In the case of AMS the user authentication is done via User/pass. In the case of MyMonitor the user authentication is done via the official process used in the Portuguese Public Administration and described at https://www.autenticacao.gov.pt.",
+      "title": "Create a new user",
+      "subtitle": "Create a new use for one og the following applications: Study Monitor or My Monitor",
+      "user_data": "User data",
+      "username_label": "Username",
+      "username_exists": "The inserted username already exists",
+      "password_label": "Password",
+      "password_hint": "The password should have at least 8 characters, 1 upper case character, 1 lower case character, 1 number and 1 special character",
+      "password_short": "The password has less than 8 characters",
+      "password_uppercase": "The password does not contain any upper case character",
+      "password_lowercase": "The password does not contain any lower case character",
+      "password_number": "The password does not contain any number",
+      "password_special": "The password does not contain any special character",
+      "confirm_password_label": "Confirm password",
+      "confirm_password_error": "Passwords don't match",
+      "names_label": "Contact names",
+      "emails_label": "Contact e-mails",
+      "emails_error": "Email is <strong>invalid</strong>",
+      "choose_app": "Application",
+      "transfer_label": "Transfer pages from observatory",
+      "websites_label": "Choose websites",
+      "tags_label": "Choose tags",
+      "reset": "Reset",
+      "submit": "Create",
+      "messages": {
+        "success": "User created successfully",
+        "error": "Error creating user"
+      }
+    },
+    "UPDATE": {
+      "title": "User",
+      "subtitle": "Edit",
+      "description": "Edit this user",
+      "default": "Undo changes",
+      "submit": "Update",
+      "delete": {
+        "title": "Delete",
+        "description": "Delete this user",
+        "list": {
+          "title": "Important:",
+          "item1": "The user and all it's data will be deleted",
+          "item2": "If the user belongs to the Study Monitor application, all it's websites and tags will be deleted",
+          "item3": "This action can't be undone"
+        },
+        "submit": "Delete user"
+      },
+      "messages": {
+        "success": "User updated successfully",
+        "error": "Error updating user"
+      }
+    },
+    "DELETE": {
+      "title": "Delete",
+      "description": "Delete this user",
+      "list": {
+        "title": "Important:",
+        "item1": "This user will be deleted",
+        "item2": "This action can't be undone"
+      },
+      "submit": "Delete user",
+      "messages": {
+        "success": "User deleted successfully",
+        "error": "Error deleting user"
+      }
+    }
+  },
+  "GOV_USERS_PAGE": {
+    "title": "Gov user:",
+    "LIST": {
+      "title": "Gov Users",
+      "subtitle": "List of all users from the applications Study Monitor and My Monitor",
+      "delete_users": "Delete users",
+      "table": {
+        "title":"List of gov users",
+        "id_label": "ID",
+        "username_label": "Username Gov",
+        "app_label": "App",
+        "websites_label": "Nº Citizen Card",
+        "register_label": "Register date",
+        "last_login_label": "Last login",
+        "edit_label": "Edit",
+        "edit_tooltip": "Edit this user",
+        "see_tooltip": "See user",
+        "citizen_number_label": "Nº de Cartão de Cidadão"
+      }
+    },
+    "ADD": {
+      "description_usergov": "To use MyMonitor you need a user Autenticação.Gov (user.Gov).",
+      "description_usergov1": "Users are a kind of account that aggregates websites to be accessed by a group of people.",
+      "description_usergov2": "With MyMonitor the process has become individualized since authentication is individual. Thus, it is necessary that each user.Gov accesses their user/account or group of websites of an account.",
+      "title": "Create a new user",
+      "subtitle": "Create a new use for one og the following applications: Study Monitor or My Monitor",
+      "user_data": "User data",
+      "username_label": "Username",
+      "username_exists": "The inserted username already exists",
+      "password_label": "Password",
+        "card_citizen_label": "Nº Card Citizen",
+      "users_associated_label":" Users associated",
+      "confirm_password_label": "Confirm password",
+      "confirm_password_error": "Passwords don't match",
+      "names_label": "Contact names",
+      "emails_label": "Contact e-mails",
+      "emails_error": "Email is <strong>invalid</strong>",
+      "choose_app": "Application",
+      "transfer_label": "Transfer pages from observatory",
+      "websites_label": "Choose websites",
+      "tags_label": "Choose tags",
+      "reset": "Reset",
+      "submit": "Create",
+      "messages": {
+        "success": "User created successfully",
+        "error": "Error creating user"
+      }
+    },
+    "UPDATE": {
+      "title": "User",
+      "subtitle": "Edit",
+      "description": "Edit this user",
+      "default": "Undo changes",
+      "submit": "Update",
+      "delete": {
+        "title": "Delete",
+        "description": "Delete this user",
+        "list": {
+          "title": "Important:",
+          "item1": "The user and all it's data will be deleted",
+          "item2": "If the user belongs to the Study Monitor application, all it's websites and tags will be deleted",
+          "item3": "This action can't be undone"
+        },
+        "submit": "Delete user"
+      },
+      "messages": {
+        "success": "User updated successfully",
+        "error": "Error updating user"
+      }
+    },
+    "DELETE": {
+      "title": "Delete",
+      "description": "Delete this user",
+      "list": {
+        "title": "Important:",
+        "item1": "This user will be deleted",
+        "item2": "This action can't be undone"
+      },
+      "submit": "Delete user",
+      "messages": {
+        "success": "User deleted successfully",
+        "error": "Error deleting user"
+      }
+    }
+  },
+  "DIRECTORIES_PAGE": {
+    "LIST": {
+      "title_list": "Directories",
+      "subtitle_list": "List of directories",
+      "title": "Global Data of the Directory \"{{directoryName}}\"",
+      "subtitle": "List of all websites of the directory \"{{directoryName}}\"",
+      "delete_users": "Delete users",
+      "delete_directories": "Delete directories",
+      "re_evaluate_pages": "Re-evaluate",
+      "delete_page":"Delete pages",
+      "export_data": "Export data",
+      "export_data_description": "To export all data from the Directory {{directoryName}} to today's date, press the 'Export CSV' button below.",
+      "export_csv": "Export CSV",
+      "global_indicators": "Global indicators of the Directory",
+      "table": {
+        "title":"List of directories",
+        "name_label": "Name",
+        "type_label": "Type",
+        "observatory_label": "Observatory"
+      }
+    },
+    "ADD": {
+      "title": "Create a new directory",
+      "description": "Create a new directory for the applications Study Monitor or My Monitor",
+      "name_label": "Directory name",
+      "show_in_observatory": "Show Directory in the Public Observatory?",
+      "choose_format": "The Directory results from which operation on Categories?",
+      "intersection": "Intersection",
+      "union": "Union",
+      "select_categories": "Indicate the Categories that will form the new Directory:",
+      "create_button": "Create directory"
+    }
+  },
+  "LOGS_PAGE": {
+    "LIST": {
+      "title": "Logs",
+      "subtitle": "List of all logs",
+      "table": {
+        "id_label": "ID",
+        "user_label": "User",
+        "action_label": "Action",
+        "date_label": "Date",
+        "details_label": "Details",
+        "view_results": "See results"
+      },
+      "delete_logs": "Delete logs",
+      "delete_logs_confirmation": "Confirm that you want to delete the logs",
+      "dowload_logs": "Export logs"
+    }
+  },
+  "CATEGORIES_PAGE": {
+    "LIST": {
+      "title": "Categories",
+      "subtitle": "List of all categories",
+      "re_evaluate_tags": "Re-evaluate categories",
+      "crawler": "Crawling Site(s)",
+      "delete_pages": "Delete pages",
+      "delete_tags": "Delete categories",
+      "table": {
+        "title":"List of categories",
+        "id_label": "ID",
+        "name_label": "Name",
+        "websites_label": "Nº Websites"
+      }
+    },
+    "ADD": {
+      "title": "Create a new category",
+      "description": "Create a new category for the applications Study Monitor or My Monitor",
+      "name_label": "Category name",
+      "directories_label": "Directories",
+      "websites_label": "Websites",
+      "create_button": "Create category",
+      "create_button_tooltip": "Create a new category for the applications Study Monitor or My Monitor",
+      "description_category": "A Category is an aggregator of websites. Categories aim to aggregate websites by classes. Examples of classes: government area of education, government area of economy, central public administration, schools, public institutes, etc. In this way it is possible to organize the visualization of information in AdminMonitorSuite by lists of websites that are, in some way, related and observe global statistics of these aggregations. A category is very similar to the \"tag\" classifier that is commonly used in blogs.",
+      "note": "Note: the Categories will not be published in the Public Observatory. In the Public Observatory the websites are published via the Directories to which they belong. Categories help to produce and organize the Directories."
+    }
+  },
+  "ENTITIES_PAGE": {
+    "LIST": {
+      "title_list": "Entities",
+      "global_indicators": "Global indicators of the Entity",
+      "export_data": "Export data",
+      "export_csv": "Export CSV",
+      "export_data_description": "To export all data from the Entity to today's date, press the 'Export CSV' button below.",
+      "title": "Entities",
+      "subtitle": "List of all entities",
+      "delete_pages": "Delete pages",
+      "re_evaluate_entities": "Re-evaluate",
+      "delete_entities": "Delete entities",
+      "table": {
+        "title":"List of entities",
+        "short_name_label": "Short name",
+        "long_name_label": "Long name",
+        "creation_label": "Creation date",
+        "websites_label": "Nº Websites",
+        "edit_label": "Edit"
+      }
+    },
+    "ADD": {
+      "description_entity": "An Entity is a group of websites that share a common purpose. Entities are used to group websites that are related to a specific topic or organization. Entities are also used to track the performance of a specific website or group of websites.",
+      "title": "Create a new entity",
+      "description": "Create a new entity for the applications Study Monitor or My Monitor",
+      "short_name_label": "Short name",
+      "short_name_exists": "The inserted short name already exists",
+      "long_name_label": "Long name",
+      "creation_label": "Creation date",
+      "websites_label": "Associate website(s)",
+      "re_evaluate_label": "Re-evaluate",
+      "re_evaluate_tooltip": "Re-evaluate the websites of the entity",
+      "edit_label": "Edit",
+      "edit_tooltip": "Edit this entity",
+      "see_tooltip": "See entity"
+    }
+  },
+  "WEBSITES_PAGE": {
+    "LIST": {
+      "title_list": "Websites",
+      "subtitle_list": "List of website pages",
+      "title": "Website \"{{websiteName}}\"",
+      "subtitle": "List of pages of the website \"{{websiteName}}\"",
+      "delete_websites": "Delete websites",
+      "re_evaluate_websites": "Re-evaluate websites",
+      "authentication_gov": "Authentication Gov",
+      "crawler": "Crawling Site(s)",
+      "pages_list_title": "Pages list",
+      "page_list_subtitle": "List of all pages of the website",
+      "export_data": "Export data",
+      "export_data_description": "To export all data from the website to today's date, press the 'Export CSV' button below.",
+      "export_csv": "Export CSV",
+      "table": {
+        "title":"List of websites",
+        "name_label": "Name",
+        "url_label": "Url",
+        "pages_label": "Nº of pages (evaluated)",
+        "creation_label": "Creation date",
+        "edit_label": "Edit",
+        "stamp_label": "Digital stamps",
+        "stamp_tooltip": "Create/update digital stamp",
+        "title_label": "Title",
+        "score_label": "Score",
+        "last_updated_label": "Last evaluation",
+        "elements_label": "Nº of elements",
+        "a_label": "Nº errors A",
+        "aa_label": "Nº errors AA",
+        "import": "Import",
+        "aaa_label": "Nº errors AAA",
+        "observatory_label": "Observatory"
+      }
+    },
+    "ADD": {
+      "description_website": "The website is the most relevant analysis unit of the Observatory. The analysis of accessibility practices is done on the sample of pages that are part of the website. Sites are aggregated into Categories and Directories and belong to Entities.",
+      "title": "Create a new website",
+      "description": "The website is the most relevant analysis unit of the Observatory. The analysis of accessibility practices is done on the sample of pages that are part of the website. Sites are aggregated into Categories and Directories and belong to Entities.",
+      "new_website": "New website",
+      "name_label": "Name",
+      "declaration_label": "Accessibility declaration",
+      "compliance_label": "Compliance",
+      "declaration_date_label": "Declaration date",
+      "email_label": "Email",
+      "stamp_label": "Usability and accessibility stamp",
+      "stamp_type_label": "Stamp type",
+      "stamp_bronze": "Bronze",
+      "stamp_silver": "Silver",
+      "stamp_gold": "Gold",
+      "stamp_date_label": "Stamp date",
+      "associations_label": "Associations",
+      "entities_label": "Entity(ies)",
+      "entity_1": "Entity 1",
+      "entity_2": "Entity 2",
+      "entity_3": "Entity 3",
+      "users_label": "User(s)",
+      "user_1": "User 1",
+      "user_2": "User 2",
+      "user_3": "User 3",
+      "categories_label": "Category(ies)",
+      "category_1": "Category 1",
+      "category_2": "Category 2",
+      "category_3": "Category 3"
+    },
+          "table_best_practices": {
+        "top_3_best_practices": "Detailed best practices distribution",
+        "top_3_bad_practices": "Detailed worst practices distribution",
+        "practice_label": "Practice",
+        "error_label": "Error",
+        "n_errors_label": "Occurrences",
+        "n_pages_label": "Pages",
+        "details_practice_label": "Practices per page",
+        "details_error_label": "Errors per page",
+        "double_a": "Double A",
+        "triple_a":"Triple A",
+        "details": {
+          "single_practice": "occurrence in",
+          "multi_practices": "occurrences in",
+          "single_error": "error in",
+          "multi_error": "errors in",
+          "single_page": "page",
+          "multi_page": "pages",
+          "all_pages": "all pages",
+          "from": "from",
+          "to": "to",
+          "multiDetailsTogether": "{{lower}} to {{upper}} occurrences in {{nPages}} pages",
+          "oneDetailAllPagesTogether": "{{lower}} occurrence in all pages",
+          "sameDetailTogether": "{{lower}} occurrences in {{nPages}} pages"
+        },
+        "lvl_label": "Level"
+      }
+  },
+  "MISC": {
+    "filter": "Filter",
+    "skip_to_main": "Skip to main content",
+    "loading": "Loading...",
+    "required_field": "This field is required",
+    "at_least_one_required": "Required to address, at least, one of these fields",
+    "message_close": "Close",
+    "success": "Success",
+    "unexpected_error": "An unexpected error has occurred. Please try again later.",
+    "error_contact": "If the problem persists, please contact us...",
+    "go_to_top": "Go to top",
+    "select": "Select",
+    "rank": "Ranking",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "PAGES_PAGE": {
+    "title": "Page:",
+    "subtitle": "User:",
+    "LIST": {
+      "title": "Pages",
+      "subtitle": "List of all pages",
+      "delete_pages": "Delete pages",
+      "table": {
+        "title":"List of pages",
+        "id_label": "ID",
+        "uri_label": "Uri",
+        "score_label": "Score",
+        "last_updated_label": "Last evaluation",
+        "elements_label": "Number of elements",
+        "type_elements_label": "Number of element types",
+        "state": "Status",
+        "state_evaluating": "The page is being evaluated",
+        "state_waiting": "The page is waiting to be evaluated",
+        "state_error": "The page evaluation resulted in error",
+        "observatory_label": "Observatory",
+        "delete_label": "Delete",
+        "delete_tooltip": "Delete this page",
+        "see_tooltip": "See page"
+      }
+    },
+    "ADD": {
+      "title": "Create a new page",
+      "description": "Create a new page for the applications Study Monitor or My Monitor",
+      "insert_url_tab": "Insert URL",
+      "insert_sitemap_tab": "Insert Sitemap",
+      "crawling_tab": "Crawling"
+    }
+  },
+  "CRAWLER_PAGE": {
+    "LIST": {
+      "title": "Crawler List",
+      "table": {
+        "title":"List of crawlers",
+        "delete_crawlers": "Delete crawlers",
+        "title": "Crawler Results",
+        "select_label": "Select",
+        "initial_url_label": "Initial URL",
+        "start_date_label": "Start Date",
+        "status_label": "Status",
+        "results_label": "Results"
+      }
+    }
+  },
+  "STATISTICS": {
+    "title": "Statistics",
+    "subtitle": "Metadata",
+    "export_data": "Export data",
+    "oldest_page_updated": "Oldest page",
+    "newest_page_updated": "Newest page",
+    "total_pages_updated": "Total pages",
+    "average_page": "Average pages",
+    "total_websites_updated": "Total websites",
+    "total_categories": "Total categories",
+    "total_entities": "Total entities",
+    "export_data_description": "To export all data from the website to today's date, press the 'Export CSV' button below.",
+    "export_csv": "Export CSV",
+    "table": {
+      "title":"List of statistics",
+      "name_label": "Name",
+      "url_label": "Url",
+      "pages_label": "Nº of pages (evaluated)",
+      "creation_label": "Creation date",
+      "edit_label": "Edit",
+      "stamp_label": "Digital stamps",
+      "stamp_tooltip": "Create/update digital stamp",
+      "title_label": "Title",
+      "score_label": "Score",
+      "last_updated_label": "Last evaluation",
+      "elements_label": "Number of elements",
+      "a_label": "Nº errors A",
+      "aa_label": "Nº errors AA",
+      "aaa_label": "Nº errors AAA",
+      "observatory_label": "Observatory"
+    },
+    "gauge": {
+      "label": "Average Score"
+    }
+  },
+  "BREADCRUMB": {
+    "tag_here": "You are here"
+  }
+} 
