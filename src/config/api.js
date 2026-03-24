@@ -6,20 +6,23 @@ const normalizeBaseUrl = (url) => {
   }
   return url.replace(/\/+$/, '');
 };
+const envPathApi = import.meta.env.VITE_PATH_API;
+const envUrl = import.meta.env.VITE_API_URL;
 
 export const getDefaultApiUrl = () => {
-  const envUrl = import.meta?.env?.VITE_API_URL;
-  return normalizeBaseUrl(envUrl);
-}
+  return normalizeBaseUrl(envUrl + envPathApi);
+} 
+
 const resolveBaseUrl = () => {
   if (typeof window === 'undefined') {
-    return '/api';
+    return getDefaultApiUrl();
   }
 
   const storedUrl = localStorage.getItem('@AMS:apiUrl');
-  const base = normalizeBaseUrl(storedUrl || getDefaultApiUrl());
 
-  return base ? `${base}/` : '/';
+  const base = normalizeBaseUrl(storedUrl + envPathApi || getDefaultApiUrl());
+
+  return base;
 };
 
 const api = axios.create({
