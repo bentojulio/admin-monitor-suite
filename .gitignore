@@ -30,4 +30,7 @@ dist-ssr
 .env.dev
 .env.preprod
 .env.prod
+.env
+.env.*
+!.env.example
 admin-scripts/
