@@ -71,7 +71,7 @@ const TabGlobalAMS = ({
   const [initialSuccessCriteriaSuccess, setInitialSuccessCriteriaSuccess] = useState([]);
   const [initialSuccessCriteriaErrors, setInitialSuccessCriteriaErrors] = useState([]);
   const [error, setError] = useState(null);
-
+  const [isLoadingData, setIsLoadingData] = useState(true);
   const fetchDataGlobalAMS = useCallback(async () => {
     try {
         const response = await api.get('/totals');
@@ -130,6 +130,7 @@ const TabGlobalAMS = ({
         setDirectories(directoriesKeys);
         const radarData = Object.values(indicators.directoryAverageScores).map((directory, index) => ({averageScore: directory, domain: directoriesKeys[index]}));
         setInitialDataRadar(radarData);
+        setIsLoadingData(false);
       } catch (err) {
         console.log(err);
         setError('Erro ao carregar diretórios');
@@ -197,9 +198,8 @@ const TabGlobalAMS = ({
       <p>
         Abaixo encontra a listagem de todos os Directórios registados no AdminMonitorSuite,
         num total de {directories.length} diretórios.
+        {isLoadingData && <span className="ml-2 badge badge-info">Processando dados...</span>}
       </p>
-
-      {error && <div className="alert alert-danger">Erro: {error}</div>}
 
       <div className="content bg-white">
         <h2>Exportação de dados</h2>

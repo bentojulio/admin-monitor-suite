@@ -9,6 +9,7 @@ import { Breadcrumb, Button } from "ama-design-system";
 import { useTranslation } from "react-i18next";
 import { api } from "../../config/api";
 import { isRequestSuccessful } from "../../utils/apiHelpers.js";
+import moment from "moment";
 import { Modal } from "../../components/Modal";
 import { useTheme } from '../../context/ThemeContext';
 import { setWebsiteNavigationContext } from "../../utils/navigation";
@@ -22,7 +23,6 @@ const formatDate = (dateString) => {
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
-
 
 
 const PageList = () => {
@@ -62,7 +62,8 @@ const PageList = () => {
         api.get(`/page/all/count/search=${search}`),
         api.get(url)
       ]);
-            
+      
+
       setTotalItems(Number(totalItemsResponse.data.result));
       
       const transformedData = (dataResponse.data.result || []).map(item => ({
@@ -73,7 +74,7 @@ const PageList = () => {
         Element_Count: calculateTotalElements(JSON.parse(item.Tag_Count)),
         A: item.A ?? 0,
         AA: item.AA ?? 0,
-        AAA: item.AAA ?? 0, 
+        AAA: item.AAA ?? 0,
         e: getEvaluationStatus(item),
         OPAW: item.Show_In ? (item.Show_In.split("")[2] === "1" ? "Sim" : "Nao") : "Nao",
       }));
@@ -91,22 +92,19 @@ const PageList = () => {
   }, [currentPage, itemsPerPage, search]);
 
   // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page) => setCurrentPage(page);
 
   // Handle items per page change
   const handleItemsPerPageChange = (n) => {
     setItemsPerPage(n);
     setCurrentPage(1); // Reset to first page
   };
-  
   const handleDeletePages = async () => {
     const pagesIds = checkboxesSelected.map(item => item.id);
     const response = await api.post("/page/delete", {
       pages: pagesIds,
     })
-    if (response.status === 200 || response.status === 201) {
+    if (isRequestSuccessful(response)) {
       const deletedIds = new Set(checkboxesSelected.map(item => item.id));
       setFeedbackMessage("Páginas excluídas com sucesso!");
       setShowFeedbackModal(true);
@@ -117,7 +115,8 @@ const PageList = () => {
       setFeedbackMessage("Erro ao excluir páginas!");
       setShowFeedbackModal(true);
     }
-  };
+
+  } 
 
   const handleShowHideObservatory = async () => {
     console.log("CHECKED OBSERVATORY: ",checkboxesSelected)
@@ -164,7 +163,6 @@ const PageList = () => {
           totalItems={totalItems}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
-          setItemsPerPage={setItemsPerPage}
           onPageChange={handlePageChange}
           onItemsPerPageChange={handleItemsPerPageChange}
           search={search}

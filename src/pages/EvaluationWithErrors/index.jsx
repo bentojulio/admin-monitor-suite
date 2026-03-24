@@ -67,7 +67,7 @@ const EvaluationWithErrors = () => {
     const response = await api.post("/page/reEvaluateMulti", {
       pages: pagesUrls,
     })
-    if (response.status === 200 || response.status === 201) {
+    if (isRequestSuccessful(response)) {
       setFeedbackMessage("As páginas que selecionou estão a ser reavaliadas pelo sistema. Pode fechar a janela e prosseguir o seu trabalho.!");
       await fetchData();
       setCheckboxesSelected([]);
@@ -85,7 +85,7 @@ const EvaluationWithErrors = () => {
     const response = await api.post("/page/evaluationList/error/delete", {
       pages: pagesIds,
     })
-    if (response.status === 200 || response.status === 201) {
+    if (isRequestSuccessful(response)) {
       setFeedbackMessage("Páginas removidas da lista com sucesso!");
       await fetchData();
       setCheckboxesSelected([]);
@@ -104,7 +104,7 @@ const EvaluationWithErrors = () => {
     const response = await api.post("/page/delete", {   
       pages: pagesIds,
     })
-    if (response.status === 200 || response.status === 201) {
+    if (isRequestSuccessful(response)) {
       setFeedbackMessage("Páginas apagadas com sucesso!");
       await fetchData();
       setCheckboxesSelected([]);

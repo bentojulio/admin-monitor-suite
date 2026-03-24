@@ -37,6 +37,9 @@ const ViewCategoriesComponent = () => {
   const [data, setData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
   const [search, setSearch] = useState("");
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(50);
 
   // Charts & indicators
   const [radarWebsites, setRadarWebsites] = useState([]);
@@ -550,7 +553,6 @@ const ViewCategoriesComponent = () => {
 
       <div>
         <h1>Dados Globais da Categoria</h1>
-
 
         <div className="mt-5">
           <ContentListWebSites

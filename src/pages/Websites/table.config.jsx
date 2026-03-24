@@ -40,8 +40,9 @@ export const directoriesHeaders = [
       name: i18n.t("WEBSITES_PAGE.LIST.table.creation_label"),
       property: "Creation_Date",
       justifyCenter: true,
-    }
-    ,    {
+    },
+     { type: "SortingText", nRow: 2, name: i18n.t('WEBSITES_PAGE.LIST.table.stamp_label'), property: "Declaration" },
+    {
       type: "SortingText",
       nRow: 1,
       name: i18n.t("WEBSITES_PAGE.LIST.table.edit_label"),
@@ -83,6 +84,12 @@ export const columnsOptions = (navigate) => ({
     bold: false,
     decimalPlace: false,
   }, // alinhado ao centro
+  Declaration: {
+    type: "Text",
+    center: false,
+    bold: false,
+    decimalPlace: false,
+  },
   edit: {
     type: "Button",
     text: i18n.t("WEBSITES_PAGE.LIST.table.edit_label"),

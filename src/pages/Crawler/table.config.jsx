@@ -15,11 +15,7 @@ export const directoriesHeaders = [
 // Column rendering options
 export const columnsOptions = (navigate) => {
   return {
-  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false, 
-    onClick: (row) => {
-      setCheckboxesSelected([...checkboxesSelected, row.id]);
-    },
-  },
+  id: { type: "Checkbox", center: true, bold: false, decimalPlace: false },
   url: { 
     type: "Text", 
     center: true, 

@@ -92,8 +92,13 @@ export default function ContentListWebSites({
         iconsAltTexts={nameOfIcons}
         project={""}
         setCheckboxesSelected={setCheckboxesSelected}
-        checkedItems={checkboxesSelected}
         pagination={true}
+        totalItems={totalItems}
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        onPageChange={onPageChange}
+        onItemsPerPageChange={onItemsPerPageChange}
+        checkedItems={checkboxesSelected}
         serverSidePagination={serverSidePagination}
         {...(serverSidePagination && {
           totalItems,

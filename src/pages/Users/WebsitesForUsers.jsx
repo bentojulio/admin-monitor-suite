@@ -43,6 +43,7 @@ const WebsitesForUsers = () => {
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [showImportModal, setShowImportModal] = useState(false);
   const [selectedWebsite, setSelectedWebsite] = useState(null);
+  const [newWebsiteName, setNewWebsiteName] = useState("");
 
   useEffect(() => {
     const currentPath = location.pathname;
@@ -133,6 +134,7 @@ const WebsitesForUsers = () => {
   // Handle import website
   const handleImportWebsite = (website) => {
     setSelectedWebsite(website);
+    setNewWebsiteName(website.Name);
     setShowImportModal(true);
   };
 
@@ -157,6 +159,7 @@ const WebsitesForUsers = () => {
 
   const handleCancelImport = () => {
     setShowImportModal(false);
+    setNewWebsiteName("");
     setSelectedWebsite(null);
   };
 

@@ -55,9 +55,8 @@ const Login = () => {
       </a>
       <div className="main-content">
         <div className="login-container" id="main-content" role="main">
-          <h1 className="login-title">
-            <img src={Logo} alt={t('LOGIN.logo_alt')} className="login-logo" />
-          </h1>
+          <h1 className="login-title visually-hidden">{t('LOGIN.title')}</h1>
+          <img src={Logo} alt={t('LOGIN.logo_alt')} className="login-logo" />
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
               id="machineIP"

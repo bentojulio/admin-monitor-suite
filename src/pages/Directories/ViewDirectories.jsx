@@ -211,6 +211,9 @@ const ViewDirectoriesComponent = () => {
   const [data, setData] = useState(dataRowsWebSites || []);
   const [checkboxesSelected, setCheckboxesSelected] = useState([]);
   const [search, setSearch] = useState("");
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(50);
   // Memoize initial empty states
   const initialSuccessCriteria = useMemo(() => ({}), []);
 
@@ -248,106 +251,270 @@ const ViewDirectoriesComponent = () => {
     localStorage.setItem('currentPath', currentPath);
   }, [location.pathname]);
 
-  const clearDirectoryPagesCache = () => {
-    delete pagesCacheRef.current[directoryName];
-  };
-
-  const loadDirectoryPages = async () => {
-    // Use only in-memory cache to avoid sessionStorage quota issues
-    if (pagesCacheRef.current[directoryName]) {
-      return pagesCacheRef.current[directoryName];
-    }
-
-    const responsePages = await api.get(`/directory/${encodeURIComponent(directoryName)}/websites/pages`);
-    const pages = responsePages.data.result || [];
-    pagesCacheRef.current[directoryName] = pages;
-    return pages;
-  };
-
-  const fetchDataWebsite = async (shouldUpdateState = true) => {
+  const fetchDataWebsite = async () => {
     const response = await api.get(`/directory/${directoryName}/websites`);
+    
     const websites = response.data.result || [];
-    const mappedWebsites = websites.map(item => ({
+    setData(websites.map(item => ({
       id: item.WebsiteId,
       Name: item.Name,
       StartingUrl: item.StartingUrl,
       Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
       Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
-      Declaration: item.Declaration === null ? "Nao avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaracao nao conforme",
+      Declaration: item.Declaration === null ? "Não avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaração não conforme",
       edit: "Editar",
-    }));
+    })));
+    setOriginalData(websites.map(item => ({
+      id: item.WebsiteId,
+      Name: item.Name,
+      StartingUrl: item.StartingUrl,
+      Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
+      Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
+      Declaration: item.Declaration === null ? "Não avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaração não conforme",
+      edit: "Editar",
+    })));
 
-    if (shouldUpdateState) {
-      setData(mappedWebsites);
-      setOriginalData(mappedWebsites);
-    }
-
-    return { response, websites, mappedWebsites };
   }
   useEffect(() => {
-    let isCancelled = false;
-
     const fetchData = async () => {
-      try {
-        // Reset flags for new directory
-        setHasInitialLoad(false);
-        
-        // Phase 1: Load websites first (fast)
-        setIsLoadingWebsites(true);
-        setWebsitesError(null);
-        const { websites, mappedWebsites } = await fetchDataWebsite(false);
-        
-        if (isCancelled) return;
-        
-        // Show websites immediately
-        setData(mappedWebsites);
-        setOriginalData(mappedWebsites);
-        setIsLoadingWebsites(false);
-        setHasInitialLoad(true); // Mark initial load complete
+      const response = await api.get(`/directory/${encodeURIComponent(directoryName)}/websites`);
+      const responsePages = await api.get(`/directory/${encodeURIComponent(directoryName)}/websites/pages`);
 
-        // Phase 2: Load pages and compute metrics (slow)
-        setIsProcessingStats(true);
-        const pages = await loadDirectoryPages();
-        
-        if (isCancelled) return;
+      const pages = responsePages.data.result || [];
+      const websites = response.data.result || [];
 
-        const simplifiedPracticesData = getSimplifiedPracticesData(pages);
-        const practicesData = buildPracticesData(simplifiedPracticesData, t);
-        const metrics = buildDirectoryMetrics(pages, websites, barData);
+      const simplifiedPracticesData = getSimplifiedPracticesData(pages)
+      setDataListDetails(simplifiedPracticesData.success?.map(item => ({
+        practice: t(`ELEMS.${item.practice}`),
+        pages: item.pages,
+        occurrences: item.occurrences,
+        level: item.level.toUpperCase()
+      })))
+      setDataListDetailsBad(simplifiedPracticesData.errors?.map(item => ({
+        practice: t(`ELEMS.${item.practice}`),
+        pages: item.pages,
+        occurrences: item.occurrences,
+        level: item.level.toUpperCase()
+      })))
 
-        // Defer heavy state updates to keep UI responsive
-        startTransition(() => {
-          setDataListDetails(practicesData.details);
-          setDataListDetailsBad(practicesData.detailsBad);
-          setSuccessCriteriaSuccess(practicesData.successCriteriaSuccess);
-          setSuccessCriteriaErrors(practicesData.successCriteriaErrors);
-          setRadarWebsites(metrics.radarWebsites);
-          setDataListBar(metrics.dataListBar);
-          setListItems(metrics.listItems);
-          setListItemsGlobal(metrics.listItemsGlobal);
-          setBarDataDynamic({
-            ...barData,
-            datasets: [
-              {
-                type: 'bar',
-                label: "Frequência (nº de páginas)",
-                data: metrics.scoreBuckets,
-                backgroundColor: '#339',
-                categoryPercentage: 1,
-                barPercentage: 1,
-                grouped: true,
-              }
-            ]
+      // Process practices by WCAG Success Criteria
+      const practicesBySuccessCriteria = {
+        success: {},
+        errors: {}
+      };
+
+      // Process successful practices
+      simplifiedPracticesData.success.forEach(item => {
+        const scs = item.scs;
+        if (scs && scs !== '') {
+          const criteriaList = scs.split(',');
+          criteriaList.forEach(criteria => {
+            const trimmedCriteria = criteria.trim();
+            if (!practicesBySuccessCriteria.success[trimmedCriteria]) {
+              practicesBySuccessCriteria.success[trimmedCriteria] = [];
+            }
+            practicesBySuccessCriteria.success[trimmedCriteria].push({
+              practice: t(`ELEMS.${item.practice}`),
+              pages: item.pages,
+              occurrences: item.occurrences,
+              level: item.level.toUpperCase(),
+              websiteCount: item.pages
+            });
           });
-          setIsProcessingStats(false);
+        }
+      });
+
+      // Process error practices
+      simplifiedPracticesData.errors.forEach(item => {
+        const scs = item.scs;
+        if (scs && scs !== '') {
+          const criteriaList = scs.split(',');
+          criteriaList.forEach(criteria => {
+            const trimmedCriteria = criteria.trim();
+            if (!practicesBySuccessCriteria.errors[trimmedCriteria]) {
+              practicesBySuccessCriteria.errors[trimmedCriteria] = [];
+            }
+
+            practicesBySuccessCriteria.errors[trimmedCriteria].push({
+              practice: t(`ELEMS.${item.practice}`),
+              pages: item.pages,
+              occurrences: item.occurrences,
+              level: item.level.toUpperCase(),
+              websiteCount: item.pages
+            });
+          });
+        }
+      });
+
+      // Format data for WCAG Success Criteria display
+      const formatSuccessCriteriaData = (practicesData) => {
+        const formatted = {};
+        Object.keys(practicesData).sort().forEach(criteria => {
+          const practices = practicesData[criteria];
+          formatted[criteria] = {
+            criteriaCode: criteria,
+            practiceCount: practices.length,
+            practices: practices
+          };
         });
-      } catch (error) {
-        console.error("Error fetching directory data:", error);
-        setWebsitesError('Erro ao carregar dados do diretório');
-        setIsLoadingWebsites(false);
-        setIsProcessingStats(false);
-        setHasInitialLoad(true); // Mark as complete even on error
-      }
+        return formatted;
+      };
+
+      const formattedSuccessData = formatSuccessCriteriaData(practicesBySuccessCriteria.success);
+      const formattedErrorData = formatSuccessCriteriaData(practicesBySuccessCriteria.errors);
+
+      setSuccessCriteriaSuccess(formattedSuccessData);
+      setSuccessCriteriaErrors(formattedErrorData);
+
+
+      const evaluatedPages = pages.filter(page => page.Evaluation_Date !== null);
+      const averageScore = evaluatedPages.reduce((acc, page) => acc + Number(page.Score || 0), 0) / (evaluatedPages.length || 1);
+      const oldestPage = moment(
+        evaluatedPages.reduce((a, b) => new Date(a.Evaluation_Date) < new Date(b.Evaluation_Date) ? a : b)
+          .Evaluation_Date
+      ).format('DD/MM/YY');
+
+      const newestPage = moment(
+        evaluatedPages.reduce((a, b) => new Date(a.Evaluation_Date) > new Date(b.Evaluation_Date) ? a : b)
+          .Evaluation_Date
+      ).format('DD/MM/YY');
+
+      const totalPages = pages.length;
+
+
+      const websitePageMap = {};
+      pages.forEach(page => {
+        if (!websitePageMap[page.WebsiteId]) websitePageMap[page.WebsiteId] = [];
+        websitePageMap[page.WebsiteId].push(page);
+      });
+
+      const totalWebsites = Object.keys(websitePageMap).length;
+      const totalEvaluatedPages = Object.keys(websitePageMap).reduce((acc, websiteId) => acc + websitePageMap[websiteId].filter(page => page.Evaluation_Date !== null).length, 0);
+
+      let conformantWebsites = 0;
+      let nonConformantWebsites = 0;
+      let conformCounts = { A: 0, AA: 0, AAA: 0 };
+
+      Object.entries(websitePageMap).forEach(([websiteId, pageList]) => {
+        const isNonConform = pageList.some(p => p.A > 0 || p.AA > 0 || p.AAA > 0);
+
+        if (isNonConform) {
+          nonConformantWebsites++;
+        } else {
+          conformantWebsites++;
+
+          if (pageList.every(p => p.A === 0)) conformCounts.A++;
+          if (pageList.every(p => p.AA === 0)) conformCounts.AA++;
+          if (pageList.every(p => p.AAA === 0)) conformCounts.AAA++;
+        }
+
+      });
+
+
+      const barDataDynamic = [
+        pages.filter(page => page.Score >= 1 && page.Score < 2).length,
+        pages.filter(page => page.Score >= 2 && page.Score < 3).length,
+        pages.filter(page => page.Score >= 3 && page.Score < 4).length,
+        pages.filter(page => page.Score >= 4 && page.Score < 5).length,
+        pages.filter(page => page.Score >= 5 && page.Score < 6).length,
+        pages.filter(page => page.Score >= 6 && page.Score < 7).length,
+        pages.filter(page => page.Score >= 7 && page.Score < 8).length,
+        pages.filter(page => page.Score >= 8 && page.Score < 9).length,
+        pages.filter(page => page.Score >= 9 && page.Score < 10).length,
+      ]
+
+      const websiteAverageScores = Object.values(websitePageMap).map(pageList => {
+        const scores = pageList
+          .filter(p => p.Evaluation_Date !== null)
+          .map(p => Number(p.Score));
+        const average = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+        return average.toFixed(1);
+      });
+     
+      
+      // Build radar websites data with domain and averageScore
+      const websitesWithScores = Object.entries(websitePageMap).map(([websiteId, pageList]) => {
+        const website = websites.find(w => w.WebsiteId.toString() === websiteId.toString());
+        if(!website) {
+          return null 
+        }
+        // Calculate average score for this website
+        const scores = pageList
+          .filter(p => p.Evaluation_Date !== null)
+          .map(p => Number(p.Score));
+        const averageScore = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+        return {
+          url: website.StartingUrl,
+          averageScore: averageScore.toFixed(2)
+        };
+      });
+
+      setRadarWebsites(websitesWithScores.filter(item => item !== null));
+      setDataListBar(
+        barDataDynamic.map((item, index) => ({
+          range: `[${index + 1} - ${index + 2}[`,
+          frequency: barDataDynamic[index],
+          frequency_percent: `${((barDataDynamic[index] / totalPages) * 100).toFixed(2)}%`,
+          cumulative: barDataDynamic.slice(0, index + 1).reduce((acc, curr) => acc + curr, 0),
+          cumulative_percent: `${((barDataDynamic.slice(0, index + 1).reduce((acc, curr) => acc + curr, 0) / totalPages) * 100).toFixed(2)}%`
+        }))
+      )
+
+      setBarDataDynamic({
+        ...barData,
+        datasets: [
+          {
+            type: 'bar',
+            label: "Frequência (nº de páginas)",
+            data: barDataDynamic,
+            backgroundColor: '#339', // All bars same color
+            categoryPercentage: 1,
+            barPercentage: 1,
+            grouped: true,
+          }
+        ]
+      })
+      setListItems([
+        { title: 'Pontuação média', value: Math.round(averageScore) },
+        { title: 'Avaliação mais antiga de uma página', value: oldestPage },
+        { title: 'Avaliação mais recente de uma página', value: newestPage },
+        { title: 'Nº de Sítios Web', value: totalWebsites },
+        { title: 'Nº de Páginas(Avaliadas)', value: `${totalPages} (${totalEvaluatedPages})` },
+        { title: 'Nº médio de Páginas por Sítio', value: Math.round(totalPages / totalWebsites) },
+      ]);
+
+      setListItemsGlobal([
+        { title: 'Sítios Web', value: totalWebsites },
+        { title: 'Sítios Web não conformes', value: nonConformantWebsites },
+        {
+          title: 'Sítios Web conformes', value: conformantWebsites,
+          itemsList: [
+            { title: 'A', value: `${conformCounts.A} (${((conformCounts.A / totalWebsites) * 100).toFixed(2)}%)` },
+            { title: 'AA', value: `${conformCounts.AA} (${((conformCounts.AA / totalWebsites) * 100).toFixed(2)}%)` },
+            { title: 'AAA', value: `${conformCounts.AAA} (${((conformCounts.AAA / totalWebsites) * 100).toFixed(2)}%)` },
+          ]
+        },
+      ]);
+      setData(websites.map(item => ({
+        id: item.WebsiteId,
+        Name: item.Name,
+        StartingUrl: item.StartingUrl,
+        Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
+        Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
+        Declaration: item.Declaration === null ? "Não avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaração não conforme",
+        edit: "Editar",
+      })));
+      setOriginalData(
+        websites.map(item => ({
+          id: item.WebsiteId,
+          Name: item.Name,
+          StartingUrl: item.StartingUrl,
+          Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
+          Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
+          Declaration: item.Declaration === null ? "Não avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaração não conforme",
+          edit: "Editar",
+        }))
+      )
     };
 
     fetchData();
@@ -373,26 +540,32 @@ const ViewDirectoriesComponent = () => {
 
   const [barDataDynamic, setBarDataDynamic] = useState(barData);
   const barOptionsCopy = JSON.parse(JSON.stringify(barOptions || {}));
-  // Client-side search filtering for directory websites
+  // Server-side pagination & search for directory websites
   useEffect(() => {
-    // Only run after initial load is complete
-    if (!hasInitialLoad) return;
-    
-    if (search.trim() === '') {
-      // No search, show all websites
-      setData(originalData);
-    } else {
-      // Filter websites by search term (client-side)
-      const filtered = originalData.filter(item => 
-        item.Name?.toLowerCase().includes(search.toLowerCase()) ||
-        item.StartingUrl?.toLowerCase().includes(search.toLowerCase())
-      );
-      setData(filtered);
-    }
-  }, [search, hasInitialLoad, originalData]);
+    const fetchPaginated = async () => {
+      try {
+        const countRes = await api.get(`/directory/${encodeURIComponent(directoryName)}/websites/count/search=${encodeURIComponent(search || '')}`);
+        setTotalItems(Number(countRes.data.result || 0));
+        const offset = currentPage - 1;
+        const listRes = await api.get(`/directory/${encodeURIComponent(directoryName)}/websites/all/${itemsPerPage}/${offset}/sort=/direction=/search=${encodeURIComponent(search || '')}`);
+        const rows = (listRes.data.result || []).map(item => ({
+          id: item.WebsiteId,
+          Name: item.Name,
+          StartingUrl: item.StartingUrl,
+          Pages: item.Pages + "(" + item.Evaluated_Pages + ")",
+          Creation_Date: moment(item.Creation_Date).format('DD/MM/YYYY'),
+          Declaration: item.Declaration === null ? "Não avaliado" : item.Declaration === 1 ? "Selo de Ouro" : item.Declaration === 2 ? "Selo de Prata" : item.Declaration === 3 ? "Selo de Bronze" : "Declaração não conforme",
+          edit: "Editar",
+        }));
+        setData(rows);
+        setOriginalData(rows);
+      } catch (e) {}
+    };
+    fetchPaginated();
+  }, [directoryName, currentPage, itemsPerPage, search]);
 
-  // No need for page change handlers in client-side pagination
-  // The SortingTable component handles pagination internally
+  const handlePageChange = (page) => setCurrentPage(page);
+  const handleItemsPerPageChange = (n) => { setItemsPerPage(n); setCurrentPage(1); };
 
   const handleCrawlingWebsites = async ({ maxDepth, maxPages, waitJS, selectedItems }) => {
     if (selectedItems.length === 0) {
