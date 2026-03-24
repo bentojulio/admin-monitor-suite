@@ -14,8 +14,7 @@ import { Modal } from "../../components/Modal";
 import { useTheme } from '../../context/ThemeContext';
 import { setWebsiteNavigationContext } from "../../utils/navigation";
 import { useUniqueCheckboxSelection } from "../../hooks/useUniqueCheckboxSelection";
-import { calculateTotalElements } from "../../utils/utils";
-import { getEvaluationStatus } from "../../utils/utils";
+import { calculateTotalElements, getEvaluationStatus } from "../../utils/utils";
 // Lightweight date formatter to replace moment.js
 const formatDate = (dateString) => {
   const date = new Date(dateString);

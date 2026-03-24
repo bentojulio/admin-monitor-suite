@@ -27,7 +27,7 @@ import Indicators from "../../components/Indicators";
 import { api } from "../../config/api";
 import moment from "moment";
 import {ruleset} from "@a12e/accessmonitor-rulesets";
-import { downloadCSV, downloadWebsiteCSV, getData, getSimplifiedPracticesData } from "../../utils/utils.js";
+import { downloadCSV, downloadWebsiteCSV, getData, getSimplifiedPracticesData, getEvaluationStatus } from "../../utils/utils.js";
 import { isRequestSuccessful } from "../../utils/apiHelpers.js";
 import { Modal } from "../../components/Modal";
 import { getEffectiveNavigationContext, setWebsiteNavigationContext } from "../../utils/navigation";
