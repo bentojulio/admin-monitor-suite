@@ -139,6 +139,14 @@ export const aggregateDirectoriesData = async (directoryNames, api) => {
       errors: {}
     };
 
+    const toCriteriaList = (scs) => {
+      if (!scs) return [];
+      const list = Array.isArray(scs)
+        ? scs
+        : (typeof scs === 'string' ? scs.split(',') : []);
+      return list.map(c => String(c).trim()).filter(Boolean);
+    };
+
     // Process successful practices
     const dataListDetails = [];
     simplifiedPracticesData.success.forEach(item => {
@@ -150,23 +158,18 @@ export const aggregateDirectoriesData = async (directoryNames, api) => {
       });
 
       // Group by success criteria (scs is already available in the item)
-      const scs = item.scs;
-      if (scs && scs !== '') {
-        const criteriaList = scs.split(',');
-        criteriaList.forEach(criteria => {
-          const trimmedCriteria = criteria.trim();
-          if (!practicesBySuccessCriteria.success[trimmedCriteria]) {
-            practicesBySuccessCriteria.success[trimmedCriteria] = [];
-          }
-          practicesBySuccessCriteria.success[trimmedCriteria].push({
-            practice: `ELEMS.${item.practice}`,
-            pages: item.pages,
-            occurrences: item.occurrences,
-            level: item.level.toUpperCase(),
-            websiteCount: item.pages
-          });
+      toCriteriaList(item.scs).forEach(trimmedCriteria => {
+        if (!practicesBySuccessCriteria.success[trimmedCriteria]) {
+          practicesBySuccessCriteria.success[trimmedCriteria] = [];
+        }
+        practicesBySuccessCriteria.success[trimmedCriteria].push({
+          practice: `ELEMS.${item.practice}`,
+          pages: item.pages,
+          occurrences: item.occurrences,
+          level: item.level.toUpperCase(),
+          websiteCount: item.pages
         });
-      }
+      });
     });
     
     // Process error practices
@@ -180,23 +183,18 @@ export const aggregateDirectoriesData = async (directoryNames, api) => {
       });
 
       // Group by success criteria (scs is already available in the item)
-      const scs = item.scs;
-      if (scs && scs !== '') {
-        const criteriaList = scs.split(',');
-        criteriaList.forEach(criteria => {
-          const trimmedCriteria = criteria.trim();
-          if (!practicesBySuccessCriteria.errors[trimmedCriteria]) {
-            practicesBySuccessCriteria.errors[trimmedCriteria] = [];
-          }
-          practicesBySuccessCriteria.errors[trimmedCriteria].push({
-            practice: `ELEMS.${item.practice}`,
-            pages: item.pages,
-            occurrences: item.occurrences.toString().includes("lang") ? "N/A" : item.occurrences,
-            level: item.level.toUpperCase(),
-            websiteCount: item.pages
-          });
+      toCriteriaList(item.scs).forEach(trimmedCriteria => {
+        if (!practicesBySuccessCriteria.errors[trimmedCriteria]) {
+          practicesBySuccessCriteria.errors[trimmedCriteria] = [];
+        }
+        practicesBySuccessCriteria.errors[trimmedCriteria].push({
+          practice: `ELEMS.${item.practice}`,
+          pages: item.pages,
+          occurrences: item.occurrences.toString().includes("lang") ? "N/A" : item.occurrences,
+          level: item.level.toUpperCase(),
+          websiteCount: item.pages
         });
-      }
+      });
     });
 
     // Format data for WCAG Success Criteria display

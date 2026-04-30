@@ -2,7 +2,7 @@
 // Make sure to create a file: `src/workers/aggregation.worker.js` (see below)
 
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
-import { Button, StatisticsHeader, SortingTable } from "@a12e/accessmonitor-ds";
+import { Button, StatisticsHeader, SortingTable, Tabs } from "@a12e/accessmonitor-ds";
 import { Bar, Radar } from "react-chartjs-2";
 import GoodBadTab  from "../../../components/GoodBadTab/GoodBadTab.jsx";
 import { detailsTableHeaders, columnsOptionsDetails, ariaLabels, detailsTable } from "../../Directories/table.config.jsx";
@@ -254,18 +254,93 @@ const TabGlobalAMS = ({
 
       <div className="mt-5 bg-white p-4">
         <h3 className="mb-4">Distribuição das pontuações AccessMonitor</h3>
-        <Bar
-          data={initialBarDataStructure}
-          options={{ responsive: true, maintainAspectRatio: true }}
+        <Tabs
+          defaultActiveKey="chart"
+          darkTheme={theme}
+          tabs={[
+            {
+              eventKey: "chart",
+              title: "Gráfico",
+              component: (
+                <Bar
+                  role="img"
+                  aria-label="Histograma das pontuações do AccessMonitor"
+                  data={initialBarDataStructure}
+                  options={{ responsive: true, maintainAspectRatio: true }}
+                />
+              ),
+            },
+            {
+              eventKey: "table",
+              title: "Tabela",
+              component: (
+                <SortingTable
+                  darkTheme={theme}
+                  hasSort={false}
+                  pagination={false}
+                  caption="Distribuição das pontuações AccessMonitor"
+                  headers={[[
+                    { type: "Text", nRow: 1, name: "Intervalo de pontuação", property: "range" },
+                    { type: "Text", nRow: 1, name: "Nº de páginas", property: "frequency", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "% Frequência", property: "frequency_percent", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "Acumulado", property: "cumulative", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "% Acumulado", property: "cumulative_percent", justifyCenter: true },
+                  ]]}
+                  dataList={dataListBar}
+                  columnsOptions={{
+                    range: { type: "Text", center: false, bold: true },
+                    frequency: { type: "Text", center: true, bold: false },
+                    frequency_percent: { type: "Text", center: true, bold: false },
+                    cumulative: { type: "Text", center: true, bold: false },
+                    cumulative_percent: { type: "Text", center: true, bold: false },
+                  }}
+                />
+              ),
+            },
+          ]}
         />
       </div>
 
       <div className="mt-5 bg-white p-4">
         <h3 className="mb-4">Mancha Gráfica da Acessibilidade</h3>
-        <Radar
-          aria-label="Gráfico de Radar mostrando a distribuição de pontuações de acessibilidade"
-          data={radarData}
-          options={radarOptions}
+        <Tabs
+          defaultActiveKey="chart"
+          darkTheme={theme}
+          tabs={[
+            {
+              eventKey: "chart",
+              title: "Gráfico",
+              component: (
+                <Radar
+                  role="img"
+                  aria-label="Gráfico de Radar mostrando a distribuição de pontuações de acessibilidade"
+                  data={radarData}
+                  options={radarOptions}
+                />
+              ),
+            },
+            {
+              eventKey: "table",
+              title: "Tabela",
+              component: (
+                <SortingTable
+                  darkTheme={theme}
+                  hasSort={false}
+                  pagination={false}
+                  caption="Mancha gráfica da acessibilidade — pontuação média por diretório"
+                  headers={[[
+                    { type: "Text", nRow: 1, name: "Diretório", property: "domain" },
+                    { type: "Text", nRow: 1, name: "Pontuação média", property: "averageScore", justifyCenter: true },
+                  ]]}
+                  dataList={initialDataRadar}
+                  columnsOptions={{
+                    domain: { type: "Text", center: false, bold: false },
+                    averageScore: { type: "Text", center: true, bold: false },
+                  }}
+                />
+              ),
+            },
+          ]}
         />
       </div>
 

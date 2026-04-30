@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, memo, useRef } from "react";
 import { useNavigate, Link, useLocation, useParams } from "react-router-dom";
-import { Button, StatisticsHeader, Breadcrumb, SortingTable, RadioGroup } from "@a12e/accessmonitor-ds";
+import { Button, StatisticsHeader, Breadcrumb, SortingTable, RadioGroup, Tabs } from "@a12e/accessmonitor-ds";
 import { Bar, Radar } from "react-chartjs-2";
 import GoodBadTab from "../../components/GoodBadTab/GoodBadTab";
 import { useTheme } from "../../context/ThemeContext";
@@ -287,10 +287,16 @@ const ViewCategoriesComponent = () => {
 
     const practicesBySuccessCriteria = { success: {}, errors: {} };
 
+    const toCriteriaList = (scs) => {
+      if (!scs) return [];
+      const list = Array.isArray(scs)
+        ? scs
+        : (typeof scs === 'string' ? scs.split(',') : []);
+      return list.map(c => String(c).trim()).filter(Boolean);
+    };
+
     simplifiedPracticesData.success.forEach(item => {
-      const scs = item.scs;
-      if (!scs) return;
-      scs.split(',').map(c => c.trim()).forEach(criteria => {
+      toCriteriaList(item.scs).forEach(criteria => {
         if (!practicesBySuccessCriteria.success[criteria]) {
           practicesBySuccessCriteria.success[criteria] = [];
         }
@@ -305,9 +311,7 @@ const ViewCategoriesComponent = () => {
     });
 
     simplifiedPracticesData.errors.forEach(item => {
-      const scs = item.scs;
-      if (!scs) return;
-      scs.split(',').map(c => c.trim()).forEach(criteria => {
+      toCriteriaList(item.scs).forEach(criteria => {
         if (!practicesBySuccessCriteria.errors[criteria]) {
           practicesBySuccessCriteria.errors[criteria] = [];
         }
@@ -645,9 +649,50 @@ const ViewCategoriesComponent = () => {
           {isProcessingStats ? (
             <p className="text-muted">A preparar distribuição...</p>
           ) : (
-            <Bar
-              data={barDataDynamic}
-              options={theme === "light" ? barOptionsCopy : barOptionsDark}
+            <Tabs
+              defaultActiveKey="chart"
+              darkTheme={theme}
+              tabs={[
+                {
+                  eventKey: "chart",
+                  title: "Gráfico",
+                  component: (
+                    <Bar
+                      role="img"
+                      aria-label="Histograma das pontuações do AccessMonitor"
+                      data={barDataDynamic}
+                      options={theme === "light" ? barOptionsCopy : barOptionsDark}
+                    />
+                  ),
+                },
+                {
+                  eventKey: "table",
+                  title: "Tabela",
+                  component: (
+                    <SortingTable
+                      darkTheme={theme}
+                      hasSort={false}
+                      pagination={false}
+                      caption="Distribuição das pontuações AccessMonitor no universo da Categoria"
+                      headers={[[
+                        { type: "Text", nRow: 1, name: "Intervalo de pontuação", property: "range" },
+                        { type: "Text", nRow: 1, name: "Nº de páginas", property: "frequency", justifyCenter: true },
+                        { type: "Text", nRow: 1, name: "% Frequência", property: "frequency_percent", justifyCenter: true },
+                        { type: "Text", nRow: 1, name: "Acumulado", property: "cumulative", justifyCenter: true },
+                        { type: "Text", nRow: 1, name: "% Acumulado", property: "cumulative_percent", justifyCenter: true },
+                      ]]}
+                      dataList={dataListBar}
+                      columnsOptions={{
+                        range: { type: "Text", center: false, bold: true },
+                        frequency: { type: "Text", center: true, bold: false },
+                        frequency_percent: { type: "Text", center: true, bold: false },
+                        cumulative: { type: "Text", center: true, bold: false },
+                        cumulative_percent: { type: "Text", center: true, bold: false },
+                      }}
+                    />
+                  ),
+                },
+              ]}
             />
           )}
         </div>
@@ -657,10 +702,44 @@ const ViewCategoriesComponent = () => {
           {isProcessingStats ? (
             <p className="text-muted">A preparar gráfico radar...</p>
           ) : (
-            <Radar
-              aria-label="Gráfico de Radar mostrando a distribuição de pontuações de acessibilidade"
-              data={radarData}
-              options={radarOptions}
+            <Tabs
+              defaultActiveKey="chart"
+              darkTheme={theme}
+              tabs={[
+                {
+                  eventKey: "chart",
+                  title: "Gráfico",
+                  component: (
+                    <Radar
+                      role="img"
+                      aria-label="Gráfico de Radar mostrando a distribuição de pontuações de acessibilidade"
+                      data={radarData}
+                      options={radarOptions}
+                    />
+                  ),
+                },
+                {
+                  eventKey: "table",
+                  title: "Tabela",
+                  component: (
+                    <SortingTable
+                      darkTheme={theme}
+                      hasSort={false}
+                      pagination={false}
+                      caption="Mancha gráfica da acessibilidade — pontuação média por sítio web"
+                      headers={[[
+                        { type: "Text", nRow: 1, name: "Sítio web", property: "url" },
+                        { type: "Text", nRow: 1, name: "Pontuação média", property: "averageScore", justifyCenter: true },
+                      ]]}
+                      dataList={radarWebsites}
+                      columnsOptions={{
+                        url: { type: "Text", center: false, bold: false },
+                        averageScore: { type: "Text", center: true, bold: false },
+                      }}
+                    />
+                  ),
+                },
+              ]}
             />
           )}
         </div>

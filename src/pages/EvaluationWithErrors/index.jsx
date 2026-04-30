@@ -39,10 +39,13 @@ const EvaluationWithErrors = () => {
   const { type } = useParams();
   // Fetch total count and current page data
   const fetchData = async () => {
-    const url = type === "AMS" ? "/page/evaluationList/error" : "/page/evaluationList/myMonitor/error ";
-    const response = await api.get(url); 
-    setData(response.data.result.map(item => ({
-      id: item.EvaluationListId,
+    const url = type === "AMS" ? "/page/evaluationList/error" : "/page/evaluationList/myMonitor/error";
+    const response = await api.get(url);
+    setData(response.data.result.map((item, idx) => ({
+      id: item.EvaluationListId != null
+        ? `el-${item.EvaluationListId}`
+        : `row-${idx}-${item.PageId ?? ''}-${item.Url ?? ''}`,
+      evaluationListId: item.EvaluationListId,
       Url: item.Url,
       Error: item.Error,
       CreatedAt: moment(item.CreatedAt).format('DD/MM/YYYY'),
@@ -50,8 +53,10 @@ const EvaluationWithErrors = () => {
     })));
   };
   useEffect(() => {
+    setCheckboxesSelected([]);
+    setCurrentPage(1);
     fetchData();
-  }, []);
+  }, [type]);
 
   // Handle page change
   const handlePageChange = (page) => setCurrentPage(page);
@@ -81,7 +86,9 @@ const EvaluationWithErrors = () => {
   }
 
   const handleRemoveFromList = async () => {
-    const pagesIds = checkboxesSelected.map(item => item.id);
+    const pagesIds = checkboxesSelected
+      .map(item => item.evaluationListId)
+      .filter(id => id != null);
     const response = await api.post("/page/evaluationList/error/delete", {
       pages: pagesIds,
     })

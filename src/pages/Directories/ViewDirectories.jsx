@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, memo, useTransition, useRef } from "react";
-import { Button, StatisticsHeader, Breadcrumb, SortingTable, RadioGroup } from "@a12e/accessmonitor-ds";
+import { Button, StatisticsHeader, Breadcrumb, SortingTable, RadioGroup, Tabs } from "@a12e/accessmonitor-ds";
 import "./style.users.css";
 import { Bar, Radar } from "react-chartjs-2";
 import { Link, useParams, useLocation } from "react-router-dom";
@@ -39,9 +39,13 @@ const buildPracticesData = (simplifiedPracticesData, t) => {
 
   const mapPractice = (target, item) => {
     const scs = item.scs;
-    if (!scs || scs === '') return;
-    scs.split(',').forEach(criteria => {
-      const trimmed = criteria.trim();
+    if (!scs) return;
+    const criteriaList = Array.isArray(scs)
+      ? scs
+      : (typeof scs === 'string' && scs !== '' ? scs.split(',') : []);
+    criteriaList.forEach(criteria => {
+      const trimmed = String(criteria).trim();
+      if (!trimmed) return;
       if (!target[trimmed]) target[trimmed] = [];
       target[trimmed].push({
         practice: getElemTrans(item.practice),
@@ -615,9 +619,50 @@ const ViewDirectoriesComponent = () => {
         {isProcessingStats ? (
           <p className="text-muted">A preparar distribuição...</p>
         ) : (
-          <Bar
-            data={barDataDynamic}
-            options={theme === "light" ? barOptionsCopy : barOptionsDark}
+          <Tabs
+            defaultActiveKey="chart"
+            darkTheme={theme}
+            tabs={[
+              {
+                eventKey: "chart",
+                title: "Gráfico",
+                component: (
+                  <Bar
+                    role="img"
+                    aria-label="Histograma das pontuações do AccessMonitor"
+                    data={barDataDynamic}
+                    options={theme === "light" ? barOptionsCopy : barOptionsDark}
+                  />
+                ),
+              },
+              {
+                eventKey: "table",
+                title: "Tabela",
+                component: (
+                  <SortingTable
+                    darkTheme={theme}
+                    hasSort={false}
+                    pagination={false}
+                    caption="Distribuição das pontuações AccessMonitor no universo do Diretório"
+                    headers={[[
+                      { type: "Text", nRow: 1, name: "Intervalo de pontuação", property: "range" },
+                      { type: "Text", nRow: 1, name: "Nº de páginas", property: "frequency", justifyCenter: true },
+                      { type: "Text", nRow: 1, name: "% Frequência", property: "frequency_percent", justifyCenter: true },
+                      { type: "Text", nRow: 1, name: "Acumulado", property: "cumulative", justifyCenter: true },
+                      { type: "Text", nRow: 1, name: "% Acumulado", property: "cumulative_percent", justifyCenter: true },
+                    ]]}
+                    dataList={dataListBar}
+                    columnsOptions={{
+                      range: { type: "Text", center: false, bold: true },
+                      frequency: { type: "Text", center: true, bold: false },
+                      frequency_percent: { type: "Text", center: true, bold: false },
+                      cumulative: { type: "Text", center: true, bold: false },
+                      cumulative_percent: { type: "Text", center: true, bold: false },
+                    }}
+                  />
+                ),
+              },
+            ]}
           />
         )}
       </div>
@@ -627,10 +672,44 @@ const ViewDirectoriesComponent = () => {
         {isProcessingStats ? (
           <p className="text-muted">A preparar gráfico radar...</p>
         ) : (
-          <Radar
-            aria-label="Gráfico de Radar mostrando a distribuição de pontuações de acessibilidade"
-            data={radarData}
-            options={radarOptions}
+          <Tabs
+            defaultActiveKey="chart"
+            darkTheme={theme}
+            tabs={[
+              {
+                eventKey: "chart",
+                title: "Gráfico",
+                component: (
+                  <Radar
+                    role="img"
+                    aria-label="Gráfico de Radar mostrando a distribuição de pontuações de acessibilidade"
+                    data={radarData}
+                    options={radarOptions}
+                  />
+                ),
+              },
+              {
+                eventKey: "table",
+                title: "Tabela",
+                component: (
+                  <SortingTable
+                    darkTheme={theme}
+                    hasSort={false}
+                    pagination={false}
+                    caption="Mancha gráfica da acessibilidade — pontuação média por sítio web"
+                    headers={[[
+                      { type: "Text", nRow: 1, name: "Sítio web", property: "url" },
+                      { type: "Text", nRow: 1, name: "Pontuação média", property: "averageScore", justifyCenter: true },
+                    ]]}
+                    dataList={radarWebsites}
+                    columnsOptions={{
+                      url: { type: "Text", center: false, bold: false },
+                      averageScore: { type: "Text", center: true, bold: false },
+                    }}
+                  />
+                ),
+              },
+            ]}
           />
         )}
       </div>

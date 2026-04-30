@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, memo, useRef } from "react";
-import { Button, Breadcrumb, SortingTable } from "@a12e/accessmonitor-ds";
+import { Button, Breadcrumb, SortingTable, Tabs } from "@a12e/accessmonitor-ds";
 import "./style.users.css";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Bar, Radar } from "react-chartjs-2";
@@ -483,46 +483,44 @@ const ViewWebSitesComponent = () => {
         errors: {}
       };
 
+      const toCriteriaList = (scs) => {
+        if (!scs) return [];
+        const list = Array.isArray(scs)
+          ? scs
+          : (typeof scs === 'string' ? scs.split(',') : []);
+        return list.map(c => String(c).trim()).filter(Boolean);
+      };
+
       // Process successful practices
       simplifiedPracticesData.success.forEach(item => {
-        const scs = item.scs;
-        if (scs && scs !== '') {
-          const criteriaList = scs.split(',');
-          criteriaList.forEach(criteria => {
-            const trimmedCriteria = criteria.trim();
-            if (!practicesBySuccessCriteria.success[trimmedCriteria]) {
-              practicesBySuccessCriteria.success[trimmedCriteria] = [];
-            }
-            practicesBySuccessCriteria.success[trimmedCriteria].push({
-              practice: t(`ELEMS.${item.practice}`),
-              pages: item.pages,
-              occurrences: item.occurrences,
-              level: item.level.toUpperCase(),
-              websiteCount: 1 // For single website view
-            });
+        toCriteriaList(item.scs).forEach(trimmedCriteria => {
+          if (!practicesBySuccessCriteria.success[trimmedCriteria]) {
+            practicesBySuccessCriteria.success[trimmedCriteria] = [];
+          }
+          practicesBySuccessCriteria.success[trimmedCriteria].push({
+            practice: t(`ELEMS.${item.practice}`),
+            pages: item.pages,
+            occurrences: item.occurrences,
+            level: item.level.toUpperCase(),
+            websiteCount: 1 // For single website view
           });
-        }
+        });
       });
 
       // Process error practices
       simplifiedPracticesData.errors.forEach(item => {
-        const scs = item.scs;
-        if (scs && scs !== '') {
-          const criteriaList = scs.split(',');
-          criteriaList.forEach(criteria => {
-            const trimmedCriteria = criteria.trim();
-            if (!practicesBySuccessCriteria.errors[trimmedCriteria]) {
-              practicesBySuccessCriteria.errors[trimmedCriteria] = [];
-            }
-            practicesBySuccessCriteria.errors[trimmedCriteria].push({
-              practice: t(`ELEMS.${item.practice}`),
-              pages: item.pages,
-              occurrences: item.occurrences.toString().includes("lang") ? "N/A" : item.occurrences,
-              level: item.level.toUpperCase(),
-              websiteCount: 1 // For single website view
-            });
+        toCriteriaList(item.scs).forEach(trimmedCriteria => {
+          if (!practicesBySuccessCriteria.errors[trimmedCriteria]) {
+            practicesBySuccessCriteria.errors[trimmedCriteria] = [];
+          }
+          practicesBySuccessCriteria.errors[trimmedCriteria].push({
+            practice: t(`ELEMS.${item.practice}`),
+            pages: item.pages,
+            occurrences: item.occurrences.toString().includes("lang") ? "N/A" : item.occurrences,
+            level: item.level.toUpperCase(),
+            websiteCount: 1 // For single website view
           });
-        }
+        });
       });
 
       // Format data for WCAG Success Criteria display
@@ -734,33 +732,175 @@ const ViewWebSitesComponent = () => {
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Distribuição das pontuações AccessMonitor no universo das páginas analisadas no sítio web</h2>
-        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-          <Bar
-            role="img"
-            aria-label="Histograma das pontuações do AccessMonitor"
-            data={barDataDynamic}
-            options={theme === "light" ? barOptions : barOptionsDark}
-          />
-        </div>
+        <Tabs
+          defaultActiveKey="chart"
+          darkTheme={theme}
+          tabs={[
+            {
+              eventKey: "chart",
+              title: "Gráfico",
+              component: (
+                <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                  <Bar
+                    role="img"
+                    aria-label="Histograma das pontuações do AccessMonitor"
+                    data={barDataDynamic}
+                    options={theme === "light" ? barOptions : barOptionsDark}
+                  />
+                </div>
+              ),
+            },
+            {
+              eventKey: "table",
+              title: "Tabela",
+              component: (
+                <SortingTable
+                  darkTheme={theme}
+                  hasSort={false}
+                  pagination={false}
+                  caption="Distribuição das pontuações AccessMonitor no universo das páginas analisadas no sítio web"
+                  headers={[[
+                    { type: "Text", nRow: 1, name: "Intervalo de pontuação", property: "range" },
+                    { type: "Text", nRow: 1, name: "Nº de páginas", property: "frequency", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "% Frequência", property: "frequency_percent", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "Acumulado", property: "cumulative", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "% Acumulado", property: "cumulative_percent", justifyCenter: true },
+                  ]]}
+                  dataList={dataListBar}
+                  columnsOptions={{
+                    range: { type: "Text", center: false, bold: true },
+                    frequency: { type: "Text", center: true, bold: false },
+                    frequency_percent: { type: "Text", center: true, bold: false },
+                    cumulative: { type: "Text", center: true, bold: false },
+                    cumulative_percent: { type: "Text", center: true, bold: false },
+                  }}
+                />
+              ),
+            },
+          ]}
+        />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Boas Práticas de acessibilidade encontradas no sítio web</h2>
-        <HtmlLabelBarChart data={horizontalDataGood} />
+        <Tabs
+          defaultActiveKey="chart"
+          darkTheme={theme}
+          tabs={[
+            {
+              eventKey: "chart",
+              title: "Gráfico",
+              component: <HtmlLabelBarChart data={horizontalDataGood} />,
+            },
+            {
+              eventKey: "table",
+              title: "Tabela",
+              component: (
+                <SortingTable
+                  darkTheme={theme}
+                  hasSort={false}
+                  pagination={false}
+                  caption="Boas práticas de acessibilidade encontradas no sítio web"
+                  headers={[[
+                    { type: "Text", nRow: 1, name: "Nível", bigWidth: "50%", property: "level", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "Prática", property: "name", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "Nº páginas", property: "pages", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "Nº ocorrências", property: "occurences", justifyCenter: true },
+                  ]]}
+                  dataList={dataGood}
+                  columnsOptions={{
+                    level: { type: "Text", center: true, bold: true },
+                    name: { type: "DangerousHTML", center: false, bold: false },
+                    pages: { type: "Text", center: true, bold: false },
+                    occurences: { type: "Text", center: true, bold: false },
+                  }}
+                />
+              ),
+            },
+          ]}
+        />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Más Práticas de acessibilidade encontradas no sítio web</h2>
-        <HtmlLabelBarChart data={horizontalDataBad} />
+        <Tabs
+          defaultActiveKey="chart"
+          darkTheme={theme}
+          tabs={[
+            {
+              eventKey: "chart",
+              title: "Gráfico",
+              component: <HtmlLabelBarChart data={horizontalDataBad} />,
+            },
+            {
+              eventKey: "table",
+              title: "Tabela",
+              component: (
+                <SortingTable
+                  darkTheme={theme}
+                  hasSort={false}
+                  pagination={false}
+                  caption="Más práticas de acessibilidade encontradas no sítio web"
+                  headers={[[
+                    { type: "Text", nRow: 1, name: "Nível", bigWidth: "50%", property: "level", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "Prática", property: "name", bigWidth: "50%", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "Nº páginas", property: "pages", justifyCenter: true },
+                    { type: "Text", nRow: 1, name: "Nº ocorrências", property: "occurences", justifyCenter: true },
+                  ]]}
+                  dataList={dataBad}
+                  columnsOptions={{
+                    level: { type: "Text", center: true, bold: true },
+                    name: { type: "DangerousHTML", center: false, bold: false },
+                    pages: { type: "Text", center: true, bold: false },
+                    occurences: { type: "Text", center: true, bold: false },
+                  }}
+                />
+              ),
+            },
+          ]}
+        />
       </div>
       <div className="mt-5 bg-white p-4">
         <h2 className="mb-4">Mancha Gráfica da Acessibilidade</h2>
-        <div style={{ display: 'flex', justifyContent: 'center', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
-          <Radar
-            role="img"
-            aria-label="Gráfico de Radar mostrando a distribuição de pontuações de acessibilidade"
-            data={radarData}
-            options={radarOptions}
-          />
-        </div>
+        <Tabs
+          defaultActiveKey="chart"
+          darkTheme={theme}
+          tabs={[
+            {
+              eventKey: "chart",
+              title: "Gráfico",
+              component: (
+                <div style={{ display: 'flex', justifyContent: 'center', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+                  <Radar
+                    role="img"
+                    aria-label="Gráfico de Radar mostrando a distribuição de pontuações de acessibilidade"
+                    data={radarData}
+                    options={radarOptions}
+                  />
+                </div>
+              ),
+            },
+            {
+              eventKey: "table",
+              title: "Tabela",
+              component: (
+                <SortingTable
+                  darkTheme={theme}
+                  hasSort={false}
+                  pagination={false}
+                  caption="Mancha gráfica da acessibilidade — pontuação por página"
+                  headers={[[
+                    { type: "Text", nRow: 1, name: "Página", property: "domain" },
+                    { type: "Text", nRow: 1, name: "Pontuação média", property: "averageScore", justifyCenter: true },
+                  ]]}
+                  dataList={radarWebsites}
+                  columnsOptions={{
+                    domain: { type: "Text", center: false, bold: false },
+                    averageScore: { type: "Text", center: true, bold: false },
+                  }}
+                />
+              ),
+            },
+          ]}
+        />
       </div>
       <div className="mt-5 bg-white p-4 d-flex flex-column gap-4">
         <h2 className="mb-4">Top 5 dos erros mais frequentes por nível de conformidade
