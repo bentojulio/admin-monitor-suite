@@ -4,6 +4,7 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { Button, StatisticsHeader, SortingTable, Tabs } from "@a12e/accessmonitor-ds";
 import { Bar, Radar } from "react-chartjs-2";
+import { AccessibleBarChart } from "../../../components/AccessibleBarChart";
 import GoodBadTab  from "../../../components/GoodBadTab/GoodBadTab.jsx";
 import { detailsTableHeaders, columnsOptionsDetails, ariaLabels, detailsTable } from "../../Directories/table.config.jsx";
 import Indicators from "../../../components/Indicators/index.jsx";
@@ -262,9 +263,8 @@ const TabGlobalAMS = ({
               eventKey: "chart",
               title: "Gráfico",
               component: (
-                <Bar
-                  role="img"
-                  aria-label="Histograma das pontuações do AccessMonitor"
+                <AccessibleBarChart
+                  ariaLabel="Histograma das pontuações do AccessMonitor"
                   data={initialBarDataStructure}
                   options={{ responsive: true, maintainAspectRatio: true }}
                 />

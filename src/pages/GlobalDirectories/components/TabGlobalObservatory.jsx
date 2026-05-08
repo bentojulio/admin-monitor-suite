@@ -1,5 +1,6 @@
 import { Button, StatisticsHeader, SortingTable, Tabs } from "@a12e/accessmonitor-ds";
 import { Bar, Radar } from "react-chartjs-2";
+import { AccessibleBarChart } from "../../../components/AccessibleBarChart";
 import GoodBadTab from "../../../components/GoodBadTab/GoodBadTab.jsx";
 import { useState, useEffect, useMemo, useRef, memo } from "react";
 import { detailsTableHeaders, columnsOptionsDetails, ariaLabels, detailsTable } from "../../Directories/table.config.jsx";
@@ -393,9 +394,8 @@ const TabGlobalObservatoryComponent = ({ theme, statsTitle, columnsOptionsBar, b
               eventKey: "chart",
               title: "Gráfico",
               component: (
-                <Bar
-                  role="img"
-                  aria-label="Histograma das pontuações do AccessMonitor"
+                <AccessibleBarChart
+                  ariaLabel="Histograma das pontuações do AccessMonitor"
                   data={barData}
                   options={barOptionsCopy}
                 />

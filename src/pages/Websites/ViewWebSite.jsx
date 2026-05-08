@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo, useCallback, memo, useRef } from "react";
 import { Button, Breadcrumb, SortingTable, Tabs } from "@a12e/accessmonitor-ds";
 import "./style.users.css";
+import "../../components/AccessibleBarChart/AccessibleBarChart.css";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Bar, Radar } from "react-chartjs-2";
+import { AccessibleBarChart } from "../../components/AccessibleBarChart";
 import ContentListPages from "../Pages/components/ContentListPage.jsx";
 import {
   dataHeaders as dataHeadersBad,
@@ -38,6 +40,9 @@ const LABEL_WIDTH = 320;
 
 function HtmlLabelBarChart({ data }) {
   const overlayRef = useRef(null);
+  const chartRef = useRef(null);
+  const buttonRefs = useRef([]);
+  const [barRects, setBarRects] = useState([]);
 
   const plugin = useRef({
     id: 'htmlLabels',
@@ -63,8 +68,50 @@ function HtmlLabelBarChart({ data }) {
         });
         overlay.appendChild(el);
       });
+
+      const meta = chart.getDatasetMeta(0);
+      if (!meta?.data?.length) return;
+      const next = meta.data.map((element, i) => ({
+        i,
+        left: Math.min(element.x ?? 0, element.base ?? 0),
+        top: Math.max(0, (element.y ?? 0) - (element.height ?? 20) / 2),
+        width: Math.max(Math.abs((element.x ?? 0) - (element.base ?? 0)), 4),
+        height: Math.max(element.height ?? 20, 4),
+      }));
+      setBarRects(prev =>
+        prev.length === next.length && prev.every((r, i) =>
+          r.left === next[i].left && r.top === next[i].top
+        ) ? prev : next
+      );
     }
   }).current;
+
+  const showBar = useCallback((i) => {
+    const chart = chartRef.current;
+    if (!chart) return;
+    chart.setActiveElements([{ datasetIndex: 0, index: i }]);
+    chart.tooltip.setActiveElements([{ datasetIndex: 0, index: i }], { x: 0, y: 0 });
+    chart.update('none');
+  }, []);
+
+  const clearBar = useCallback(() => {
+    const chart = chartRef.current;
+    if (!chart) return;
+    chart.setActiveElements([]);
+    chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+    chart.update('none');
+  }, []);
+
+  const handleKeyDown = (e, idx) => {
+    const total = barRects.length;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      buttonRefs.current[(idx + 1) % total]?.focus();
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      buttonRefs.current[(idx - 1 + total) % total]?.focus();
+    }
+  };
 
   const BAR_HEIGHT = 84;
   const count = data?.labels?.length ?? 0;
@@ -87,12 +134,25 @@ function HtmlLabelBarChart({ data }) {
   }), []);
 
   return (
-    <div style={{ position: 'relative', height: chartHeight }}>
+    <div role="group" aria-label="Gráfico de barras de práticas de acessibilidade" style={{ position: 'relative', height: chartHeight }}>
       <div
         ref={overlayRef}
         style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none', zIndex: 1 }}
       />
-      <Bar data={data} options={chartOptions} plugins={[plugin]} />
+      <Bar ref={chartRef} data={data} options={chartOptions} plugins={[plugin]} aria-hidden="true" />
+      {barRects.map(({ i, left, top, width, height }) => (
+        <button
+          key={i}
+          ref={el => { buttonRefs.current[i] = el; }}
+          className="chart-bar-btn"
+          tabIndex={0}
+          aria-label={`${data.labels?.[i] ?? `Barra ${i + 1}`}: ${data.datasets?.[0]?.data?.[i] ?? ''} ocorrências`}
+          onFocus={() => showBar(i)}
+          onBlur={clearBar}
+          onKeyDown={e => handleKeyDown(e, i)}
+          style={{ position: 'absolute', left, top, width, height, zIndex: 2 }}
+        />
+      ))}
     </div>
   );
 }
@@ -741,9 +801,8 @@ const ViewWebSitesComponent = () => {
               title: "Gráfico",
               component: (
                 <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                  <Bar
-                    role="img"
-                    aria-label="Histograma das pontuações do AccessMonitor"
+                  <AccessibleBarChart
+                    ariaLabel="Histograma das pontuações do AccessMonitor"
                     data={barDataDynamic}
                     options={theme === "light" ? barOptions : barOptionsDark}
                   />
